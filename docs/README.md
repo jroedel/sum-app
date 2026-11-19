@@ -17,7 +17,7 @@ The starting point was the branch's brainstorm, photographed in
 | [04 Roster and life groups](04-roster-and-life-groups.md) | Self-maintained profiles, life groups, contact details | drafting |
 | **Operations** (MVP) | | |
 | [05 Apartment schedule](05-apartment-schedule.md) | Who is at the apartment, and when | outline |
-| [06 Dues](06-dues.md) | Who has paid: through drop-in forms, or cash recorded by the secretary | drafting |
+| [06 Dues](06-dues.md) | $60 a semester, paid only through drop-in forms | drafting |
 | **Content** (MVP) | | |
 | [07 Home, pages and menu](07-pages-and-menu.md) | The home page in code; editable pages; the menu | drafting |
 | **Engagement** (MVP) | | |
