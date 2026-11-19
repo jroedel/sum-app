@@ -26,6 +26,8 @@ The starting point was the branch's brainstorm, photographed in
 | [09 Checklists and milestones](09-checklists-and-milestones.md) | Life group semesters, events, personal milestones; deadlines and reminders | drafting |
 | **Integrations** | | |
 | [12 Forms](12-forms.md) | Forms through drop-in forms, and what it would need to gain | drafting |
+| **Delivery** | | |
+| [13 CI and CD](13-ci-cd.md) | Checks, push-to-deploy, superseding a deploy, secrets and the vault | drafting |
 | **Look and voice** | | |
 | [10 Design](10-design.md) | Brand, screens, voice, language | outline |
 | **Later** | | |
