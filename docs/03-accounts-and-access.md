@@ -83,6 +83,7 @@ roles to fill in the app, because the roster depends on him. He:
 - keeps the roster ([04](04-roster-and-life-groups.md));
 - sees each new sign-up, and contacts that person outside the app;
 - confirms a newcomer as a member;
+- records cash dues payments, and sees everyone's dues ([06](06-dues.md));
 - marks members active or inactive;
 - can approve a request to join a life group, as a group's mentors can
   ([04](04-roster-and-life-groups.md));
@@ -117,7 +118,7 @@ The MVP needs:
 | Newcomer | anyone who signs up | (less than a member; see the table above) |
 | Member | confirmed by the secretary | |
 | Mentor | one or two per life group | approve requests to join his group |
-| Secretary | core team | confirm members, keep the roster, approve join requests, record milestones; assign mentors if delegated |
+| Secretary | core team | confirm members, keep the roster, approve join requests, record milestones and cash dues; assign mentors if delegated |
 | Branch leader | core team | assign mentors if delegated |
 | Priest moderator | the branch's moderators | assign mentors; delegate that |
 
@@ -158,8 +159,8 @@ removed.
 The core team has more roles than the ones above. Most don't need anything
 special from the app: they are **titles**, shown on the roster, with nothing
 more than a member can do. A role gets a permission only when a feature needs
-one. The branch has no treasurer today; who records dues is still open
-([06](06-dues.md)).
+one. The branch has no treasurer today; **the secretary is responsible for
+dues** ([06](06-dues.md)).
 - **Mentors** are assigned by a priest moderator, or by the branch leader or
   secretary if a priest moderator has delegated it
   ([above](#priest-moderators)).
@@ -185,10 +186,10 @@ part they need: signing in, and seeing the groups they mentor. The wider
 - Whether becoming a member is always the secretary's step, or follows from
   something else (a second semester, paying dues).
 - What happens to a newcomer who never joins.
-- Which other core team roles the MVP needs (treasurer for dues? page
-  editors?), and who assigns core team roles in the app.
+- Which other core team roles the MVP needs (page editors?), and who assigns
+  core team roles in the app.
 - Whether the secretary can remove an account, or only deactivate it.
 - What to call the kind of account a priest or alum mentor has, and who
   creates it (the secretary, by email address?).
 - The list of core team roles, and whether any besides secretary and branch
-  leader needs a permission in the MVP (recording dues, editing pages).
+  leader needs a permission in the MVP (editing pages?).
