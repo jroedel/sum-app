@@ -150,16 +150,15 @@ belong in drop-in forms' own design documents when the work starts there.
   not in a listing that shows more than a newcomer
   ([03](03-accounts-and-access.md)) or a stranger should see.
 
-## Later: dues
+## Dues
 
 Drop-in forms already takes payments through Stripe, and Stripe's checkout
-offers Apple Pay on an iPhone. Paying dues ([06](06-dues.md)) could become a
-form, which would cover the board's "Dues → Apple Pay" without the app
-handling money itself.
+offers Apple Pay on an iPhone. Each semester's dues are a form
+([06](06-dues.md)), so the app never handles money itself.
 
 ## Open questions
 
 - Who in the branch may open a form from the app: the lead of an event, the
   core team?
-- Which forms the MVP needs. From the conversation so far: RSVPs to branch
+- Which forms the MVP needs. So far: each semester's dues, RSVPs to branch
   retreats, and the leadership interest form.

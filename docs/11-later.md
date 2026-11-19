@@ -12,7 +12,6 @@ grow into them.
 | Leadership roles | Core team positions in the app. The secretary is already in the MVP ([03](03-accounts-and-access.md)) | Adding more core team roles without changing how roles work |
 | Native applications | App store apps | The web app working well when installed |
 | Event sign-ups | Through drop-in forms ([12](12-forms.md)); tied to events later | Events from [09](09-checklists-and-milestones.md) |
-| Apple Pay | Paying dues in the app. Possibly a drop-in forms form, through Stripe ([12](12-forms.md)) | Dues records in [06](06-dues.md) with room for a payment method |
 | Evaluations | ? | |
 | Voting | ? | |
 | COG | ? | |
