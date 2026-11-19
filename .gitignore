@@ -1,0 +1,53 @@
+# Adapted from stewards, before any code exists, so that nothing private can
+# reach this public repository by accident.
+
+# Compiled binaries, named after the module in the repository root.
+/sum-app
+/sum-app-linux-amd64
+*.exe
+*.test
+*.out
+*.prof
+coverage.*
+
+# Storage. A local database holds whatever was typed into it, and member data
+# never reaches a public repository.
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite3
+
+# Configuration that carries a secret. The example files are tracked and are
+# the documentation; the real ones never are.
+config.toml
+*.env
+*.env.bak
+.env*
+!config.example.toml
+!secrets.env.example
+
+# Exports of member data, such as a roster pulled into a spreadsheet.
+*.csv
+*.xlsx
+
+# Keys of any kind, including the identity-provider signing key
+# (docs/12-forms.md).
+*.key
+*.pem
+id_rsa
+id_ecdsa
+id_ed25519
+*_ed25519
+
+# Local tooling and editor state
+/tools/
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Claude Code working state. CLAUDE.md and settings.json are tracked on
+# purpose; they are how the project is built. The rest is not.
+.claude/worktrees/
+.claude/settings.local.json
