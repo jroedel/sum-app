@@ -55,7 +55,7 @@ P = will be a page: content, not a feature of its own.
 | User management | ★ | [03](03-accounts-and-access.md) |
 | LG directory / roster | ★ | [04](04-roster-and-life-groups.md) |
 | Apartment scheduling | ★ | [05](05-apartment-schedule.md) |
-| Dues (→ Apple Pay) | ★ | [06](06-dues.md): paid through drop-in forms, where Stripe offers Apple Pay; cash recorded by the secretary |
+| Dues (→ Apple Pay) | ★ | [06](06-dues.md): $60, paid only through drop-in forms, where Stripe offers Apple Pay |
 | Pages | ★ | [07](07-pages-and-menu.md) |
 | Daily game | ★ | [08](08-daily-game.md) |
 | Home page: upcoming events, feature | P | [07](07-pages-and-menu.md): the home page is built in code; events and the feature stay editable |

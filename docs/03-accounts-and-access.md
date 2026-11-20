@@ -83,7 +83,7 @@ roles to fill in the app, because the roster depends on him. He:
 - keeps the roster ([04](04-roster-and-life-groups.md));
 - sees each new sign-up, and contacts that person outside the app;
 - confirms a newcomer as a member;
-- records cash dues payments, and sees everyone's dues ([06](06-dues.md));
+- is responsible for dues, and sees everyone's ([06](06-dues.md));
 - marks members active or inactive;
 - can approve a request to join a life group, as a group's mentors can
   ([04](04-roster-and-life-groups.md));
@@ -118,7 +118,7 @@ The MVP needs:
 | Newcomer | anyone who signs up | (less than a member; see the table above) |
 | Member | confirmed by the secretary | |
 | Mentor | one or two per life group | approve requests to join his group |
-| Secretary | core team | confirm members, keep the roster, approve join requests, record milestones and cash dues; assign mentors if delegated |
+| Secretary | core team | confirm members, keep the roster, approve join requests, record milestones, see everyone's dues; assign mentors if delegated |
 | Branch leader | core team | assign mentors if delegated |
 | Priest moderator | the branch's moderators | assign mentors; delegate that |
 
