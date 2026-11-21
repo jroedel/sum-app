@@ -27,9 +27,9 @@ more than the mock-ups need: those wait until the docs say what they do. The
 work is still mostly the plan and the design documents; the coding rules below
 are here so they are settled before the first feature is written.
 
-The scaffold is the first Go in the repository, so rule 0 applies to it in full:
-the `writing-go` skill comes over from stewards in the same pull request that
-adds the first `.go` file, or before it.
+The scaffold is the first Go in the repository, so rule 0 applies to it in full.
+The `writing-go` skill is already here, written for Go 1.27, which is the
+version `go.mod` pins.
 
 It will be written in Go, and is expected to ship the way its siblings do: a
 push to `main` that CI deploys, here to the schoenstatt.link account on the
@@ -39,8 +39,8 @@ see `docs/02-architecture.md`, "Latency". The rules below were imported from
 about this repository rather than about Go, it is marked as such.
 
 **How to write Go here** is section 0 below and
-`.claude/skills/writing-go/SKILL.md` (to be brought over from stewards before
-the first `.go` file), following
+`.claude/skills/writing-go/SKILL.md` (from stewards, brought up to Go 1.27),
+following
 [ardanlabs/kronk](https://github.com/ardanlabs/kronk) by way of
 drop-in forms and mass-intentions.
 
