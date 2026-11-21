@@ -17,10 +17,19 @@ questions** rather than inventing a specific. Keep features small enough for a
 student branch to maintain: when a design grows, say what it costs and what
 could be left out (see `docs/09-checklists-and-milestones.md`, "Deliberately left out").
 
-**This project is in its documentation phase. Do not write code yet** — no
-`go.mod`, no `.go` files, no Makefile. The work right now is the plan and the
-design documents; the coding rules below are here so they are settled before
-the first line is written, not because they apply today.
+**This project is in its documentation phase. Only scaffolding code is
+allowed so far.** Scaffolding means what is needed to put a plain web server
+on the production server and show the mock-ups there: `go.mod`, a `main`
+that serves static files and `/healthz`, the Makefile targets this file names,
+the CI and deploy files, and the clickable mock-ups under `docs/prototype/`.
+It does **not** mean handlers, stores, business rules, or JavaScript that does
+more than the mock-ups need: those wait until the docs say what they do. The
+work is still mostly the plan and the design documents; the coding rules below
+are here so they are settled before the first feature is written.
+
+The scaffold is the first Go in the repository, so rule 0 applies to it in full:
+the `writing-go` skill comes over from stewards in the same pull request that
+adds the first `.go` file, or before it.
 
 It will be written in Go, and is expected to ship the way its siblings do: a
 push to `main` that CI deploys, here to the schoenstatt.link account on the
@@ -30,8 +39,8 @@ see `docs/02-architecture.md`, "Latency". The rules below were imported from
 about this repository rather than about Go, it is marked as such.
 
 **How to write Go here** is section 0 below and
-`.claude/skills/writing-go/SKILL.md` (to be brought over from stewards when
-coding starts), following
+`.claude/skills/writing-go/SKILL.md` (to be brought over from stewards before
+the first `.go` file), following
 [ardanlabs/kronk](https://github.com/ardanlabs/kronk) by way of
 drop-in forms and mass-intentions.
 
