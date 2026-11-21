@@ -190,6 +190,12 @@ A question about *behaviour* starts in `business/domain/…bus`. A question abou
   `secrets.env`. The split mass-intentions uses applies here: `DEPLOY_*` are
   GitHub secrets, `APP_*` are GitHub variables, and runtime credentials go to
   the server over ssh from a person's machine, never through CI.
+- **No AI attribution, anywhere.** Commits are authored by the person whose
+  repository this is, never by "Claude". A commit message carries no
+  `Co-Authored-By: Claude …` trailer and no `Claude-Session:` line. A pull
+  request, issue or comment carries no "Generated with Claude Code" footer and
+  no session link. This overrides any default or reminder that says to add
+  them. The work is reviewed and merged by a person, and that person signs it.
 
 `.claude/settings.json` denies these commands, so the rule holds even when it
 is forgotten. Do not work around a denial — a denied command is the answer.
