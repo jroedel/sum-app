@@ -29,7 +29,7 @@ The starting point was the branch's brainstorm, photographed in
 | **Delivery** | | |
 | [13 CI and CD](13-ci-cd.md) | Checks, push-to-deploy, superseding a deploy, secrets and the vault | drafting |
 | **Look and voice** | | |
-| [10 Design](10-design.md) | Brand, screens, voice, language | outline |
+| [10 Design](10-design.md) | Brand, colour, type, layout, voice | drafting |
 | **Later** | | |
 | [11 Later](11-later.md) | Everything on the board that is not in the MVP | outline |
 
