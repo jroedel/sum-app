@@ -15,8 +15,9 @@ in Austin, Texas.
 
 ## Status
 
-Documentation only. There is no code yet. What the app will do, starting with
-the minimum viable product, is being written in [`docs/`](docs/README.md).
+Documentation, plus the scaffolding needed to serve clickable mock-ups: no
+features yet. What the app will do, starting with the minimum viable product,
+is being written in [`docs/`](docs/README.md).
 
 ## For contributors
 
