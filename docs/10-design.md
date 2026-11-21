@@ -2,11 +2,19 @@
 
 How the app looks and speaks. Proposed 2026-11-21, for the branch to agree.
 
-The same brand is kept as a browsable design system, with live previews of
-the components and of Home on a phone:
-[SUM Brand](https://claude.ai/artifact/Vb32AUQUG4UiXryt6NRdpi) (private
-until shared). This document is the source; where the two differ, this one
-wins and the other is brought into line.
+![SUM Brand: the name, the tagline, and the brand's colours and shapes](design/cover.png)
+
+**To see it rather than read it:** the images in this document come from one
+page, [`design/brand.html`](design/brand.html). Download it and open it in a
+browser to see the components live. In its pictures the seal is a
+placeholder, because the original artwork isn't in this public repository
+(see Open questions).
+
+The same brand is also kept as a browsable design system, for agents to
+build from:
+[SUM Brand](https://claude.ai/artifact/Vb32AUQUG4UiXryt6NRdpi) (private).
+This document is the source. Where the page, the images or the design system
+differ from it, this document wins and the others are brought into line.
 
 ## Where SUM's brand sits
 
@@ -68,9 +76,11 @@ Open questions.
 
 ## Colour
 
-Six brand colours, taken from the seal: the disc, its ring, its lettering,
-the orange flame of its colourway in the story highlights; plus a ground and
-a green.
+Six brand colours. Four come from the seal: the disc, its ring, its
+lettering, and the orange flame of its colourway in the story highlights. A
+ground and a green complete the set.
+
+![The six brand colours, then every interface colour in light and dark, with the four status chips](design/colour.png)
 
 | Name | Hex | From | Use |
 |---|---|---|---|
@@ -146,6 +156,8 @@ calligraphic in origin, warm without being quaint, and free under the SIL
 Open Font License. The seal's lettering is the seal's own; the brand doesn't
 try to imitate it.
 
+![Alegreya and Alegreya Sans, and every text style with a sample](design/type.png)
+
 | Style | Face | Size / line | Use |
 |---|---|---|---|
 | `title-xl` | Alegreya 700 | 34 / 38 px | Home's greeting. Once per screen at most |
@@ -183,9 +195,13 @@ embedding Google Fonts breaches a visitor's privacy.
 - Cards are flat on the ground: no border in the light theme, a hairline in
   the dark. Only the tab bar and floating sheets have a shadow.
 
+![Buttons, status chips, event rows, the milestone ring and the tab bar in light and dark, and the brand's shapes](design/components.png)
+
 ## The app's layout
 
 One column, mobile first, under one arch.
+
+![Home on a phone, light and dark, with invented example content](design/home.png)
 
 - **Top bar** (56 px, on `surface`): the full-colour seal at 32 px, then
   either "SUM" or the screen's title, then the person's avatar at the right.
