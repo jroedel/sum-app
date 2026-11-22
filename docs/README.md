@@ -31,10 +31,13 @@ The starting point was the branch's brainstorm, photographed in
 | **For the mock-up** | | |
 | [14 Stories, flows and the site map](14-stories-flows-and-site-map.md) | What each person wants to do, the steps they take, the screens, and the first mock-up | drafting |
 | [The mock-ups](prototype/README.md) | Clickable screens at [app.sumatx.us/prototype](https://app.sumatx.us/prototype/), with invented content | building |
+| **For review** | | |
+| [15 Decisions for review](15-decisions-for-review.md) | The working decisions of 2026-11-22 across 01–10, and the pressure points for the stakeholders | for review |
 | **Look and voice** | | |
 | [10 Design](10-design.md) | Brand, colour, type, layout, voice | drafting |
 | **Later** | | |
 | [11 Later](11-later.md) | Everything on the board that is not in the MVP | outline |
 
 Status is one of **outline** (headings and what is known), **drafting**
-(being worked through), or **agreed** (the branch has signed off).
+(being worked through), or **agreed** (the branch has signed off). Doc 15 is
+**for review**: decisions made to build from, waiting on the stakeholders.
