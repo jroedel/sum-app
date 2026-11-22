@@ -113,6 +113,18 @@ test-unit: ## The Go tests, with the race detector. No network
 shell-test: ## Every scripts/*-test.sh; a new one runs with nothing to register
 	@scripts/shell-test
 
+# The JavaScript, as stewards runs it: plain ES modules, no npm, Node's own
+# test runner (scripts/js-test). Today that is the mock-ups' scripts under
+# docs/prototype/; the browser tests build this server and drive a headless
+# Chrome against it, so they see the real header policy.
+.PHONY: test-js
+test-js: ## The JavaScript's unit tests, under Node's own test runner. No browser
+	@scripts/js-test unit
+
+.PHONY: test-browser
+test-browser: ## The pages with scripts, in headless Chrome against a server built for it
+	@scripts/js-test browser
+
 .PHONY: check-scripts
 check-scripts: ## Every shell script parsed by its own shell, then the pinned ShellCheck
 	@SHELLCHECK_VERSION=$(SHELLCHECK_VERSION) scripts/check-scripts
@@ -134,7 +146,7 @@ secrets-template-check: ## secrets.env.example documents exactly the keys script
 	@scripts/secrets template-check
 
 .PHONY: test
-test: lint test-unit shell-test check-scripts check-workflows secrets-template-check ## Everything CI runs that needs no network, in CI's order
+test: lint test-unit shell-test test-js test-browser check-scripts check-workflows secrets-template-check ## Everything CI runs that needs no network, in CI's order
 
 # ---------------------------------------------------------------- build and run
 

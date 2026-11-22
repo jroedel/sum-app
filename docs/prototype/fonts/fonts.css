@@ -1,0 +1,43 @@
+/* The brand's two families, served by this app and never by Google Fonts
+   (docs/10-design.md, "Type"): a second origin is a second connection on a
+   cold start from Austin to Germany, and a German court has held that
+   embedding Google Fonts gives a visitor's address away.
+
+   Four files, Latin only, fetched once from Google's static font files and
+   committed (docs/prototype/README.md says how). Doc 10 counts five because
+   it lists Alegreya 600 and 700 separately; Google serves both from one
+   variable file, which covers 400 to 900. Alegreya Sans comes as 400 and 700
+   only, so the 500 that caption and numeral ask for falls back to 400 in the
+   mock-ups. Both families are under the SIL Open Font License, beside them. */
+
+@font-face {
+  font-family: "Alegreya";
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url("alegreya-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Alegreya";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("alegreya-italic-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Alegreya Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("alegreya-sans-400-latin.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Alegreya Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("alegreya-sans-700-latin.woff2") format("woff2");
+}

@@ -1,0 +1,115 @@
+/* The brand's tokens, from docs/10-design.md ("Colour", "Shape"). One copy,
+   used by the mock-ups and by the brand sheet (docs/design/brand.html).
+
+   The page follows the phone's light or dark setting. The .light and .dark
+   classes force one theme, which is how the brand sheet shows both side by
+   side. */
+
+:root {
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-6:24px;
+  --space-8:32px;
+  --space-12:48px;
+  --radius-sm:10px;
+  --radius-md:18px;
+  --radius-arch:120px;
+  --radius-pill:999px;
+  --font-display:Alegreya, "Iowan Old Style", Georgia, serif;
+  --font-text:"Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light dark;
+}
+
+:root, .light {
+  --brand-mantle:#2f4260;
+  --brand-night:#15223a;
+  --brand-thread:#e6d9b8;
+  --brand-flame:#d2703f;
+  --brand-veil:#f4f6f9;
+  --brand-garden:#5b7553;
+  --ground:#f4f6f9;
+  --surface:#ffffff;
+  --surface-sunk:#e9eef4;
+  --ink:#15223a;
+  --ink-muted:#4d5b72;
+  --line:#d5dce6;
+  --line-strong:#7d8aa0;
+  --primary:#2f4260;
+  --on-primary:#ffffff;
+  --primary-tint:#dfe6f0;
+  --accent:#d2703f;
+  --on-accent:#15223a;
+  --thread:#e6d9b8;
+  --focus:#b5521f;
+  --done:#2f5e37;
+  --done-tint:#e1ecdd;
+  --due-soon:#8a4316;
+  --due-soon-tint:#f7e4d6;
+  --overdue:#9b2c2c;
+  --overdue-tint:#f5dcda;
+  --shadow-lift:0 1px 2px rgba(21,34,58,0.06), 0 8px 24px rgba(21,34,58,0.08);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --brand-mantle:#2f4260;
+    --brand-night:#15223a;
+    --brand-thread:#e6d9b8;
+    --brand-flame:#d2703f;
+    --brand-veil:#f4f6f9;
+    --brand-garden:#5b7553;
+    --ground:#111c30;
+    --surface:#1a2841;
+    --surface-sunk:#0c1526;
+    --ink:#eee7d6;
+    --ink-muted:#aeb7c6;
+    --line:#2c3d5c;
+    --line-strong:#6f81a0;
+    --primary:#9db4d6;
+    --on-primary:#111c30;
+    --primary-tint:#24375a;
+    --accent:#e2865a;
+    --on-accent:#111c30;
+    --thread:#e6d9b8;
+    --focus:#f0a070;
+    --done:#a5c79b;
+    --done-tint:#1f3325;
+    --due-soon:#edb088;
+    --due-soon-tint:#3a2a1e;
+    --overdue:#f0a39c;
+    --overdue-tint:#3d2024;
+    --shadow-lift:0 1px 2px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.35);
+  }
+}
+
+.dark {
+  --brand-mantle:#2f4260;
+  --brand-night:#15223a;
+  --brand-thread:#e6d9b8;
+  --brand-flame:#d2703f;
+  --brand-veil:#f4f6f9;
+  --brand-garden:#5b7553;
+  --ground:#111c30;
+  --surface:#1a2841;
+  --surface-sunk:#0c1526;
+  --ink:#eee7d6;
+  --ink-muted:#aeb7c6;
+  --line:#2c3d5c;
+  --line-strong:#6f81a0;
+  --primary:#9db4d6;
+  --on-primary:#111c30;
+  --primary-tint:#24375a;
+  --accent:#e2865a;
+  --on-accent:#111c30;
+  --thread:#e6d9b8;
+  --focus:#f0a070;
+  --done:#a5c79b;
+  --done-tint:#1f3325;
+  --due-soon:#edb088;
+  --due-soon-tint:#3a2a1e;
+  --overdue:#f0a39c;
+  --overdue-tint:#3d2024;
+  --shadow-lift:0 1px 2px rgba(0,0,0,0.4), 0 8px 24px rgba(0,0,0,0.35);
+}

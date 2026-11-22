@@ -1,0 +1,67 @@
+/* SUM Brand: the component styles. Every value comes from tokens.css. */
+
+.sum-root { font-family: var(--font-text); color: var(--ink); background: var(--ground); font-size: 17px; line-height: 26px; -webkit-font-smoothing: antialiased; }
+.sum-root *, .sum-root *::before, .sum-root *::after { box-sizing: border-box; }
+.sum-display { font-family: var(--font-display); }
+.sum-eyebrow { font-family: var(--font-text); font-size: 13px; line-height: 16px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); margin: 0; }
+.sum-voice { font-family: var(--font-display); font-style: italic; font-size: 20px; line-height: 28px; font-weight: 400; margin: 0; }
+.sum-num { font-variant-numeric: lining-nums tabular-nums; }
+.sum-icon { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.sum-icon--sm { width: 16px; height: 16px; }
+:where(.sum-root) :focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+/* Button: primary (mantle), accent (flame, once per screen), quiet (outline). */
+.sum-btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: 48px; padding: var(--space-3) var(--space-6); border-radius: var(--radius-sm); border: 2px solid transparent; font: 700 17px/20px var(--font-text); cursor: pointer; text-decoration: none; }
+.sum-btn--primary { background: var(--primary); color: var(--on-primary); }
+.sum-btn--accent { background: var(--accent); color: var(--on-accent); }
+.sum-btn--quiet { background: transparent; color: var(--primary); border-color: var(--line-strong); }
+.sum-btn--block { width: 100%; }
+
+/* Status chip: always an icon and a word. */
+.sum-chip { display: inline-flex; align-items: center; gap: var(--space-1); min-height: 28px; padding: 2px var(--space-3) 2px var(--space-2); border-radius: var(--radius-pill); font: 700 13px/18px var(--font-text); white-space: nowrap; }
+.sum-chip--done { background: var(--done-tint); color: var(--done); }
+.sum-chip--track { background: var(--primary-tint); color: var(--primary); }
+.sum-chip--soon { background: var(--due-soon-tint); color: var(--due-soon); }
+.sum-chip--overdue { background: var(--overdue-tint); color: var(--overdue); }
+.dark .sum-chip--track { color: var(--ink); }
+
+/* Card and the arch. */
+.sum-card { background: var(--surface); border-radius: var(--radius-md); padding: var(--space-4); }
+.dark .sum-card { box-shadow: inset 0 0 0 1px var(--line); }
+.sum-arch { border-radius: 50% 50% var(--radius-md) var(--radius-md) / var(--radius-arch) var(--radius-arch) var(--radius-md) var(--radius-md); overflow: hidden; }
+.sum-feature { background: var(--brand-mantle); color: var(--brand-thread); padding: calc(var(--radius-arch) * .6) var(--space-6) var(--space-6); text-align: center; position: relative; }
+.sum-feature .sum-eyebrow { color: var(--brand-thread); }
+.sum-feature h3 { font: 700 28px/32px var(--font-display); color: var(--brand-veil); margin: var(--space-2) 0; text-wrap: balance; }
+.sum-feature p { margin: 0 0 var(--space-4); color: var(--brand-thread); font-size: 15px; line-height: 22px; }
+.sum-plus { font-family: var(--font-text); font-weight: 400; color: var(--brand-thread); }
+
+/* Event row: a date disc, after the seal, then the title and metadata. */
+.sum-event { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) 0; border-bottom: 1px solid var(--line); }
+.sum-event:last-child { border-bottom: 0; }
+.sum-date { flex: none; width: 52px; height: 52px; border-radius: var(--radius-pill); background: var(--surface-sunk); display: grid; place-content: center; text-align: center; }
+.sum-date b { display: block; font: 700 20px/20px var(--font-display); color: var(--ink); font-variant-numeric: lining-nums; }
+.sum-date small { display: block; font: 700 11px/14px var(--font-text); letter-spacing: .1em; text-transform: uppercase; color: var(--primary); }
+.sum-event-text { min-width: 0; flex: 1; }
+.sum-event-title { font-weight: 700; margin: 0; }
+.sum-event-meta { margin: 0; font-size: 15px; line-height: 22px; color: var(--ink-muted); }
+
+/* Tab bar: the fixed menu. */
+.sum-tabbar { display: flex; justify-content: space-around; gap: var(--space-1); background: var(--surface); box-shadow: var(--shadow-lift); padding: var(--space-2) var(--space-2) calc(var(--space-2) + env(safe-area-inset-bottom, 0px)); }
+.sum-tab { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px; min-height: 48px; padding: 4px 0; color: var(--ink-muted); font: 500 13px/16px var(--font-text); text-decoration: none; }
+.sum-tab .sum-tab-pill { display: grid; place-items: center; width: 56px; height: 30px; border-radius: var(--radius-pill); }
+.sum-tab[aria-current="page"] { color: var(--ink); font-weight: 700; }
+.sum-tab[aria-current="page"] .sum-tab-pill { background: var(--primary-tint); color: var(--primary); }
+.dark .sum-tab[aria-current="page"] .sum-tab-pill { color: var(--ink); }
+
+/* Milestone ring: four arcs around the man's initial. */
+.sum-ring { display: flex; align-items: center; gap: var(--space-4); }
+.sum-ring > svg { flex: none; width: 88px; height: 88px; }
+.sum-ring .arc { fill: none; stroke-width: 8; stroke-linecap: round; }
+.sum-ring .arc--done { stroke: var(--accent); }
+.sum-ring .arc--todo { stroke: var(--line); }
+.sum-ring .initial { font: 700 26px var(--font-display); fill: var(--ink); }
+.sum-ring ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; font-size: 15px; line-height: 22px; }
+.sum-ring li { display: flex; align-items: center; gap: var(--space-2); color: var(--ink-muted); }
+.sum-ring li.is-done { color: var(--ink); }
+.sum-ring li.is-done .sum-icon { color: var(--done); }
+.sum-ring li.is-next { color: var(--ink); font-weight: 700; }

@@ -5,8 +5,8 @@ How the app looks and speaks. Proposed 2026-11-21, for the branch to agree.
 ![SUM Brand: the name, the tagline, and the brand's colours and shapes](design/cover.png)
 
 **To see it rather than read it:** the images in this document come from one
-page, [`design/brand.html`](design/brand.html). Download it and open it in a
-browser to see the components live. In its pictures the seal is a
+page, [`design/brand.html`](design/brand.html), which the app serves at
+<https://app.sumatx.us/brand/> to see the components live. In its pictures the seal is a
 placeholder, because the original artwork isn't in this public repository
 (see Open questions).
 

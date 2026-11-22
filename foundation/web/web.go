@@ -172,6 +172,11 @@ type Policy struct {
 	CacheControl          string
 	FrameOptions          string
 	StrictTransport       string
+
+	// RobotsTag is X-Robots-Tag: what a search engine may do with the
+	// response. Unlike a <meta name="robots">, it also covers what is not
+	// HTML, such as a stylesheet or a font.
+	RobotsTag string
 }
 
 // PolicyFor chooses the policy for one request.
@@ -200,6 +205,7 @@ func SecureHeaders(policy PolicyFor) Middleware {
 			set("Cache-Control", p.CacheControl)
 			set("X-Frame-Options", p.FrameOptions)
 			set("Strict-Transport-Security", p.StrictTransport)
+			set("X-Robots-Tag", p.RobotsTag)
 			head.Set("X-Content-Type-Options", "nosniff")
 
 			next.ServeHTTP(w, r)

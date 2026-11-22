@@ -49,8 +49,23 @@ func TestSecureHeadersSetsAndSkipsEmpty(t *testing.T) {
 		t.Errorf("nosniff = %q", got)
 	}
 
-	if _, ok := rec.Header()["Cache-Control"]; ok {
-		t.Error("an empty field in the policy was set anyway")
+	for _, name := range []string{"Cache-Control", "X-Robots-Tag"} {
+		if _, ok := rec.Header()[name]; ok {
+			t.Errorf("%s: an empty field in the policy was set anyway", name)
+		}
+	}
+}
+
+func TestSecureHeadersSendsRobotsTag(t *testing.T) {
+	h := SecureHeaders(func(*http.Request) Policy {
+		return Policy{RobotsTag: "noindex"}
+	})(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {}))
+
+	rec := httptest.NewRecorder()
+	h.ServeHTTP(rec, httptest.NewRequest("GET", "/", nil))
+
+	if got := rec.Header().Get("X-Robots-Tag"); got != "noindex" {
+		t.Errorf("X-Robots-Tag = %q, want noindex", got)
 	}
 }
 
