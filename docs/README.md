@@ -28,6 +28,8 @@ The starting point was the branch's brainstorm, photographed in
 | [12 Forms](12-forms.md) | Forms through drop-in forms, and what it would need to gain | drafting |
 | **Delivery** | | |
 | [13 CI and CD](13-ci-cd.md) | Checks, push-to-deploy, superseding a deploy, secrets and the vault | drafting |
+| **For the mock-up** | | |
+| [14 Stories, flows and the site map](14-stories-flows-and-site-map.md) | What each person wants to do, the steps they take, the screens, and the first mock-up | drafting |
 | **Look and voice** | | |
 | [10 Design](10-design.md) | Brand, colour, type, layout, voice | drafting |
 | **Later** | | |
