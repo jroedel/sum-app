@@ -13,6 +13,9 @@
 # go.mod. Grouped, the week's bumps arrive together, CI runs once, and there
 # is nothing to conflict with.
 #
+# No commit-message prefix: Dependabot's own titles already begin "Bump",
+# and stewards' prefix: "Bump" made them "Bump: Bump actions/setup-go ...".
+#
 # Neither ecosystem covers the go line in go.mod (Dependabot bumps modules,
 # not the toolchain); go-version.yml does. dependabot-merge.yml merges both
 # kinds once they are a day old with every check green, and deploys them.
@@ -27,8 +30,6 @@ updates:
     groups:
       actions:
         patterns: ["*"]
-    commit-message:
-      prefix: "Bump"
 
   - package-ecosystem: gomod
     directory: /
@@ -38,5 +39,3 @@ updates:
     groups:
       go-modules:
         patterns: ["*"]
-    commit-message:
-      prefix: "Bump"
