@@ -32,10 +32,184 @@
 </header>
 <main class="screen">
 <div class="hello">
-  <p class="sum-eyebrow">A mock-up of the SUM app</p>
+  <p class="sum-eyebrow">Monday, November 23</p>
   <h1>Good evening<span data-for="newcomer pending">, Lucas</span><span data-for="member">, Mateo</span><span data-for="mentor">, Andrew</span><span data-for="secretary">, Daniel</span>.</h1>
+  <p class="sum-voice welcome" data-for="newcomer">Welcome to SUM. Find the men you'll walk with.</p>
 </div>
-<p class="sum-card">This is the mock-up's frame: the banner, the menu and the role switcher. Home itself is drawn in the next pull request. Choose another role in the banner to see the menu change: a newcomer and a mentor have no Apartment tab.</p>
+
+<section class="sec" aria-labelledby="waiting">
+  <h2 id="waiting">Waiting on you</h2>
+
+  <div class="sum-card stack" data-for="newcomer" id="find-group">
+    <div class="row">
+      <svg class="icon accent-icon" aria-hidden="true"><use href="icons.svg#users"/></svg>
+      <div class="grow">
+        <p class="sum-event-title">Find your life group</p>
+        <p class="muted">Three groups are forming this semester. See who is in each, and ask to join the one that suits you.</p>
+      </div>
+    </div>
+    <a class="sum-btn sum-btn--primary sum-btn--block" href="groups.html">See the open groups</a>
+  </div>
+
+  <div class="sum-card stack" data-for="pending" id="request-pending">
+    <div class="row">
+      <div class="grow">
+        <p class="sum-event-title">Your request to join Emmaus</p>
+        <p class="muted">Sent Saturday. Its mentors have been told, and one of them will answer.</p>
+      </div>
+      <span class="sum-chip sum-chip--soon"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#hourglass"/></svg>Pending</span>
+    </div>
+    <div class="row">
+      <a class="sum-btn sum-btn--quiet" href="groups.html" data-not-here>See Emmaus</a>
+      <button class="sum-btn sum-btn--quiet" type="button" data-not-here>Withdraw</button>
+    </div>
+  </div>
+
+  <a class="sum-card row-link" data-for="member" id="dues-due" href="more.html#dues">
+    <svg class="icon" aria-hidden="true"><use href="icons.svg#circle-dollar-sign"/></svg>
+    <div class="grow">
+      <p class="sum-event-title">Spring dues, $60</p>
+      <p class="muted">Due by February 15. Pay with Apple Pay or a card.</p>
+    </div>
+    <span class="sum-chip sum-chip--soon"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#clock"/></svg>Due</span>
+  </a>
+
+  <div class="sum-card list-card" data-for="mentor" id="mentor-requests">
+    <a class="row-link" href="groups.html" data-not-here>
+      <span class="avatar" aria-hidden="true">L</span>
+      <div class="grow">
+        <p class="sum-event-title">Lucas wants to join Emmaus</p>
+        <p class="muted sum-num">Class of 2029 · Mechanical engineering · 2 days ago</p>
+      </div>
+      <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    </a>
+    <a class="row-link" href="groups.html" data-not-here>
+      <span class="avatar" aria-hidden="true">N</span>
+      <div class="grow">
+        <p class="sum-event-title">Noah wants to join Emmaus</p>
+        <p class="muted sum-num">Class of 2028 · Economics · today</p>
+      </div>
+      <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    </a>
+  </div>
+
+  <div class="sum-card list-card" data-for="secretary" id="secretary-feed">
+    <a class="row-link" href="more.html" data-not-here>
+      <svg class="icon" aria-hidden="true"><use href="icons.svg#user"/></svg>
+      <div class="grow">
+        <p class="sum-event-title">New sign-up: Ethan</p>
+        <p class="muted">Signed up yesterday. Reach out and confirm him as a member.</p>
+      </div>
+      <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    </a>
+    <a class="row-link" href="groups.html" data-not-here>
+      <svg class="icon" aria-hidden="true"><use href="icons.svg#hourglass"/></svg>
+      <div class="grow">
+        <p class="sum-event-title">Unanswered for 3 days</p>
+        <p class="muted">Caleb asked to join Cana, and no mentor has answered.</p>
+      </div>
+      <span class="sum-chip sum-chip--overdue"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#triangle-alert"/></svg>3 days</span>
+    </a>
+    <a class="row-link" href="more.html" data-not-here>
+      <svg class="icon" aria-hidden="true"><use href="icons.svg#circle-dollar-sign"/></svg>
+      <div class="grow">
+        <p class="sum-event-title">A payment to match</p>
+        <p class="muted">$60 from an address no member has. Match it to him by hand.</p>
+      </div>
+      <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    </a>
+  </div>
+</section>
+
+<div class="sum-arch sum-feature">
+  <p class="sum-eyebrow"><span class="sum-plus">+</span>&ensp;Feature&ensp;<span class="sum-plus">+</span></p>
+  <h3>Advent recollection</h3>
+  <p>A morning of quiet at the shrine before finals. Breakfast at 8.</p>
+  <a class="sum-btn sum-btn--accent" href="more.html" data-not-here>I'm going</a>
+</div>
+
+<section class="sec" aria-labelledby="upcoming">
+  <h2 id="upcoming">Upcoming</h2>
+  <div class="sum-card list-card">
+    <div class="sum-event"><div class="sum-date"><small>Nov</small><b>29</b></div><div class="sum-event-text"><p class="sum-event-title">Branch Mass and dinner</p><p class="sum-event-meta sum-num">Sun · 6:00 PM · The apartment · 14 going</p></div></div>
+    <div class="sum-event"><div class="sum-date"><small>Dec</small><b>5</b></div><div class="sum-event-text"><p class="sum-event-title">Advent recollection</p><p class="sum-event-meta sum-num">Sat · 9:00 AM · The shrine · 9 going</p></div></div>
+    <div class="sum-event"><div class="sum-date"><small>Jan</small><b>22</b></div><div class="sum-event-text"><p class="sum-event-title">Opening retreat</p><p class="sum-event-meta">Fri–Sun · Retreat house</p></div></div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="your-group" data-for="member secretary mentor">
+  <h2 id="your-group"><span data-for="member secretary">Your group</span><span data-for="mentor">Your groups</span></h2>
+  <div class="sum-card row" data-for="member secretary">
+    <svg class="icon primary-icon" aria-hidden="true"><use href="icons.svg#users"/></svg>
+    <div class="grow">
+      <p class="sum-event-title">Tabor</p>
+      <p class="muted sum-num">Thu · 8:00–10:00 PM · The apartment</p>
+    </div>
+  </div>
+  <div class="sum-card list-card" data-for="mentor">
+    <div class="row-link">
+      <svg class="icon primary-icon" aria-hidden="true"><use href="icons.svg#users"/></svg>
+      <div class="grow">
+        <p class="sum-event-title">Emmaus <span class="sum-chip sum-chip--track">Forming</span></p>
+        <p class="muted sum-num">Tue · 7:00–9:00 PM · The apartment</p>
+      </div>
+    </div>
+    <div class="row-link">
+      <svg class="icon primary-icon" aria-hidden="true"><use href="icons.svg#users"/></svg>
+      <div class="grow">
+        <p class="sum-event-title">Tabor</p>
+        <p class="muted sum-num">Thu · 8:00–10:00 PM · The apartment</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<a class="sum-card row game-tile" href="game.html">
+  <span class="tile"><svg class="icon" aria-hidden="true"><use href="icons.svg#grid-3x3"/></svg></span>
+  <span class="grow">
+    <span class="sum-event-title">Today's game</span>
+    <span class="muted">Not chosen yet</span>
+  </span>
+  <span class="streak sum-num" data-for="member secretary">6-day streak</span>
+</a>
+
+<section class="sec" aria-labelledby="milestones" data-for="member secretary">
+  <h2 id="milestones">Your milestones</h2>
+  <div data-for="member">
+  <div class="sum-card sum-ring">
+    <svg viewBox="0 0 88 88" role="img" aria-label="2 of 4 milestones">
+      <circle class="arc arc--done" cx="44" cy="44" r="36" pathLength="100" stroke-dasharray="19 81" stroke-dashoffset="-3" transform="rotate(-90 44 44)"/>
+      <circle class="arc arc--done" cx="44" cy="44" r="36" pathLength="100" stroke-dasharray="19 81" stroke-dashoffset="-28" transform="rotate(-90 44 44)"/>
+      <circle class="arc arc--todo" cx="44" cy="44" r="36" pathLength="100" stroke-dasharray="19 81" stroke-dashoffset="-53" transform="rotate(-90 44 44)"/>
+      <circle class="arc arc--todo" cx="44" cy="44" r="36" pathLength="100" stroke-dasharray="19 81" stroke-dashoffset="-78" transform="rotate(-90 44 44)"/>
+      <text class="initial" x="44" y="53" text-anchor="middle">M</text>
+    </svg>
+    <ol>
+      <li class="is-done"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#check"/></svg>Wristband</li>
+      <li class="is-done"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#check"/></svg>Home Shrine Kit</li>
+      <li class="is-next"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#arrow-right"/></svg>Covenant of Love</li>
+      <li><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#circle"/></svg>Personal ideal</li>
+    </ol>
+  </div>
+  </div>
+  <div data-for="secretary">
+  <div class="sum-card sum-ring">
+    <svg viewBox="0 0 88 88" role="img" aria-label="3 of 4 milestones">
+      <circle class="arc arc--done" cx="44" cy="44" r="36" pathLength="100" stroke-dasharray="19 81" stroke-dashoffset="-3" transform="rotate(-90 44 44)"/>
+      <circle class="arc arc--done" cx="44" cy="44" r="36" pathLength="100" stroke-dasharray="19 81" stroke-dashoffset="-28" transform="rotate(-90 44 44)"/>
+      <circle class="arc arc--done" cx="44" cy="44" r="36" pathLength="100" stroke-dasharray="19 81" stroke-dashoffset="-53" transform="rotate(-90 44 44)"/>
+      <circle class="arc arc--todo" cx="44" cy="44" r="36" pathLength="100" stroke-dasharray="19 81" stroke-dashoffset="-78" transform="rotate(-90 44 44)"/>
+      <text class="initial" x="44" y="53" text-anchor="middle">D</text>
+    </svg>
+    <ol>
+      <li class="is-done"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#check"/></svg>Wristband</li>
+      <li class="is-done"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#check"/></svg>Home Shrine Kit</li>
+      <li class="is-done"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#check"/></svg>Covenant of Love</li>
+      <li class="is-next"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#arrow-right"/></svg>Personal ideal</li>
+    </ol>
+  </div>
+  </div>
+</section>
 </main>
 <nav class="sum-tabbar tabbar" aria-label="Menu">
   <img class="rail-seal" src="seal.svg" alt="">

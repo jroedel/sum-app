@@ -167,3 +167,63 @@ a { color: var(--primary); }
   .sum-tab[aria-current="page"] .sum-tab-pill,
   .avatar { color: var(--ink); }
 }
+
+/* Home. */
+.hello .welcome { margin-top: var(--space-2); color: var(--ink-muted); }
+.accent-icon { color: var(--accent); }
+.primary-icon { color: var(--primary); }
+.sum-card.row-link { padding: var(--space-4); border-bottom: 0; }
+.list-card .sum-event-title .sum-chip { margin-left: var(--space-2); vertical-align: middle; }
+.list-card .avatar { width: 40px; height: 40px; }
+
+.game-tile { color: inherit; text-decoration: none; }
+.game-tile .grow > span { display: block; }
+.game-tile .tile {
+  flex: none;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid;
+  place-items: center;
+}
+.game-tile .streak { margin-left: auto; font-size: 15px; color: var(--ink-muted); }
+
+/* What the mock-up does not draw says so, briefly, rather than doing
+   nothing when it is tapped (app.js). */
+.toast {
+  position: fixed;
+  z-index: 30;
+  left: 50%;
+  bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  max-width: calc(100% - 32px);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--brand-night);
+  color: var(--brand-veil);
+  box-shadow: var(--shadow-lift);
+  font: 500 15px/22px var(--font-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .toast { animation: toast-in 150ms ease-out; }
+  @keyframes toast-in { from { opacity: 0; } }
+}
+
+/* Game. */
+.game-placeholder { align-items: flex-start; }
+.game-placeholder .tile.big {
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-md);
+  background: var(--accent);
+  color: var(--on-accent);
+  display: grid;
+  place-items: center;
+}
+
+/* The milestone ring's list uses the sprite, so components.css's
+   .sum-icon rule for a done step does not reach it. */
+.sum-ring li.is-done .icon-sm { color: var(--done); }

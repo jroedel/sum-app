@@ -34,6 +34,16 @@ lists it here, so it is not mistaken for a decision:
 
 - **An alum mentor has no Apartment tab.** Doc 10 gives the tab to members;
   doc 04 makes the alum mentor not a member.
+- **Home's sections, per role** (doc 07's table, in doc 10's order). The
+  secretary's feed holds a new sign-up, a request nobody answered in 3 days,
+  and a payment to match (doc 03, doc 06). A member's *Waiting on you* is dues
+  when they are due. The mentor sees his groups under *Your groups*.
+- **The secretary is a member,** with his own group, streak and milestones.
+- **Game, More and anything marked "not in this mock-up"** are placeholders:
+  tapping one says so rather than doing nothing.
+
+The people (Lucas, Mateo, Andrew, Daniel, Noah, Ethan, Caleb) and the groups
+(Emmaus, Cana, Tabor) are invented.
 
 ## How it is built
 
