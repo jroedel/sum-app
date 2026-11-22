@@ -33,6 +33,16 @@ embedded audio, embedded forms ([12](12-forms.md))?).
 
 This part should be reusable in other projects.
 
+### Editing through an MCP endpoint
+
+Proposed 2026-11-22. Pages are the part of the app where one endpoint reaches
+the most content: the feature and upcoming events on the home page, the
+documents, the knowledge base and the songs are all pages. An **MCP endpoint**
+over pages would let the core team read and change them from Claude, as well
+as in the app. Drop-in forms already has one for forms ([12](12-forms.md)).
+It would be another way to do what the editing screens do, with the same
+permissions.
+
 ## The menu
 
 The menu is **fixed in code**. What is open is how a menu item reaches its
@@ -71,3 +81,6 @@ Who can create, edit and publish pages, and whether there are drafts.
 - Whether any page is visible without logging in.
 - Drafts and history: whether an edit can be undone.
 - English only, or English and Spanish ([10](10-design.md)).
+- Who may use the MCP endpoint, and whether it can publish a page or only save a
+  draft.
+- Whether the endpoint covers anything beyond pages in the MVP.
