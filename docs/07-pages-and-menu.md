@@ -61,7 +61,8 @@ From the board:
 - **Documentation**: apartment order, conduct policy, first overnight
   document, branch day organization document.
 - **Schoenstatt knowledge base**: formation material, founding documents.
-- **Songs**. Streaming is later ([11](11-later.md)).
+- **Songs**. The lyrics come first and must open quickly. Chords, recordings,
+  video and tabs are later ([11](11-later.md)).
 - **Event sign-ups**: a page with a form from drop-in forms
   ([12](12-forms.md)).
 

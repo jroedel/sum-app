@@ -15,12 +15,15 @@ grow into them.
 | Evaluations | Proposed 2026-11-22: a short evaluation generated automatically after each event, answered in about 30 seconds. Its questions are phrased to bring constructive feedback and not to feel personal. It can be answered anonymously or not. The core team gets the statistics and the feedback on the docket for its next meeting. It never scores a man ([09](09-checklists-and-milestones.md), "A leadership path") | Events from [09](09-checklists-and-milestones.md), so each event has something to evaluate |
 | Voting | ? | |
 | COG | ? | |
-| Song streaming | Playing songs in the app | Songs as pages in [07](07-pages-and-menu.md) |
+| Song media and streaming | Chords, recordings, video recordings for learning a song on guitar, and guitar tabs, and playing songs in the app. Middle-term and very important: music is a large part of how the branch passes on its values and ideals | Songs as pages in [07](07-pages-and-menu.md): the lyrics come first and open fast, on a page that can later hold chords, tabs, audio and video |
+| Apartment display | A screen in the apartment that shows the schedule from [05](05-apartment-schedule.md) | The schedule kept in the database in a form a screen can read |
 | Checklists and milestones | Life group semesters, events, personal milestones | See [09](09-checklists-and-milestones.md) |
 
 ## Open questions
 
 - What "COG" stands for.
+- Where recordings and video are stored, since the server is in Germany and
+  video is heavy, and whose recordings the branch may put in the app.
 - What meeting scheduling, LG coordination and voting each mean.
 - Whether the evaluation above is what the board meant by "evaluations", what
   its questions are, and whether the person answering chooses to be anonymous

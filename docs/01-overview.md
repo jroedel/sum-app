@@ -62,7 +62,7 @@ P = will be a page: content, not a feature of its own.
 | Documentation: apt order, conduct policy, 1st overnight doc, branch day org doc | P | [07](07-pages-and-menu.md) |
 | Event sign-ups / home page | P | [12](12-forms.md), [09](09-checklists-and-milestones.md) |
 | Schoenstatt knowledge base: formation material, founding docs | P | [07](07-pages-and-menu.md) |
-| Songs (→ streaming) | P | [07](07-pages-and-menu.md); streaming in [11](11-later.md) |
+| Songs (→ streaming) | P | [07](07-pages-and-menu.md); chords, recordings and video in [11](11-later.md) |
 | Meeting scheduling | | [11](11-later.md) |
 | LG coordination | | [11](11-later.md), [09](09-checklists-and-milestones.md) |
 | Alumni functionality | | [11](11-later.md) |
