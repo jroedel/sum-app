@@ -180,8 +180,9 @@ A question about *behaviour* starts in `business/domain/…bus`. A question abou
   description says what the change does to the running app, not only to the
   code.
 - **Agents never touch the production server.** No `ssh`, `scp` or `rsync` to
-  it, no `deploy/deploy.sh`, and none of the `make deploy*` or `make prod-*`
-  targets. Those exist for a person at a terminal; `make` is how that person
+  it, no `scripts/deploy-ci`, `scripts/prod` or `deploy/*.sh` run by hand,
+  and none of the `make deploy*` or `make prod-*` targets. (Their tests run
+  under `make shell-test`, against a throwaway home, and touch no server.) Those exist for a person at a terminal; `make` is how that person
   talks to production, and it is the only way. If a task seems to need
   something from production — a log line, the state of the database — say
   what you need and why, and let the person run the target and paste the

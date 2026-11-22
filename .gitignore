@@ -4,6 +4,8 @@
 # Compiled binaries, named after the module in the repository root.
 /sum-app
 /sum-app-linux-amd64
+/deploy-kit.tar.gz
+/SHA256SUMS
 *.exe
 *.test
 *.out
