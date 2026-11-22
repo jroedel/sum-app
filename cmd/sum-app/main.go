@@ -16,6 +16,7 @@ import (
 	"os/signal"
 	"syscall"
 
+	"github.com/jroedel/sum-app/app/domain/docsapp"
 	"github.com/jroedel/sum-app/app/domain/homeapp"
 	"github.com/jroedel/sum-app/app/sdk/health"
 	"github.com/jroedel/sum-app/app/sdk/page"
@@ -85,6 +86,7 @@ func routes(log *slog.Logger) http.Handler {
 
 	mux.Handle("GET /healthz", health.Handler(build.Commit()))
 	homeapp.Routes(mux)
+	docsapp.Routes(mux)
 
 	return web.Wrap(mux,
 		web.RequestID(),

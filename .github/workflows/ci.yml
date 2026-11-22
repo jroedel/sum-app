@@ -74,6 +74,26 @@ jobs:
       - name: shell tests
         run: make shell-test
 
+      # The mock-ups' scripts are plain JavaScript modules with no build step,
+      # so nothing else would notice one breaking. Node's own test runner, so
+      # there is nothing to install from npm; Node itself is pinned here
+      # because the browser tests need 22 or later and the runner's own may be
+      # older. (From stewards.)
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 24
+
+      - name: JavaScript tests
+        run: make test-js
+
+      # In the runner's own Chrome, against a server built from this commit,
+      # under its real header policy. CI is set here, so a missing Chrome
+      # fails this step rather than skipping it.
+      - name: browser tests
+        if: hashFiles('cmd/sum-app/*.go') != ''
+        timeout-minutes: 10
+        run: make test-browser
+
       - name: scripts parse and pass ShellCheck
         run: make check-scripts
 

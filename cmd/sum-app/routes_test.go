@@ -104,3 +104,73 @@ func TestOnlyGET(t *testing.T) {
 		t.Fatalf("POST / = %d, want 405", resp.StatusCode)
 	}
 }
+
+// The mock-ups and the brand sheet (issue #8): served, kept out of search
+// results by header as well as by meta, and allowed their own scripts, while
+// the app's own pages keep the strict policy the deploy checks for.
+func TestPagesKeptUnderDocs(t *testing.T) {
+	for _, tc := range []struct {
+		path, contains, script string
+	}{
+		{"/prototype/", "Mock-up · not the real SUM app", "script-src 'self'"},
+		{"/prototype/app.js", "roleFrom", "script-src 'self'"},
+		{"/prototype/fonts/alegreya-latin.woff2", "", "script-src 'self'"},
+		{"/brand/", "SUM Brand", "style-src 'self' 'unsafe-inline'"},
+	} {
+		resp, body := get(t, tc.path)
+
+		if resp.StatusCode != http.StatusOK {
+			t.Errorf("%s: status %d, want 200", tc.path, resp.StatusCode)
+			continue
+		}
+
+		if !strings.Contains(body, tc.contains) {
+			t.Errorf("%s: body does not contain %q", tc.path, tc.contains)
+		}
+
+		if got := resp.Header.Get("X-Robots-Tag"); got != "noindex" {
+			t.Errorf("%s: X-Robots-Tag = %q, want noindex", tc.path, got)
+		}
+
+		csp := resp.Header.Get("Content-Security-Policy")
+		if !strings.HasPrefix(csp, "default-src 'none'") || !strings.Contains(csp, tc.script) {
+			t.Errorf("%s: Content-Security-Policy = %q, want default-src 'none' first and %s", tc.path, csp, tc.script)
+		}
+	}
+}
+
+// The app's own pages, and /healthz which the deploy rolls back on, are
+// answered exactly as they were before the mock-ups arrived.
+func TestAppPagesUnchangedByTheMockups(t *testing.T) {
+	for _, p := range []string{"/", "/healthz"} {
+		resp, _ := get(t, p)
+
+		if got := resp.Header.Get("X-Robots-Tag"); got != "" {
+			t.Errorf("%s: X-Robots-Tag = %q, want none", p, got)
+		}
+
+		if csp := resp.Header.Get("Content-Security-Policy"); strings.Contains(csp, "script-src") {
+			t.Errorf("%s: Content-Security-Policy allows a script: %q", p, csp)
+		}
+	}
+}
+
+func TestBarePathsRedirect(t *testing.T) {
+	srv := httptest.NewTestServer(t, routes(slog.New(slog.DiscardHandler)))
+	client := srv.Client()
+	client.CheckRedirect = func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }
+
+	for p, want := range map[string]string{"/prototype": "/prototype/", "/brand": "/brand/"} {
+		resp, err := client.Get(srv.URL + p)
+		if err != nil {
+			t.Fatal(err)
+		}
+		resp.Body.Close()
+
+		// 307, as the mux answers for a subtree: a 301 would be cached by the
+		// browser for good, and these paths go when the mock-ups do.
+		if resp.StatusCode != http.StatusTemporaryRedirect || resp.Header.Get("Location") != want {
+			t.Errorf("%s: %d to %q, want 307 to %q", p, resp.StatusCode, resp.Header.Get("Location"), want)
+		}
+	}
+}
