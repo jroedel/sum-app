@@ -75,8 +75,9 @@ cp secrets.env.example secrets.env && chmod 600 secrets.env
 
 1. Fill in `DEPLOY_SSH_HOST`, `DEPLOY_SSH_USER` and `DEPLOY_SSH_PORT` from
    konsoleH → Access → SSH.
-2. Set `PROD_SSH` to your own ssh host alias for the account. Your own key
-   is used for setup and logs; the deploy key is never used for them.
+2. Nothing else for ssh. Setup and logs reach the server with those three
+   values and **your own** ssh keys, as the sibling projects do. No
+   `~/.ssh/config` entry is needed, and the deploy key is never used for them.
 3. Choose a port:
 
    ```sh

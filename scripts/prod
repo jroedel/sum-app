@@ -9,8 +9,9 @@
 #     scripts/prod restart    stop and start the app
 #     scripts/prod deploy-status   one verdict: this machine, GitHub, the server, the public site
 #
-# Every server step goes through the person's own ssh (PROD_SSH), never the
-# deploy key, which can only reach the receiver. Agents never run these
+# Every server step goes through the person's own ssh (the account's user, host
+# and port from secrets.env, with the person's own keys), never the deploy key,
+# which can only reach the receiver. Agents never run these
 # (CLAUDE.md section 6; .claude/settings.json denies make prod-*).
 
 set -euo pipefail
@@ -23,7 +24,7 @@ REPO=jroedel/sum-app
 
 cmd_install() {
 	load_env
-	need PROD_SSH APP_DIR APP_DOCROOT APP_PORT APP_HOST DEPLOY_SSH_KEY_B64
+	need DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT APP_DIR APP_DOCROOT APP_PORT APP_HOST DEPLOY_SSH_KEY_B64
 
 	local dir="${ENV[APP_DIR]}" pubkey
 	# Global, not local: the EXIT trap runs after this function has returned,
@@ -47,7 +48,7 @@ cmd_install() {
 # person's and goes into secrets.env.
 cmd_ports() {
 	load_env
-	need PROD_SSH
+	need DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT
 	prod_ssh bash -s <<'EOF_PORTS'
 free=""
 for p in $(seq 8400 8500); do
@@ -59,19 +60,19 @@ EOF_PORTS
 
 cmd_status() {
 	load_env
-	need PROD_SSH APP_DIR
+	need DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT APP_DIR
 	prod_ssh "cd '${ENV[APP_DIR]}' && ./receive.sh status"
 }
 
 cmd_logs() {
 	load_env
-	need PROD_SSH APP_DIR
+	need DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT APP_DIR
 	prod_ssh "tail -n ${LINES:-60} '${ENV[APP_DIR]}/sum-app.log'"
 }
 
 cmd_restart() {
 	load_env
-	need PROD_SSH APP_DIR
+	need DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT APP_DIR
 	prod_ssh "cd '${ENV[APP_DIR]}' && ./supervise.sh restart"
 }
 
@@ -99,7 +100,7 @@ cmd_deploy_status() {
 	fi
 
 	echo "== the server"
-	if [ -n "${ENV[PROD_SSH]:-}" ] && prod_ssh "test -x '${ENV[APP_DIR]:-sum-app}/receive.sh'" 2>/dev/null; then
+	if [ -n "${ENV[DEPLOY_SSH_HOST]:-}" ] && prod_ssh "test -x '${ENV[APP_DIR]:-sum-app}/receive.sh'" 2>/dev/null; then
 		echo "the receiver is installed"
 		if prod_ssh "cd '${ENV[APP_DIR]}' && test -f config.toml" 2>/dev/null; then
 			echo "config.toml is there"
@@ -108,7 +109,7 @@ cmd_deploy_status() {
 			todo+=("make secrets-install")
 		fi
 	else
-		echo "the receiver is not installed, or the server is not reachable as PROD_SSH"
+		echo "the receiver is not installed, or the server is not reachable with your own ssh keys"
 		todo+=("make prod-install")
 	fi
 

@@ -67,9 +67,13 @@ need() {
 	fi
 }
 
-# prod_ssh runs a command on the server as the PERSON, through their own ssh
-# host alias (PROD_SSH), never with the deploy key, which can only reach the
-# receiver.
+# prod_ssh runs a command on the server as the PERSON: the account's user,
+# host and port from secrets.env, the way the sibling projects reach it, with
+# the person's own ssh keys or agent. Never with the sum-app deploy key, which
+# lives only in secrets.env and GitHub, is never written to ~/.ssh, and can
+# only reach the receiver anyway.
+#
+# Not BatchMode, so a key passphrase or a password can be typed when ssh asks.
 prod_ssh() {
-	ssh -o BatchMode=yes -o ConnectTimeout=20 "${ENV[PROD_SSH]}" "$@"
+	ssh -o ConnectTimeout=20 -p "${ENV[DEPLOY_SSH_PORT]}" "${ENV[DEPLOY_SSH_USER]}@${ENV[DEPLOY_SSH_HOST]}" "$@"
 }
