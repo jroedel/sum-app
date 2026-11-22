@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+#
+# Runs every scripts/*-test.sh, and fails if any of them does.
+#
+#     make shell-test
+#
+# A glob rather than a list, so a new test runs from the commit that adds it
+# with nothing to register: a test that has to be added to a list is a test
+# that one day is not, and passes forever by never running.
+#
+# Each test runs in its own process and its own exit status is what counts.
+# A summary line names the ones that failed, so a red run does not need its
+# log read from the top.
+
+set -uo pipefail
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+shopt -s nullglob
+tests=(scripts/*-test.sh)
+
+if [ "${#tests[@]}" -eq 0 ]; then
+	echo "no shell tests yet"
+	exit 0
+fi
+
+failed=()
+
+for t in "${tests[@]}"; do
+	echo "== $t"
+	if ! bash "$t"; then
+		failed+=("$t")
+	fi
+done
+
+if [ "${#failed[@]}" -gt 0 ]; then
+	echo "FAILED: ${failed[*]}" >&2
+	exit 1
+fi
+
+echo "${#tests[@]} shell tests passed"

@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+#
+# Every shell script in the repository, parsed by its own shell and then
+# checked by the pinned ShellCheck.
+#
+#     make check-scripts
+#
+# Both, because they catch different things. "bash -n" is the shell's own
+# parser: a script it refuses would fail the first time it ran, which for a
+# deploy script is on the server, mid-deploy. ShellCheck finds what parses and
+# is still wrong: an unquoted variable that splits a path with a space in it,
+# a "cd" whose failure is ignored.
+#
+# Which files: anything under scripts/ and deploy/ whose first line names a
+# shell, so a new script is checked without being registered anywhere. A
+# script with no shebang is not found, which is itself a mistake worth making
+# loudly elsewhere; here it is simply not a shell script.
+#
+# ShellCheck missing is a failure, never a skip (docs/13-ci-cd.md, principle
+# 7): a check that passes because its tool is absent is the check that says
+# green on the day it matters. The version is pinned too, because a newer
+# ShellCheck adds checks, and CI and this machine would then disagree about
+# what is clean.
+
+set -uo pipefail
+
+want_version="${SHELLCHECK_VERSION:-0.11.0}"
+
+if ! command -v shellcheck >/dev/null 2>&1; then
+	echo "shellcheck is not installed. Run: make tools" >&2
+	exit 1
+fi
+
+have_version="$(shellcheck --version | sed -n 's/^version: *//p')"
+if [ "$have_version" != "$want_version" ]; then
+	echo "shellcheck is $have_version; this repository pins $want_version. Run: make tools" >&2
+	exit 1
+fi
+
+cd "$(git rev-parse --show-toplevel)" || exit 1
+
+scripts=()
+while IFS= read -r -d '' f; do
+	case "$(head -n1 "$f")" in
+	'#!'*bash* | '#!'*/sh | '#!'*' sh') scripts+=("$f") ;;
+	esac
+done < <(find scripts deploy -type f -print0 2>/dev/null | sort -z)
+
+if [ "${#scripts[@]}" -eq 0 ]; then
+	echo "no shell scripts found"
+	exit 0
+fi
+
+status=0
+
+for f in "${scripts[@]}"; do
+	case "$(head -n1 "$f")" in
+	*bash*) shell="bash" ;;
+	*) shell="sh" ;;
+	esac
+
+	if ! "$shell" -n "$f"; then
+		echo "$f: $shell cannot parse it" >&2
+		status=1
+	fi
+done
+
+shellcheck --external-sources "${scripts[@]}" || status=1
+
+if [ "$status" -eq 0 ]; then
+	echo "${#scripts[@]} scripts parse and pass shellcheck $want_version"
+fi
+
+exit "$status"

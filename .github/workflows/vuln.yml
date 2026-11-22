@@ -1,0 +1,57 @@
+# govulncheck, on its own, where its red is a warning rather than a stop.
+# (From eumaeus.)
+#
+# It is not a step in CI, because CI gates the deploy, and govulncheck turns
+# red when an advisory is *published*, whatever this repository did. In eumaeus,
+# gating on it once blocked the very Go release that fixed the advisory: the
+# fix could not deploy because the advisory it fixed was red.
+#
+# Daily as well as on changes, because the database changes while the code
+# does not. A failed scheduled run emails whoever last changed this file's
+# schedule, which is the signal.
+#
+# dependabot-merge.yml (later) leaves this check out of its "every check
+# green" verdict for the same reason: the bump that fixes an advisory must not
+# wait behind it.
+name: Vulnerabilities
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "docs/**"
+      - "README.md"
+      - "CLAUDE.md"
+      - ".claude/**"
+  pull_request:
+    paths-ignore:
+      - "docs/**"
+      - "README.md"
+      - "CLAUDE.md"
+      - ".claude/**"
+  schedule:
+    - cron: "23 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: vuln-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # The job's name is what dependabot-merge.yml will leave out of its verdict.
+  govulncheck:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - run: make vuln-check
