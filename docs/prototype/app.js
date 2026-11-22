@@ -49,4 +49,26 @@ if (select) {
   });
 }
 
+// notHere answers a tap on something the mock-up does not draw (marked
+// data-not-here) with a short note, rather than a dead button or a 404.
+let toast;
+export function notHere(message = "Not in this mock-up yet") {
+  toast?.remove();
+  toast = document.createElement("p");
+  toast.className = "toast";
+  toast.setAttribute("role", "status");
+  toast.textContent = message;
+  document.body.append(toast);
+  const shown = toast;
+  setTimeout(() => shown.remove(), 2500);
+}
+
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-not-here]");
+  if (el) {
+    e.preventDefault();
+    notHere(el.dataset.notHere || undefined);
+  }
+});
+
 apply();
