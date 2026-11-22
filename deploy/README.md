@@ -102,10 +102,18 @@ make secrets-install     # config.toml
 ### 5. GitHub
 
 1. Settings → Environments: create **production**. Optionally, add yourself
-   as a required reviewer.
-2. Settings → Code security: turn on **secret scanning** and **push
+   as a required reviewer; but then every deploy waits for you, and the
+   nightly dependency merge (step 3) gives up on one after an hour and goes
+   red.
+2. Settings → Advanced Security: turn on **secret scanning** and **push
    protection**.
-3. Push the deploy secrets and variables:
+3. Settings → Actions → General → Workflow permissions: tick **Allow GitHub
+   Actions to create and approve pull requests**. `go-version.yml` opens a
+   pull request for each Go patch release, and is refused without it.
+   `dependabot-merge.yml` merges that and Dependabot's pull requests once
+   they are a day old with every check green, and deploys them
+   (`docs/13-ci-cd.md`, "Dependencies and Go itself").
+4. Push the deploy secrets and variables:
 
    ```sh
    make secrets-push        # GitHub's lists are read back afterwards

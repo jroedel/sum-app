@@ -1,0 +1,42 @@
+# Dependabot, for the two kinds of pin this repository holds (docs/13-ci-cd.md,
+# "Dependencies and Go itself"). From stewards, which took it from eumaeus.
+#
+# The actions are pinned by commit (see the comment in ci.yml), which is only
+# sustainable if something proposes the bumps: Dependabot opens a pull request
+# when a new release exists, moves the SHA and the version comment together,
+# and CI runs on it. Go modules the same way, including the `tool` lines in
+# go.mod (actionlint, govulncheck), so the tools CI runs stay current too.
+#
+# Weekly, on a Monday, and GROUPED: one pull request per ecosystem per week,
+# not one per module. stewards' first week opened three Go bumps at once, and
+# merging the first put the other two into conflict on the same lines of
+# go.mod. Grouped, the week's bumps arrive together, CI runs once, and there
+# is nothing to conflict with.
+#
+# Neither ecosystem covers the go line in go.mod (Dependabot bumps modules,
+# not the toolchain); go-version.yml does. dependabot-merge.yml merges both
+# kinds once they are a day old with every check green, and deploys them.
+version: 2
+
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      actions:
+        patterns: ["*"]
+    commit-message:
+      prefix: "Bump"
+
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      go-modules:
+        patterns: ["*"]
+    commit-message:
+      prefix: "Bump"

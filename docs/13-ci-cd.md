@@ -2,9 +2,9 @@
 
 The standard for building, checking and shipping this app, and what the
 workflows, the Makefile and the scripts must meet. CI and push to deploy
-were built with the scaffold (2026-11-21). Dependabot, `go-version.yml`,
-`dependabot-merge.yml`, the pre-commit hook and the upgrade check are still
-to come. [`deploy/README.md`](../deploy/README.md) is the operator's guide.
+were built with the scaffold (2026-11-21); Dependabot, `go-version.yml` and
+`dependabot-merge.yml` the day after. The pre-commit hook and the upgrade
+check are still to come. [`deploy/README.md`](../deploy/README.md) is the operator's guide.
 
 It takes the best of the sibling repositories, each of which paid for its
 lessons:

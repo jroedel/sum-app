@@ -10,7 +10,7 @@
 # does not. A failed scheduled run emails whoever last changed this file's
 # schedule, which is the signal.
 #
-# dependabot-merge.yml (later) leaves this check out of its "every check
+# dependabot-merge.yml leaves this check out of its "every check
 # green" verdict for the same reason: the bump that fixes an advisory must not
 # wait behind it.
 name: Vulnerabilities
@@ -41,7 +41,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  # The job's name is what dependabot-merge.yml will leave out of its verdict.
+  # The job's name is what dependabot-merge.yml leaves out of its verdict.
   govulncheck:
     name: govulncheck
     runs-on: ubuntu-latest

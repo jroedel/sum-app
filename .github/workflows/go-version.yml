@@ -1,0 +1,166 @@
+# Raise the go line in go.mod when Go ships a patch release, as a pull request
+# that dependabot-merge.yml then treats like one of Dependabot's own
+# (docs/13-ci-cd.md). From drop-in forms, with mass-intentions' handling of a
+# conflicted or superseded pull request, and an issue for a new minor.
+#
+# Dependabot does not do this. It bumps modules, not the toolchain: in eumaeus
+# it ran every week from September into October, across Go 1.26.7 and 1.26.8,
+# and never touched "go 1.26.6". A Go patch release is where the standard
+# library's security fixes arrive. Here that is not hypothetical: the scaffold's
+# first govulncheck run found an HTTP/1 server crash this app reaches, fixed in
+# Go 1.27.4. The go line is pinned to the patch so that CI, the deploy and a
+# laptop all build with exactly one toolchain; this keeps the pin from going
+# stale.
+#
+# # Why it starts CI itself
+#
+# A pull request opened with the repository's token does not trigger
+# workflows: GitHub's guard against a workflow starting an endless chain of
+# itself. So CI would never run on it, and the merge workflow, which wants
+# every check green, would never merge it. workflow_dispatch is the exception,
+# so this dispatches CI on the branch; its check runs land on the branch's head
+# commit, which is where the merge workflow looks.
+#
+# # What it will not do
+#
+# It stays on the minor the go line already names. A new minor (1.27 to 1.28)
+# changes the language and is for a person to read and decide, so it opens an
+# issue saying so, once. When the named minor drops out of support, which is
+# when its security fixes stop, it opens an issue saying that instead.
+#
+# # What it needs once, by hand
+#
+# Settings -> Actions -> General -> "Allow GitHub Actions to create and
+# approve pull requests". Without it the pull request is refused; this run
+# then fails, and deletes the branch it pushed so the next run tries again.
+
+name: Go version
+
+on:
+  schedule:
+    # 05:00 UTC daily, half an hour before the merge workflow, so a pull
+    # request opened here has waited its full day by the next morning's merge
+    # rather than the one after.
+    - cron: "0 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: go-version
+  cancel-in-progress: false
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Raise the go line to the newest patch of its minor
+        run: |
+          set -euo pipefail
+
+          current=$(sed -n 's/^go \([0-9][0-9.]*\)$/\1/p' go.mod)
+          [ -n "$current" ] || { echo "go.mod has no go line"; exit 1; }
+          minor=$(echo "$current" | cut -d. -f1,2)
+
+          # The download page lists the supported releases only: the newest
+          # two minors, each at its newest patch.
+          releases=$(curl -fsSL --retry 5 --retry-all-errors 'https://go.dev/dl/?mode=json' \
+            | jq -r '.[] | select(.stable) | .version | ltrimstr("go")')
+          [ -n "$releases" ] || { echo "go.dev listed no stable releases"; exit 1; }
+
+          # Compared as a field, not as a regular expression built from the
+          # version: drop-in forms' draft escaped the dots once too often and
+          # matched nothing, which would have reported a supported minor as
+          # dead on its first run.
+          latest=$(echo "$releases" | awk -F. -v m="$minor" '$1"."$2 == m' | sort -V | tail -1)
+          newest=$(echo "$releases" | sort -V | tail -1)
+          newest_minor=$(echo "$newest" | cut -d. -f1,2)
+
+          # open_issue_once <state> <title> <body> opens an issue with this
+          # title unless one in <state> (open, or all) already has it. A new
+          # minor is asked about once, ever: closing that issue is an answer,
+          # and asking again every morning would be nagging. A minor out of
+          # support is asked about until it is fixed, because it should be.
+          open_issue_once() {
+            local state="$1" title="$2" body="$3" found
+            found=$(gh issue list --state "$state" --search "\"${title}\" in:title" --json number,title \
+              -q "first(.[] | select(.title == \"${title}\") | .number) // empty")
+            if [ -n "$found" ]; then
+              echo "${title}; issue #${found} already says so"
+            else
+              gh issue create --title "$title" --body "$body"
+            fi
+          }
+
+          if [ -z "$latest" ]; then
+            open_issue_once open "Go ${minor} is no longer supported" \
+              "go.mod names Go ${current}. Go ${minor} no longer receives security fixes; the supported releases are $(echo "$releases" | paste -sd, - | sed 's/,/, /g'). Moving to ${newest} changes the language version, so the go line is for a person to raise, with the release notes: https://go.dev/doc/go${newest_minor}. The writing-go skill names the version too."
+            exit 0
+          fi
+
+          if [ "$newest_minor" != "$minor" ]; then
+            open_issue_once all "Go ${newest_minor} is out" \
+              "go.mod names Go ${current}, and Go ${newest_minor} is now released (${newest}). Go ${minor} is still supported, and this workflow keeps raising its patch; moving to ${newest_minor} changes the language version, so it is for a person to read and decide: https://go.dev/doc/go${newest_minor}. Update .claude/skills/writing-go/SKILL.md in the same pull request."
+          fi
+
+          if [ "$(printf '%s\n%s\n' "$current" "$latest" | sort -V | tail -1)" = "$current" ]; then
+            echo "go ${current} is the newest ${minor} release"
+            exit 0
+          fi
+
+          branch="go-${latest}"
+          if git ls-remote --exit-code --heads origin "$branch" >/dev/null; then
+            # A pull request that has fallen into conflict with main (a
+            # Dependabot bump can raise the go line itself) would otherwise
+            # wait for ever, since Dependabot rebases only its own. Closing it
+            # lets this run open it again from today's main. (mass-intentions)
+            state=$(gh pr view "$branch" --json state,mergeable -q '"\(.state) \(.mergeable)"' 2>/dev/null || echo "none")
+            if [ "$state" != "OPEN CONFLICTING" ]; then
+              echo "${branch} already exists (${state}); leaving it"
+              exit 0
+            fi
+            gh pr close "$branch" --delete-branch --comment "In conflict with main; reopening from main."
+          fi
+
+          sed -i "s/^go ${current}\$/go ${latest}/" go.mod
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -q -c "$branch"
+          git commit -q -am "Go ${latest}" -m "Raised by the Go version workflow from ${current}. Release notes: https://go.dev/doc/devel/release#go${latest}"
+          git push -q origin "$branch"
+
+          body="Go ${latest} is out, and go.mod names ${current}. This raises the go line so CI, the deploy and local builds use it.
+
+          Release notes, including which packages got security fixes: https://go.dev/doc/devel/release#go${latest}
+
+          CI was started on this branch by the workflow that opened it. Once it is green and the pull request is a day old, the merge workflow merges and deploys it like a Dependabot bump."
+
+          if ! gh pr create --head "$branch" --title "Go ${latest}" --body "$body"; then
+            git push -q origin --delete "$branch"
+            echo "could not open the pull request. Settings -> Actions -> General ->"
+            echo "\"Allow GitHub Actions to create and approve pull requests\" must be ticked."
+            exit 1
+          fi
+
+          gh workflow run ci.yml --ref "$branch"
+          echo "opened the pull request for Go ${latest} and started CI on it"
+
+          # An older patch's pull request still open would merge first and put
+          # this one into conflict on the same line. This one supersedes it.
+          # (mass-intentions)
+          for old in $(gh pr list --author app/github-actions --state open --json number,headRefName \
+            -q ".[] | select(.headRefName != \"$branch\" and (.headRefName | test(\"^go-[0-9]+\\\\.[0-9]+\\\\.[0-9]+$\"))) | .number"); do
+            gh pr close "$old" --delete-branch --comment "Superseded by Go ${latest}."
+          done
