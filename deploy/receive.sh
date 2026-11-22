@@ -215,29 +215,40 @@ install_front_end() {
 # and by nothing else, and never look like another project's.
 CRON_MARKER='# sum-app'
 
+#
+# Every line that is not ours is kept byte for byte, blank lines and comments
+# included, and the new crontab is installed only if filtering ours back out
+# of it gives exactly those lines: a bug here must not cost drop-in forms its
+# watchdog. The lines travel through files, never through $(...) or a
+# here-string, which drop and add newlines on their own. The first version
+# kept them in a variable, stripped blank lines from the new crontab but not
+# from the count of the old, and so refused the real crontab, which has blank
+# lines, on the first real deploy, after the app was already up.
 install_cron() {
-	local tmp current
-	tmp="$(mktemp)"
-	current="$(crontab -l 2>/dev/null || true)"
+	local tmp
+	tmp="$(mktemp -d)"
+
+	crontab -l >"$tmp/current" 2>/dev/null || : >"$tmp/current"
+	grep -v " $CRON_MARKER\$" "$tmp/current" >"$tmp/theirs" || true
+
+	# A last line with no newline would run into our first line.
+	if [ -s "$tmp/theirs" ] && [ -n "$(tail -c1 "$tmp/theirs")" ]; then
+		echo >>"$tmp/theirs"
+	fi
+
 	{
-		grep -v " $CRON_MARKER\$" <<<"$current" || true
+		cat "$tmp/theirs"
 		printf '@reboot cd %s && ./supervise.sh start %s\n' "$APP_DIR" "$CRON_MARKER"
 		printf '*/5 * * * * cd %s && ./supervise.sh watch %s\n' "$APP_DIR" "$CRON_MARKER"
-	} | sed '/^$/d' >"$tmp"
+	} >"$tmp/new"
 
-	# Install it only if every line that was not ours is still there: a bug
-	# here must not cost drop-in forms its watchdog.
-	local theirs_before theirs_after
-	theirs_before="$(grep -cv " $CRON_MARKER\$" <<<"$current" || true)"
-	theirs_after="$(grep -cv " $CRON_MARKER\$" "$tmp" || true)"
-	[ -z "$current" ] && theirs_before=0
-	if [ "$theirs_before" != "$theirs_after" ]; then
-		rm -f "$tmp"
+	if ! { grep -v " $CRON_MARKER\$" "$tmp/new" || true; } | cmp -s - "$tmp/theirs"; then
+		rm -rf "$tmp"
 		fail "refusing to install a crontab that would change another project's lines"
 	fi
 
-	crontab "$tmp"
-	rm -f "$tmp"
+	crontab "$tmp/new"
+	rm -rf "$tmp"
 }
 
 rollback() {
