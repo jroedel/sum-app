@@ -20,7 +20,23 @@
 name: CI
 
 on:
+  # A pull request that changes only prose or pictures skips CI: no Markdown
+  # file or image under docs/ is built into the binary or read by a test.
+  # GitHub skips only when EVERY changed file matches, so a pull request that
+  # also touches anything else runs in full. Not docs/** as a whole: the
+  # mock-ups, docs/docs.go and the brand page are compiled in and tested.
   pull_request:
+    paths-ignore:
+      - "**/*.md"
+      - "docs/**/*.png"
+      - "docs/**/*.jpg"
+
+  # No filter here, on purpose. A deploy that sees a newer commit on main
+  # stands down and leaves its change to that commit's deploy (scripts/
+  # deploy-ci, superseded). If a docs-only merge skipped CI, it would start no
+  # deploy, and a code change merged just before it would never reach the
+  # server, with nothing red to say so. A docs-only merge costs one redundant
+  # deploy instead.
   push:
     branches: [main]
 
