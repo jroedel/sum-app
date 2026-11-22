@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="prototype.css">
 <script type="module" src="app.js"></script>
+<script type="module" src="apartment.js"></script>
 </head>
 <body>
 <div class="mockup-banner" role="note">
@@ -31,8 +32,39 @@
   <span class="avatar" aria-hidden="true"><span data-for="newcomer pending">L</span><span data-for="member">M</span><span data-for="mentor">A</span><span data-for="secretary">D</span></span>
 </header>
 <main class="screen">
-<h1 class="screen-title">Apartment</h1>
-<p class="sum-card not-here">The apartment schedule is drawn in a later pull request (flow 5).</p>
+<h1 class="screen-title">The apartment</h1>
+
+<div class="stack" data-for="member secretary">
+  <p class="muted">Who will be there, and when. Life group meetings are on it already. Double bookings are allowed: whoever one displaces is told, so it can be settled beforehand.</p>
+  <div class="stack" id="days"></div>
+  <div class="thumb-action">
+    <a class="sum-btn sum-btn--accent sum-btn--block" href="apartment-add.html">Add yourself</a>
+  </div>
+</div>
+
+<div class="sum-card stack" data-for="newcomer pending mentor" id="members-only">
+  <p class="sum-event-title">The apartment is for members</p>
+  <p class="muted">Its schedule shows who will be there and when. Once the secretary confirms you as a member, it is here.</p>
+</div>
+
+<template id="day">
+  <section class="sec">
+    <h2 data-slot="label"></h2>
+    <div class="sum-card list-card" data-slot="rows"></div>
+  </section>
+</template>
+
+<template id="booking">
+  <div class="row-link booking">
+    <p class="time sum-num" data-slot="time"></p>
+    <div class="grow">
+      <p class="sum-event-title" data-slot="who"></p>
+      <p class="muted" data-slot="space"></p>
+      <div class="chips" data-slot="chips"></div>
+    </div>
+    <button class="sum-btn sum-btn--quiet small" type="button" data-slot="remove" hidden>Remove me</button>
+  </div>
+</template>
 </main>
 <nav class="sum-tabbar tabbar" aria-label="Menu">
   <img class="rail-seal" src="seal.svg" alt="">

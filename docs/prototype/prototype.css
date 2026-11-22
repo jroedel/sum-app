@@ -233,3 +233,53 @@ a { color: var(--primary); }
 .group-card p { margin: 0; }
 .group-card .chev { color: var(--ink-muted); }
 .request .row p { margin: 0; }
+
+/* The apartment. */
+.booking { align-items: flex-start; }
+.booking .time { flex: none; width: 7.5rem; margin: 0; font-size: 15px; line-height: 22px; color: var(--ink-muted); padding-top: 2px; }
+.booking .chips { margin-top: var(--space-1); }
+.booking:target { background: var(--due-soon-tint); margin-inline: calc(-1 * var(--space-4)); padding-inline: var(--space-4); }
+.nobody { padding: var(--space-3) 0; }
+.sum-btn.small { min-height: 40px; padding: var(--space-2) var(--space-3); font-size: 15px; }
+
+/* The one main action, low on the screen where a thumb reaches (doc 10). */
+.thumb-action {
+  position: sticky;
+  bottom: calc(76px + env(safe-area-inset-bottom, 0px));
+  padding-top: var(--space-2);
+}
+
+@media (min-width: 960px) {
+  .thumb-action { bottom: var(--space-4); }
+}
+
+/* Forms. Every control is 48 px tall at least (doc 10, "Accessibility"). */
+.choice { border: 0; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.choice legend, .field { font-weight: 700; padding: 0; margin-bottom: var(--space-2); }
+.choice label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 48px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+  font-weight: 400;
+}
+.choice label:has(input:checked) { box-shadow: inset 0 0 0 2px var(--primary); }
+.choice input { width: 20px; height: 20px; accent-color: var(--primary); margin: 0; }
+
+.field { display: flex; flex-direction: column; gap: var(--space-2); margin: 0; }
+.field select, .field input {
+  min-height: 48px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--ink);
+  font: 400 17px/26px var(--font-text);
+}
+.times { align-items: flex-end; }
+.field-error { margin: 0; color: var(--overdue); font-weight: 700; }
+.told { margin: 0; padding-left: 1.2em; display: grid; gap: var(--space-2); }
