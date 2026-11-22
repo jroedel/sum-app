@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { DEFAULT_ROLE, ROLES, askToJoin, clashes, isMember, memory, requestFor, roleFrom, shownFor, withRole, years } from "./model.js";
+import { DEFAULT_ROLE, ROLES, askToJoin, clashes, clashesWith, clock, isMember, memory, requestFor, roleFrom, schedule, shownFor, span, withRole, years } from "./model.js";
 
 test("the role comes from ?as=, then memory, then the default", () => {
   assert.equal(roleFrom("?as=secretary", "mentor"), "secretary");
@@ -107,4 +107,32 @@ test("one request at a time (doc 04)", () => {
 
 test("a group's years, earliest first", () => {
   assert.deepEqual(years([{ year: 2029 }, { year: 2027 }, { year: 2028 }]), [2027, 2028, 2029]);
+});
+
+test("times read as a phone shows them", () => {
+  assert.equal(clock("16:30"), "4:30 PM");
+  assert.equal(clock("00:15"), "12:15 AM");
+  assert.equal(clock("12:00"), "12:00 PM");
+  assert.equal(span("16:30", "17:30"), "4:30–5:30 PM");
+  assert.equal(span("11:00", "13:00"), "11:00 AM–1:00 PM");
+});
+
+test("a meeting is two halves: the dining room, then a room", () => {
+  const days = [{ iso: "2026-11-24", weekday: 2 }, { iso: "2026-11-25", weekday: 3 }];
+  const all = schedule([{ group: "emmaus", weekday: 2, start: "19:00", middle: "20:00", end: "21:00", room: "second" }], days, []);
+  assert.deepEqual(
+    all.map((b) => [b.space, b.day, b.start, b.end]),
+    [
+      ["dining", "2026-11-24", "19:00", "20:00"],
+      ["second", "2026-11-24", "20:00", "21:00"],
+    ],
+  );
+});
+
+test("a booking lists what it overlaps, never itself", () => {
+  const a = { id: "a", space: "study", day: "d", start: "15:00", end: "18:00" };
+  const b = { id: "b", space: "study", day: "d", start: "17:00", end: "19:00" };
+  const c = { id: "c", space: "study", day: "d", start: "18:00", end: "20:00" };
+  assert.deepEqual(clashesWith(a, [a, b, c]).map((x) => x.id), ["b"]);
+  assert.deepEqual(clashesWith(b, [a, b, c]).map((x) => x.id), ["a", "c"]);
 });

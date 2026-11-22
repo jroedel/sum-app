@@ -47,6 +47,17 @@ lists it here, so it is not mistaken for a decision:
 - **A mentor sees requests to his own groups only;** the secretary sees every
   request, with the ones unanswered for 3 days marked.
 
+- **The rooms are "Study room" and "Second room".** Their names are open in
+  doc 05, and so is how a group picks its second-hour room: here each group
+  always uses the same one.
+- **An overlap is marked on both bookings** ("Overlaps"), and adding one says
+  who is told: a life group's leader for a meeting, a member himself for his
+  own booking. Doc 05 says the displaced are told; the mock-up tells everyone
+  the new booking overlaps.
+- **A member removes only his own bookings,** never a meeting.
+- **Newcomers and the alum mentor** reaching the apartment by its address are
+  told it is for members.
+
 ## Clicking through flow 2
 
 Lucas, the newcomer, has one request in this browser. Choosing **Newcomer, no
@@ -112,3 +123,11 @@ When the real screens replace them (issue #8):
    the brand sheet's route too.
 3. Remove the `/prototype/` case from `app/sdk/page/policy.go`.
 4. Take `docs/prototype` out of `scripts/js-test` once nothing is left there.
+
+## Clicking through flow 5
+
+As **Member**, Apartment shows the week from Monday, November 23, with each
+life group meeting as its two halves. Mateo's Wednesday study time overlaps
+Cana's second hour, and Home says so under *Waiting on you*. **Add yourself**
+is always accepted; one that overlaps lists who is told. **Remove me** takes
+off his own.

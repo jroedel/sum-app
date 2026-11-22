@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Add yourself · SUM mock-up</title>
+<link rel="icon" href="seal.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="prototype.css">
+<script type="module" src="app.js"></script>
+<script type="module" src="apartment-add.js"></script>
+</head>
+<body>
+<div class="mockup-banner" role="note">
+  <p>Mock-up · not the real SUM app</p>
+  <label>Viewing as
+    <select id="as">
+      <option value="newcomer">Newcomer, no request</option>
+      <option value="pending">Newcomer with a request</option>
+      <option value="member">Member</option>
+      <option value="mentor">Mentor (an alum)</option>
+      <option value="secretary">Secretary</option>
+    </select>
+  </label>
+</div>
+<header class="topbar">
+  <a class="back" href="apartment.html" aria-label="Back"><svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg></a>
+  <p class="name">Apartment</p>
+  <span class="avatar" aria-hidden="true"><span data-for="newcomer pending">L</span><span data-for="member">M</span><span data-for="mentor">A</span><span data-for="secretary">D</span></span>
+</header>
+<main class="screen">
+<h1 class="screen-title">Add yourself</h1>
+
+<form class="stack" id="add" novalidate data-for="member secretary">
+  <fieldset class="choice">
+    <legend>Where</legend>
+    <label><input type="radio" name="space" value="study" checked> Study room</label>
+    <label><input type="radio" name="space" value="second"> Second room</label>
+    <label><input type="radio" name="space" value="dining"> Dining and living area</label>
+  </fieldset>
+
+  <label class="field">Day
+    <select name="day" id="day"></select>
+  </label>
+
+  <div class="row times">
+    <label class="field grow">From
+      <input type="time" name="start" value="15:00" step="900">
+    </label>
+    <label class="field grow">Until
+      <input type="time" name="end" value="18:00" step="900">
+    </label>
+  </div>
+
+  <fieldset class="choice">
+    <legend>Why</legend>
+    <label><input type="radio" name="kind" value="study" checked> To study. Others are asked not to disturb you.</label>
+    <label><input type="radio" name="kind" value="here"> Just to be there</label>
+  </fieldset>
+
+  <p class="field-error" id="error" role="alert" hidden></p>
+
+  <button class="sum-btn sum-btn--accent sum-btn--block" type="submit">Add me</button>
+</form>
+
+<div class="sum-card stack" data-for="newcomer pending mentor">
+  <p class="sum-event-title">The apartment is for members</p>
+  <p class="muted">Once the secretary confirms you as a member, you can put yourself on its schedule.</p>
+</div>
+
+<div class="stack" id="added" role="status" hidden>
+  <div class="sum-card stack">
+    <div class="row">
+      <p class="sum-event-title grow">You're on the schedule</p>
+      <span class="sum-chip sum-chip--done"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#check"/></svg>Added</span>
+    </div>
+    <p class="muted" id="added-what"></p>
+  </div>
+
+  <div class="sum-card stack" id="overlap" hidden>
+    <div class="row">
+      <p class="sum-event-title grow">It overlaps another booking</p>
+      <span class="sum-chip sum-chip--soon"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#bell"/></svg>Told</span>
+    </div>
+    <ul class="told" id="told"></ul>
+    <p class="muted">Nothing is refused. The point is to settle it before the day, between the people it affects.</p>
+  </div>
+
+  <a class="sum-btn sum-btn--primary sum-btn--block" href="apartment.html" id="see">See the schedule</a>
+</div>
+</main>
+<nav class="sum-tabbar tabbar" aria-label="Menu">
+  <img class="rail-seal" src="seal.svg" alt="">
+  <a class="sum-tab" href="./"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#house"/></svg></span>Home</a>
+  <a class="sum-tab" href="groups.html"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#users"/></svg></span>Groups</a>
+  <a class="sum-tab" href="apartment.html" aria-current="page" data-members><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#calendar-days"/></svg></span>Apartment</a>
+  <a class="sum-tab" href="game.html"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#grid-3x3"/></svg></span>Game</a>
+  <a class="sum-tab" href="more.html"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#ellipsis"/></svg></span>More</a>
+</nav>
+</body>
+</html>

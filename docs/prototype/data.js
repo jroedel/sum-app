@@ -81,3 +81,51 @@ export const OTHER_REQUESTS = [
   { id: "noah", name: "Noah", year: 2028, major: "Economics", group: "emmaus", sent: "today", for: ["mentor", "secretary"] },
   { id: "caleb", name: "Caleb", year: 2027, major: "Finance", group: "cana", sent: "3 days ago", unanswered: true, for: ["secretary"] },
 ];
+
+// The apartment (doc 05): two rooms and the dining and living area, which is
+// one space. What the two rooms are called is open; "Study room" and "Second
+// room" are the mock-up's names for them.
+export const SPACES = [
+  { id: "dining", name: "Dining and living area" },
+  { id: "study", name: "Study room" },
+  { id: "second", name: "Second room" },
+];
+
+export const space = (id) => SPACES.find((s) => s.id === id);
+
+// DAYS are the week the mock-up shows, starting on the Monday Home names.
+export const DAYS = [
+  { iso: "2026-11-23", label: "Monday, November 23", weekday: 1 },
+  { iso: "2026-11-24", label: "Tuesday, November 24", weekday: 2 },
+  { iso: "2026-11-25", label: "Wednesday, November 25", weekday: 3 },
+  { iso: "2026-11-26", label: "Thursday, November 26", weekday: 4 },
+  { iso: "2026-11-27", label: "Friday, November 27", weekday: 5 },
+  { iso: "2026-11-28", label: "Saturday, November 28", weekday: 6 },
+  { iso: "2026-11-29", label: "Sunday, November 29", weekday: 0 },
+];
+
+// MEETINGS are each life group's weekly meeting on the schedule, put there
+// without anyone entering it (doc 05): the dining room for the first hour,
+// then one of the two rooms for the second. Which room is open in doc 05;
+// here each group has one.
+export const MEETINGS = [
+  { group: "emmaus", weekday: 2, start: "19:00", middle: "20:00", end: "21:00", room: "second" },
+  { group: "cana", weekday: 3, start: "20:00", middle: "21:00", end: "22:00", room: "study" },
+  { group: "tabor", weekday: 4, start: "20:00", middle: "21:00", end: "22:00", room: "second" },
+  { group: "nazareth", weekday: 0, start: "16:30", middle: "17:30", end: "18:30", room: "second" },
+];
+
+// BOOKINGS are what members have put on the schedule themselves. Mateo's
+// study booking on Wednesday is overlapped by Cana's second hour, so the
+// member has a displacement waiting on Home (doc 05: a single member who is
+// displaced is told himself).
+export const BOOKINGS = [
+  { id: "isaac-mon", who: "Isaac", kind: "study", space: "study", day: "2026-11-23", start: "15:00", end: "18:00" },
+  { id: "mateo-tue", who: "Mateo", kind: "here", space: "dining", day: "2026-11-24", start: "17:00", end: "19:00" },
+  { id: "mateo-wed", who: "Mateo", kind: "study", space: "study", day: "2026-11-25", start: "20:30", end: "22:00" },
+  { id: "peter-fri", who: "Peter", kind: "here", space: "dining", day: "2026-11-27", start: "18:00", end: "21:00" },
+  { id: "daniel-sat", who: "Daniel", kind: "study", space: "study", day: "2026-11-28", start: "10:00", end: "13:00" },
+];
+
+// ME is who "Remove me" and a new booking belong to, by role.
+export const ME = { member: "Mateo", secretary: "Daniel" };

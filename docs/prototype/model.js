@@ -140,6 +140,38 @@ export function clashes(a, b) {
   );
 }
 
+// clock turns "16:30" into "4:30 PM", and span gives "4:30–5:30 PM", or
+// "11:00 AM–1:00 PM" across noon.
+export function clock(hhmm) {
+  const [h, m] = hhmm.split(":").map(Number);
+  return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
+}
+
+export function span(start, end) {
+  const a = clock(start);
+  const b = clock(end);
+  return a.slice(-2) === b.slice(-2) ? `${a.slice(0, -3)}–${b}` : `${a}–${b}`;
+}
+
+// schedule is every booking in the week: each life group meeting as its two
+// halves (doc 05), then the members' own, in the order of the day.
+export function schedule(meetings, days, bookings) {
+  const out = [...bookings];
+  for (const m of meetings) {
+    for (const d of days.filter((d) => d.weekday === m.weekday)) {
+      out.push({ id: `${m.group}-${d.iso}-1`, kind: "meeting", group: m.group, space: "dining", day: d.iso, start: m.start, end: m.middle });
+      out.push({ id: `${m.group}-${d.iso}-2`, kind: "meeting", group: m.group, space: m.room, day: d.iso, start: m.middle, end: m.end });
+    }
+  }
+  return out.sort((a, b) => a.day.localeCompare(b.day) || minutes(a.start) - minutes(b.start) || a.space.localeCompare(b.space));
+}
+
+// clashesWith is every other booking that b overlaps. A double booking is
+// allowed (doc 05): this is who to tell, not a reason to refuse.
+export function clashesWith(b, all) {
+  return all.filter((o) => o.id !== b.id && clashes(b, o));
+}
+
 // memory is localStorage when the browser allows it, and a plain map when it
 // does not (a private window, blocked site data), so the mock-up still works
 // for the length of a page and never throws.
