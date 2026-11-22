@@ -1,0 +1,102 @@
+# Every pull request, and main. This workflow touches nothing outside GitHub:
+# deploy.yml follows it, by name, once it succeeds on main (docs/13-ci-cd.md).
+#
+# THE NAME IS LOAD-BEARING. deploy.yml is triggered by `workflow_run` on the
+# workflow called "CI"; rename this one and every deploy silently stops, with
+# no red anywhere. scripts/workflow-names-test.sh asserts the two agree.
+#
+# The trigger is `pull_request`, never `pull_request_target`. This repository is
+# public, so a pull request can come from anybody's fork, and
+# `pull_request_target` would run that fork's code with this repository's
+# token and secrets. Under `pull_request` a fork gets a read-only token and no
+# secrets, and this workflow needs neither.
+#
+# The checks are separate steps rather than one `make test`, so a red run names
+# what failed on its own line.
+#
+# Actions are pinned to a commit with the version in a comment. A tag is a
+# moving pointer its owner can repoint, and a third-party action runs with
+# this workflow's token; Dependabot moves the pin and the comment together.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+  # For go-version.yml (later): a pull request opened with the repository's
+  # token starts no workflow, so that workflow starts this one on its branch.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# A newer push to the same branch cancels the older run. On main this is the
+# first layer of superseding: an overtaken commit usually never reaches the
+# deploy at all, because its CI never finishes.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    # A browser test with no limit once hung stewards' CI for 42 minutes.
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          # From go.mod, so there is no second place to bump the toolchain.
+          go-version-file: go.mod
+          cache: true
+
+      # The pinned ShellCheck, installed explicitly. The runner image has its
+      # own, of whatever version the image ships, and check-scripts refuses
+      # any but the pinned one rather than passing on a different opinion.
+      - name: install the pinned ShellCheck
+        run: |
+          make tools
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      # The Go steps enable themselves with the first .go file, as in
+      # stewards, so a step can never be red for want of code.
+      - name: lint
+        if: hashFiles('**/*.go') != ''
+        run: make lint
+
+      - name: unit tests, with the race detector
+        if: hashFiles('**/*.go') != ''
+        run: make test-unit
+
+      - name: shell tests
+        run: make shell-test
+
+      - name: scripts parse and pass ShellCheck
+        run: make check-scripts
+
+      - name: workflows pass actionlint
+        run: make check-workflows
+
+      # Not a duplicate of the build the tests did. The server has no Go and
+      # gets one file, so a build that quietly links this runner's glibc is a
+      # deploy that dies on the host; `make release` asserts the result is
+      # statically linked.
+      - name: the release build is static
+        if: hashFiles('cmd/sum-app/*.go') != ''
+        run: make release
+
+      # The binary deploy.yml ships: this exact file, from this exact run,
+      # rather than a rebuild (docs/13-ci-cd.md, principle 2). One day is
+      # plenty, because the deploy starts the moment this run ends. Pull
+      # requests upload nothing, since nothing deploys them.
+      - name: keep the binary for the deploy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && hashFiles('cmd/sum-app/*.go') != ''
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: sum-app-linux-amd64
+          path: sum-app-linux-amd64
+          retention-days: 1
+          if-no-files-found: error

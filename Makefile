@@ -19,6 +19,17 @@ GOFILES = $(shell find . -name '*.go' -not -path './.git/*' -not -path './.claud
 STATICCHECK_VERSION := v0.8.2
 GOPLS_VERSION       := v0.24.0
 
+# ShellCheck, which scripts/check-scripts runs over every shell script, and
+# those are the scripts that hold the deploy key. Pinned, because a new release
+# adds checks and two versions would disagree about what is clean. Its releases
+# publish no checksums file, so the archive's SHA-256 is recorded here (the same
+# pin as eumaeus). actionlint and govulncheck need no line here: they are `tool`
+# lines in go.mod, so `go tool` runs the pinned version and Dependabot bumps it.
+SHELLCHECK_VERSION ?= 0.11.0
+SHELLCHECK_SHA256  ?= 8c3be12b05d5c177a04c29e3c78ce89ac86f1595681cab149b65b97c4e227198
+TOOLS_DIR          ?= $(HOME)/.local/bin
+CURL               ?= curl -fsSL --retry 5 --retry-all-errors --connect-timeout 20
+
 .DEFAULT_GOAL := help
 
 .PHONY: help
@@ -43,6 +54,18 @@ outline: ## Every symbol in one file, with line numbers (make outline FILE=path/
 dev-tools: ## Install the Go tooling this Makefile navigates and checks with, pinned
 	$(GO) install golang.org/x/tools/gopls@$(GOPLS_VERSION)
 	$(GO) install honnef.co/go/tools/cmd/staticcheck@$(STATICCHECK_VERSION)
+
+.PHONY: tools
+tools: ## Install the pinned ShellCheck into $(TOOLS_DIR), checked against its hash
+	@mkdir -p $(TOOLS_DIR)
+	@tmp=$$(mktemp -d) && trap 'rm -rf "$$tmp"' EXIT && \
+		base="shellcheck-v$(SHELLCHECK_VERSION).linux.x86_64.tar.xz" && \
+		$(CURL) -o "$$tmp/$$base" "https://github.com/koalaman/shellcheck/releases/download/v$(SHELLCHECK_VERSION)/$$base" && \
+		(cd "$$tmp" && echo "$(SHELLCHECK_SHA256)  $$base" | sha256sum -c --quiet -) && \
+		tar xJf "$$tmp/$$base" -C "$$tmp" "shellcheck-v$(SHELLCHECK_VERSION)/shellcheck" && \
+		install -m 0755 "$$tmp/shellcheck-v$(SHELLCHECK_VERSION)/shellcheck" $(TOOLS_DIR)/shellcheck
+	@echo "installed $(TOOLS_DIR)/shellcheck $$($(TOOLS_DIR)/shellcheck --version | sed -n 's/^version: *//p')"
+	@command -v shellcheck >/dev/null || echo "NOTE: $(TOOLS_DIR) is not on your PATH"
 
 # ---------------------------------------------------------------- the checks
 
@@ -86,8 +109,28 @@ fmt-check: ## Fail, naming the files, if any Go source is not gofmt -s clean
 test-unit: ## The Go tests, with the race detector. No network
 	@GO=$(GO) scripts/go-test -race ./...
 
+.PHONY: shell-test
+shell-test: ## Every scripts/*-test.sh; a new one runs with nothing to register
+	@scripts/shell-test
+
+.PHONY: check-scripts
+check-scripts: ## Every shell script parsed by its own shell, then the pinned ShellCheck
+	@SHELLCHECK_VERSION=$(SHELLCHECK_VERSION) scripts/check-scripts
+
+# actionlint knows GitHub's expression syntax and each action's inputs, so a
+# misspelt `if:` or a `needs:` naming a job that does not exist fails here
+# rather than in a run that silently skips the step. It runs ShellCheck over
+# every `run:` block too, when ShellCheck is on the path.
+.PHONY: check-workflows
+check-workflows: ## The workflows, checked by the pinned actionlint
+	@$(GO) tool actionlint
+
+.PHONY: vuln-check
+vuln-check: ## Dependencies and the standard library against the Go vulnerability database (needs network)
+	@$(GO) tool govulncheck ./...
+
 .PHONY: test
-test: lint test-unit ## Everything CI runs that needs no network, in CI's order
+test: lint test-unit shell-test check-scripts check-workflows ## Everything CI runs that needs no network, in CI's order
 
 # ---------------------------------------------------------------- build and run
 
