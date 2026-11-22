@@ -39,6 +39,22 @@ lists it here, so it is not mistaken for a decision:
   and a payment to match (doc 03, doc 06). A member's *Waiting on you* is dues
   when they are due. The mentor sees his groups under *Your groups*.
 - **The secretary is a member,** with his own group, streak and milestones.
+- **What a group shows** (open in doc 14, flow 2): its members' first names,
+  graduation years and majors, its meeting time and place, and its mentors.
+  The open groups list shows each member's year as a chip.
+- **Withdrawing to ask another group** is offered right where the second
+  request is refused, as "Withdraw it", rather than only on Home.
+- **A mentor sees requests to his own groups only;** the secretary sees every
+  request, with the ones unanswered for 3 days marked.
+
+## Clicking through flow 2
+
+Lucas, the newcomer, has one request in this browser. Choosing **Newcomer, no
+request** starts him over. He opens a group from Groups and taps **Request to
+join**; Home then shows Pending. Asking a second group asks him to withdraw the
+first. As **Mentor**, Requests to join (from Home or Groups) has **Approve**;
+back as **Newcomer with a request**, Home shows his group. Before he has done
+anything, the mock-up's example is a request to Emmaus sent on Saturday.
 - **Game, More and anything marked "not in this mock-up"** are placeholders:
   tapping one says so rather than doing nothing.
 

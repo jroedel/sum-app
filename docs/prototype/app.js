@@ -6,11 +6,30 @@
 // A screen with more to do (a button that changes something) has a script of
 // its own, which imports `role` and `saved` from here. Module scripts run in
 // the order the page lists them, so this one has run by then.
-import { isMember, memory, roleFrom, shownFor, withRole } from "./model.js";
+import { group } from "./data.js";
+import { isMember, memory, requestFor, roleFrom, shownFor, withRole } from "./model.js";
 
 export const saved = memory(window);
 export const role = roleFrom(window.location.search, saved.get("role"));
 saved.set("role", role);
+
+// request is Lucas's request to join, as this role has it (model.js,
+// requestFor). Withdrawn, or forgotten by choosing "Newcomer, no request", it
+// is remembered as null, so the example does not come back on its own.
+export const request = requestFor(role, saved.get("request"));
+saved.set("request", request ?? null);
+
+// setRequest and withdraw change it, and go where the flow goes next: Home,
+// as the newcomer with or without a request, unless the page says otherwise.
+export function setRequest(next) {
+  saved.set("request", next);
+  window.location.assign(withRole("./", "pending"));
+}
+
+export function withdraw(then = withRole("./", "newcomer")) {
+  saved.set("request", null);
+  window.location.assign(then);
+}
 
 // apply shows or hides everything marked data-for, and marks the document
 // with the role and whether it is a member's, which the stylesheet does not
@@ -19,8 +38,24 @@ export function apply(root = document) {
   document.documentElement.dataset.role = role;
   document.documentElement.dataset.member = String(isMember(role));
 
-  for (const el of root.querySelectorAll("[data-for]")) {
-    el.hidden = !shownFor(el.dataset.for, role);
+  // data-for is who sees an element; data-request, which state of the
+  // newcomer's request it belongs to (pending or approved). Both must hold.
+  for (const el of root.querySelectorAll("[data-for], [data-request]")) {
+    const forRole = !("for" in el.dataset) || shownFor(el.dataset.for, role);
+    const forRequest = !("request" in el.dataset) || el.dataset.request === request?.status;
+    el.hidden = !(forRole && forRequest);
+  }
+
+  // The request's group, wherever a page names it.
+  const asked = request && group(request.group);
+  if (asked) {
+    for (const el of root.querySelectorAll("[data-fill]")) {
+      const value = { "group-name": asked.name, "group-meets": `${asked.meets} · ${asked.place}`, sent: request.sent }[el.dataset.fill];
+      if (value !== undefined) el.textContent = value;
+    }
+    for (const a of root.querySelectorAll("a[data-group-link]")) {
+      a.setAttribute("href", `group.html?g=${asked.id}`);
+    }
   }
 
   // The Apartment tab is a member's (doc 10, "The app's layout").

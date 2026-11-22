@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="prototype.css">
 <script type="module" src="app.js"></script>
+<script type="module" src="groups.js"></script>
 </head>
 <body>
 <div class="mockup-banner" role="note">
@@ -32,7 +33,59 @@
 </header>
 <main class="screen">
 <h1 class="screen-title">Groups</h1>
-<p class="sum-card not-here">Groups is drawn in a later pull request (flow 2, request to join).</p>
+
+<section class="sec" aria-labelledby="mine" data-for="member secretary">
+  <h2 id="mine">My life group</h2>
+  <div class="sum-card list-card">
+    <a class="row-link" href="group.html?g=tabor">
+      <svg class="icon primary-icon" aria-hidden="true"><use href="icons.svg#users"/></svg>
+      <div class="grow">
+        <p class="sum-event-title">Tabor</p>
+        <p class="muted sum-num">Thu · 8:00–10:00 PM · The apartment</p>
+      </div>
+      <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    </a>
+    <a class="row-link" href="more.html" data-not-here>
+      <svg class="icon primary-icon" aria-hidden="true"><use href="icons.svg#book-open"/></svg>
+      <div class="grow">
+        <p class="sum-event-title">Roster</p>
+        <p class="muted">Every member's email and phone</p>
+      </div>
+      <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    </a>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="to-approve" data-for="mentor secretary">
+  <h2 id="to-approve">Requests to join</h2>
+  <a class="sum-card row-link" href="requests.html">
+    <svg class="icon primary-icon" aria-hidden="true"><use href="icons.svg#bell"/></svg>
+    <div class="grow">
+      <p class="sum-event-title"><span data-for="mentor">Waiting on you</span><span data-for="secretary">Every request, and the ones nobody answered</span></p>
+      <p class="muted">Approve a man and he is in the group.</p>
+    </div>
+    <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+  </a>
+</section>
+
+<section class="sec" aria-labelledby="open">
+  <h2 id="open">Open life groups</h2>
+  <p class="muted">Groups forming this semester. Each shows its members' graduation years, because a group whose men finish around the same time stays together longer. Which one suits you is your choice.</p>
+  <div class="stack" id="open-groups"></div>
+</section>
+
+<template id="group-card">
+  <a class="sum-card group-card" href="group.html">
+    <div class="row">
+      <p class="sum-event-title grow" data-slot="name"></p>
+      <span class="sum-chip sum-chip--soon" data-slot="requested" hidden><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#hourglass"/></svg>Requested</span>
+      <span class="sum-chip sum-chip--done" data-slot="joined" hidden><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#check"/></svg>Your group</span>
+      <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+    </div>
+    <p class="muted sum-num" data-slot="meets"></p>
+    <div class="chips" data-slot="years"></div>
+  </a>
+</template>
 </main>
 <nav class="sum-tabbar tabbar" aria-label="Menu">
   <img class="rail-seal" src="seal.svg" alt="">

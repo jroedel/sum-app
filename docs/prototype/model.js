@@ -81,6 +81,47 @@ function splitOnce(s, sep) {
   return i < 0 ? [s, undefined] : [s.slice(0, i), s.slice(i + 1)];
 }
 
+// requestFor is Lucas's request to join, as the role being looked at has it.
+//
+// "Newcomer, no request" has none, whatever this browser remembers. Everyone
+// else sees the one he made, or, before he has made one, the mock-up's own
+// example: Lucas asked Emmaus on Saturday, so the mentor has a request to
+// approve on a first visit. Choosing "Newcomer, no request" forgets his, which
+// starts the flow over, and a tap on Request to join moves the role from one
+// newcomer to the other.
+export const EXAMPLE_REQUEST = { group: "emmaus", status: "pending", sent: "Saturday" };
+
+// remembered is undefined when this browser has seen nothing yet, and null
+// once a request was withdrawn or the flow started over.
+export function requestFor(role, remembered) {
+  if (role === "newcomer") return undefined;
+  if (remembered) return remembered;
+  if (role === "pending" || remembered === undefined) return EXAMPLE_REQUEST;
+  return undefined;
+}
+
+// askToJoin is what tapping Request to join does to a request (doc 04): one
+// at a time, so a request out to another group must be withdrawn first; there
+// is no second request to the same group; and a man already approved into a
+// group asks no other.
+export function askToJoin(request, groupID) {
+  if (!request) {
+    return { ok: true, request: { group: groupID, status: "pending", sent: "just now" } };
+  }
+
+  if (request.status === "approved") {
+    return { ok: false, reason: "in-group" };
+  }
+
+  return { ok: false, reason: request.group === groupID ? "already" : "withdraw-first" };
+}
+
+// years is a group's graduation years, earliest first, for the chips an open
+// group shows at a glance (doc 04, "Composition is shown").
+export function years(members) {
+  return members.map((m) => m.year).sort((a, b) => a - b);
+}
+
 // minutes turns "16:30" into minutes after midnight.
 export function minutes(hhmm) {
   const [h, m] = hhmm.split(":").map(Number);
