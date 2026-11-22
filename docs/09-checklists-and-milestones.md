@@ -7,7 +7,7 @@ The app is a standard operating procedure manual written into software. The
 One mechanism serves three uses:
 
 1. **A life group's semester**: the steps every life group goes through.
-2. **An event**: branch day, Friendsgiving, the opening and closing branch
+2. **An event**: branch day, Brosgiving, the opening and closing branch
    retreats of each semester.
 3. **A person's milestones**: the checkpoints of a member's path in SUM.
 
@@ -86,7 +86,7 @@ done, which are coming up, and which are overdue.
 ## 2. Events
 
 The pattern described earlier for branch day applies to every event:
-Friendsgiving and the four yearly branch retreats (the opening and closing
+Brosgiving and the four yearly branch retreats (the opening and closing
 retreat of each semester, fall and spring). Each has something special, and
 points in common.
 
@@ -138,7 +138,7 @@ one:
 3. Only then is he considered for the core team, the Good Friday pilgrimage
    or Ignis, which come after some experience in the group.
 
-Small events are branch day, Friendsgiving and the Seder meal. A role can also
+Small events are branch day, Brosgiving and the Seder meal. A role can also
 be smaller and last all year:
 
 - **Queen's Guard** makes sure the Blessed Mother arrives at each event. There
@@ -218,6 +218,5 @@ recommended order is the life group semester next, and events after that.
   in he is assigned.
 - How the core team sees who has filled the form in, and whether the form
   lives in the app or stays a separate form that the app links to.
-- Whether the term is Friendsgiving or something else the branch uses.
 - Whether a step is a milestone on the member's profile (section 3) or is
   worked out from the events he has been sub-lead and lead of.
