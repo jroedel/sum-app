@@ -37,18 +37,24 @@ This replaces the earlier open question of claim versus visibility: an entry
 claims a space, and a clash is reported to the people it affects instead of
 being refused.
 
+### Decided (2026-11-22)
+
+- **The study room is one of the two rooms.** The other is the second room.
+- **A typical life group meeting** starts in the dining room for the first
+  hour and moves to one of the two rooms for the second.
+- **A life group meeting can displace a study reservation.** Meetings are
+  scheduled ahead, at a constant weekly time, so a member can see them coming.
+- **A single member who is displaced is told himself.**
+
 ## Open questions
 
-- The spaces and their names: whether one of the two rooms is the study room,
-  and whether the dining and living area is ever booked as two.
-- Which space a life group's weekly meeting takes by default, and how its
-  leader changes it.
-- Whether a life group meeting can displace a member's study reservation, or
-  the reverse, or both are only reported.
-- Who is notified when a member, not a group, is displaced: only the member, or
-  also a life group leader.
-- Whether some uses need the apartment to themselves (a life group meeting?)
-  and others can share.
+- What the two rooms are called.
+- How a life group leader chooses the room for his second hour, and whether a
+  meeting without a room free in its second hour is reported like any other
+  double booking.
+- Whether a study reservation can be displaced by something other than a life
+  group meeting.
+- Whether some uses need a space to themselves and others can share it.
 - Whether there is an "apt order" document ([07](07-pages-and-menu.md)) with
   house rules the schedule should link to.
 - How far ahead a member can put himself on the schedule.
