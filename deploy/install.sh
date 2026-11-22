@@ -33,6 +33,11 @@ public_html | public_html/*) fail "$app_dir is inside public_html; the app's dir
 esac
 
 [[ "$port" =~ ^[0-9]+$ ]] || fail "the port must be a number: $port"
+# Below 1024 only root may listen, and the receiver would install a front end
+# for a port the app can never open (the first deploy's APP_PORT was 222).
+if [ "$port" -lt 1024 ] || [ "$port" -gt 65535 ]; then
+	fail "APP_PORT $port cannot be opened by this account; choose a free port from 1024 up (make prod-ports)"
+fi
 [[ "$pubkey" =~ ^ssh-ed25519\ [A-Za-z0-9+/=]+(\ .*)?$ ]] || fail "the deploy public key is not an ssh-ed25519 key"
 
 # `restrict` in authorized_keys needs OpenSSH 7.2 or later. The server side is
