@@ -23,7 +23,7 @@ The starting point was the branch's brainstorm, photographed in
 | **Engagement** (MVP) | | |
 | [08 Daily game](08-daily-game.md) | A reason to open the app every day | outline |
 | **Procedures** (partly MVP, to decide) | | |
-| [09 Checklists and milestones](09-checklists-and-milestones.md) | Life group semesters, events, personal milestones; deadlines and reminders | drafting |
+| [09 Checklists and milestones](09-checklists-and-milestones.md) | Life group semesters, events, personal milestones, the leadership path; deadlines and reminders | drafting |
 | **Integrations** | | |
 | [12 Forms](12-forms.md) | Forms through drop-in forms, and what it would need to gain | drafting |
 | **Delivery** | | |

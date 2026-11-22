@@ -120,6 +120,34 @@ reached, not due.
 **In the MVP** (decided 2026-11-19). **The member records his own** milestone,
 or **the secretary** records it for him.
 
+## 4. A leadership path
+
+Proposed 2026-11-22, for the branch to agree.
+
+Formation is largely growing in competence: learning how to do things and how
+to serve the community. A man should be able to see how to take on more, and
+the core team should be able to see who is willing to help.
+
+Until now the branch has asked for this with a **leadership interest form**,
+usually a simple Google form. It records that a man is interested and says
+nothing about what comes next. The app can lay out the steps, each a small
+one:
+
+1. **Deputy** (sub-lead) of a small event.
+2. **Lead** of a small event.
+3. Only then is he considered for the core team, the Good Friday pilgrimage
+   or Ignis, which come after some experience in the group.
+
+Two things should follow. A new man knows what is expected of him and which
+step is next. The core team sees who has said he is willing, so it can hand a
+task to someone else early rather than improvising at the last minute. Leading
+means delegating: giving the new man a chance and involving more people.
+
+The roles already exist for events (**lead** and **sub-lead**, section 2), and
+the path is those roles over time. What is not decided is how much of it the
+app records; see the open questions. As with everything here, it must stay
+small enough for a student branch to maintain.
+
 ## Deliberately left out
 
 To keep this maintainable:
@@ -155,3 +183,12 @@ recommended order is the life group semester next, and events after that.
 - What "hook" means for an event.
 - Who creates events and assigns people.
 - Whether a budget is a single amount, or tracks what is spent.
+- Whether the leadership path ([section 4](#4-a-leadership-path)) is in the
+  MVP. It builds on events, which are still to decide.
+- What counts as a small event, for the deputy and lead steps.
+- Who decides that a man is ready for the next step, and who sees his
+  progress.
+- How a man says he is interested or available, whether the interest form
+  stays, and how the core team sees who has said so.
+- Whether a step is a milestone on the member's profile (section 3) or is
+  worked out from the events he has been sub-lead and lead of.
