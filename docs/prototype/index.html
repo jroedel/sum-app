@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="components.css">
 <link rel="stylesheet" href="prototype.css">
 <script type="module" src="app.js"></script>
+<script type="module" src="home.js"></script>
 </head>
 <body>
 <div class="mockup-banner" role="note">
@@ -51,18 +52,29 @@
     <a class="sum-btn sum-btn--primary sum-btn--block" href="groups.html">See the open groups</a>
   </div>
 
-  <div class="sum-card stack" data-for="pending" id="request-pending">
+  <div class="sum-card stack" data-for="pending" data-request="pending" id="request-pending">
     <div class="row">
       <div class="grow">
-        <p class="sum-event-title">Your request to join Emmaus</p>
-        <p class="muted">Sent Saturday. Its mentors have been told, and one of them will answer.</p>
+        <p class="sum-event-title">Your request to join <span data-fill="group-name">Emmaus</span></p>
+        <p class="muted">Sent <span data-fill="sent">Saturday</span>. Its mentors have been told, and one of them will answer.</p>
       </div>
       <span class="sum-chip sum-chip--soon"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#hourglass"/></svg>Pending</span>
     </div>
     <div class="row">
-      <a class="sum-btn sum-btn--quiet" href="groups.html" data-not-here>See Emmaus</a>
-      <button class="sum-btn sum-btn--quiet" type="button" data-not-here>Withdraw</button>
+      <a class="sum-btn sum-btn--quiet" href="groups.html" data-group-link>See the group</a>
+      <button class="sum-btn sum-btn--quiet" type="button" id="withdraw">Withdraw</button>
     </div>
+  </div>
+
+  <div class="sum-card stack" data-for="pending" data-request="approved" id="request-approved">
+    <div class="row">
+      <div class="grow">
+        <p class="sum-event-title">You're in <span data-fill="group-name">Emmaus</span></p>
+        <p class="muted">A mentor approved your request. Your group meets <span data-fill="group-meets">Tue · 7:00–9:00 PM · The apartment</span>.</p>
+      </div>
+      <span class="sum-chip sum-chip--done"><svg class="icon-sm" aria-hidden="true"><use href="icons.svg#check"/></svg>Approved</span>
+    </div>
+    <a class="sum-btn sum-btn--quiet" href="groups.html" data-group-link>See your group</a>
   </div>
 
   <a class="sum-card row-link" data-for="member" id="dues-due" href="more.html#dues">
@@ -75,15 +87,15 @@
   </a>
 
   <div class="sum-card list-card" data-for="mentor" id="mentor-requests">
-    <a class="row-link" href="groups.html" data-not-here>
+    <a class="row-link" href="requests.html" data-request="pending">
       <span class="avatar" aria-hidden="true">L</span>
       <div class="grow">
-        <p class="sum-event-title">Lucas wants to join Emmaus</p>
-        <p class="muted sum-num">Class of 2029 · Mechanical engineering · 2 days ago</p>
+        <p class="sum-event-title">Lucas wants to join <span data-fill="group-name">Emmaus</span></p>
+        <p class="muted sum-num">Class of 2029 · Mechanical engineering · <span data-fill="sent">Saturday</span></p>
       </div>
       <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
     </a>
-    <a class="row-link" href="groups.html" data-not-here>
+    <a class="row-link" href="requests.html">
       <span class="avatar" aria-hidden="true">N</span>
       <div class="grow">
         <p class="sum-event-title">Noah wants to join Emmaus</p>
@@ -102,7 +114,7 @@
       </div>
       <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
     </a>
-    <a class="row-link" href="groups.html" data-not-here>
+    <a class="row-link" href="requests.html">
       <svg class="icon" aria-hidden="true"><use href="icons.svg#hourglass"/></svg>
       <div class="grow">
         <p class="sum-event-title">Unanswered for 3 days</p>

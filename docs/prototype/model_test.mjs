@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { DEFAULT_ROLE, ROLES, clashes, isMember, memory, roleFrom, shownFor, withRole } from "./model.js";
+import { DEFAULT_ROLE, ROLES, askToJoin, clashes, isMember, memory, requestFor, roleFrom, shownFor, withRole, years } from "./model.js";
 
 test("the role comes from ?as=, then memory, then the default", () => {
   assert.equal(roleFrom("?as=secretary", "mentor"), "secretary");
@@ -82,4 +82,29 @@ test("memory keeps values in localStorage as JSON", () => {
   };
   memory(win).set("request", { group: "emmaus", status: "pending" });
   assert.deepEqual(memory(win).get("request"), { group: "emmaus", status: "pending" });
+});
+
+test("the request follows the role", () => {
+  const made = { group: "cana", status: "pending", sent: "just now" };
+  assert.equal(requestFor("newcomer", made), undefined, "no request, whatever is remembered");
+  assert.deepEqual(requestFor("pending", made), made);
+  assert.equal(requestFor("pending", undefined).group, "emmaus", "the mock-up's own example");
+  assert.deepEqual(requestFor("mentor", made), made);
+  assert.equal(requestFor("mentor", undefined).group, "emmaus", "a first visit has the example to approve");
+  assert.equal(requestFor("mentor", null), undefined, "withdrawn is remembered as none");
+  assert.equal(requestFor("pending", null).group, "emmaus", "the pending newcomer always has one");
+});
+
+test("one request at a time (doc 04)", () => {
+  const first = askToJoin(undefined, "cana");
+  assert.ok(first.ok);
+  assert.deepEqual([first.request.group, first.request.status], ["cana", "pending"]);
+
+  assert.deepEqual(askToJoin(first.request, "emmaus"), { ok: false, reason: "withdraw-first" });
+  assert.deepEqual(askToJoin(first.request, "cana"), { ok: false, reason: "already" });
+  assert.deepEqual(askToJoin({ group: "cana", status: "approved" }, "emmaus"), { ok: false, reason: "in-group" });
+});
+
+test("a group's years, earliest first", () => {
+  assert.deepEqual(years([{ year: 2029 }, { year: 2027 }, { year: 2028 }]), [2027, 2028, 2029]);
 });
