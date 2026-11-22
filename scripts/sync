@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+#
+# Put this checkout on GitHub's main: switch to main, and fast-forward it.
+#
+#     make sync
+#
+# Before any command that sends something from this checkout to the server
+# (make prod-install, make secrets-install), which refuse to run otherwise
+# (on_latest_main in scripts/env-lib.sh).
+#
+# It never throws work away. Uncommitted changes to tracked files stop it
+# before it switches anything, and a local main with commits GitHub does not
+# have stops it rather than being reset: both are a person's to decide about.
+# Untracked files, secrets.env among them, are left exactly where they are.
+
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+
+dirty="$(git status --porcelain --untracked-files=no)"
+if [ -n "$dirty" ]; then
+	printf 'uncommitted changes; commit or stash them first:\n%s\n' "$dirty" >&2
+	exit 1
+fi
+
+git fetch --quiet origin main || {
+	echo "could not reach GitHub; nothing was changed" >&2
+	exit 1
+}
+
+from="$(git symbolic-ref --quiet --short HEAD 2>/dev/null || echo "a detached HEAD")"
+if [ "$from" != main ]; then
+	git switch --quiet main
+	echo "switched from $from to main"
+fi
+
+# Checked before the merge, not left to it: a main AHEAD of GitHub's is
+# "Already up to date" to `git merge --ff-only`, which then succeeds, and sync
+# would report being in step when it is not. scripts/sync-test.sh found this.
+if ! git merge-base --is-ancestor HEAD FETCH_HEAD; then
+	echo "this main has commits GitHub's main does not, so it cannot simply be moved forward. Nothing was changed past switching to main; look at: git log FETCH_HEAD..main" >&2
+	exit 1
+fi
+
+git merge --quiet --ff-only FETCH_HEAD
+
+echo "main is at $(git log -1 --format='%h %s'), the same as GitHub"
