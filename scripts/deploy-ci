@@ -65,7 +65,10 @@ main() {
 	done
 	[ "${#missing[@]}" -eq 0 ] || fail "not set: ${missing[*]}. A person sets them with make secrets-push"
 
-	local tmp
+	# Global, not local: the EXIT trap runs after this function has returned,
+	# when a local would be gone, and under set -u the trap then fails
+	# instead of cleaning up. That left a copy of the deploy key in /tmp
+	# the first time make secrets-keygen ran.
 	tmp="$(mktemp -d)"
 	trap 'rm -rf "$tmp"' EXIT
 	base64 -d <<<"$DEPLOY_SSH_KEY_B64" >"$tmp/key"

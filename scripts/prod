@@ -25,7 +25,11 @@ cmd_install() {
 	load_env
 	need PROD_SSH APP_DIR APP_DOCROOT APP_PORT APP_HOST DEPLOY_SSH_KEY_B64
 
-	local dir="${ENV[APP_DIR]}" pubkey tmp
+	local dir="${ENV[APP_DIR]}" pubkey
+	# Global, not local: the EXIT trap runs after this function has returned,
+	# when a local would be gone, and under set -u the trap then fails
+	# instead of cleaning up. That left a copy of the deploy key in /tmp
+	# the first time make secrets-keygen ran.
 	tmp="$(mktemp -d)"
 	trap 'rm -rf "$tmp"' EXIT
 
