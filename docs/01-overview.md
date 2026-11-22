@@ -85,7 +85,26 @@ daily game.
 ([09](09-checklists-and-milestones.md)): life group semesters and events. It is
 designed now either way, so that nothing in the MVP blocks it.
 
+## Priority
+
+Proposed 2026-11-22, for the branch to agree. All of these are in the MVP.
+This is the order of importance among them:
+
+1. User management ([03](03-accounts-and-access.md))
+2. LG directory / roster ([04](04-roster-and-life-groups.md))
+3. Dues ([06](06-dues.md))
+4. Songs, as pages ([07](07-pages-and-menu.md))
+5. Apartment scheduling ([05](05-apartment-schedule.md))
+6. Daily game ([08](08-daily-game.md))
+
+Pages ([07](07-pages-and-menu.md)) are not on the list because they are what
+songs and the other content are built from. They are also valued for a second
+reason: an MCP endpoint over pages lets the core team change a lot of the
+app's content without a screen for each.
+
 ## Open questions
 
 - The MVP test, in one sentence.
 - A target date for the first release.
+- Whether the order above is also the order of building, and what is cut first
+  if the first release has to be smaller.
