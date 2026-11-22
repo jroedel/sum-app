@@ -81,7 +81,6 @@ Who can create, edit and publish pages, and whether there are drafts.
 - What structure a page has.
 - Whether any page is visible without logging in.
 - Drafts and history: whether an edit can be undone.
-- English only, or English and Spanish ([10](10-design.md)).
 - Who may use the MCP endpoint, and whether it can publish a page or only save a
   draft.
 - Whether the endpoint covers anything beyond pages in the MVP.

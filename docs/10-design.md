@@ -320,7 +320,8 @@ tagline in thread.
 
 ## Language
 
-English only, or English and Spanish: still open.
+**English only** (decided 2026-11-22). No screen, page or message is
+translated.
 
 ## Open questions
 
@@ -337,4 +338,3 @@ English only, or English and Spanish: still open.
   printed material follow it too or it stays the app's.
 - Whether the tagline is written "Transforming Hearts with Mary" (title
   case, as on Instagram) or "Transforming hearts with Mary".
-- Language.

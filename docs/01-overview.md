@@ -87,8 +87,8 @@ designed now either way, so that nothing in the MVP blocks it.
 
 ## Priority
 
-Proposed 2026-11-22, for the branch to agree. All of these are in the MVP.
-This is the order of importance among them:
+Agreed 2026-11-22. All of these are in the MVP. This is the order of
+importance among them:
 
 1. User management ([03](03-accounts-and-access.md))
 2. LG directory / roster ([04](04-roster-and-life-groups.md))
