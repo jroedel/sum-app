@@ -1,12 +1,16 @@
 # Every target is here so that there is one command per purpose and no habit of
 # piping one through a filter written in a hurry. `make help` lists them.
 #
-# So far this holds what CLAUDE.md sections 0 and 2 rely on: the check after
-# editing Go, finding a symbol, and the tools both need. The test, lint, build,
-# deploy and secrets targets arrive with the scaffold, as docs/13-ci-cd.md
-# lists them.
+# The CI, deploy and secrets targets arrive with the pull requests that add
+# them, as docs/13-ci-cd.md lists them.
 
-GO ?= go
+GO   ?= go
+APP  := sum-app
+MAIN := ./cmd/sum-app
+
+# Every Go source, tracked or not, so a new file is checked before it is added.
+# Worktrees under .claude are other checkouts and not ours to judge.
+GOFILES = $(shell find . -name '*.go' -not -path './.git/*' -not -path './.claude/*')
 
 # Pinned, and bumped on purpose. staticcheck 2026.2 (v0.8.x) is the first
 # release that reads Go 1.27; 2026.1 fails on every package with "export data
@@ -59,3 +63,49 @@ go-check: ## Format, vet, staticcheck, build and test one package (make go-check
 	fi
 	@$(GO) build ./...
 	@GO=$(GO) scripts/go-test $(PKG)/...
+
+.PHONY: lint
+lint: vet fmt-check ## go vet and the gofmt check, on the whole module
+
+.PHONY: vet
+vet: ## go vet the whole module
+	@$(GO) vet ./...
+
+.PHONY: fmt
+fmt: ## Format all Go sources in place
+	@gofmt -s -w $(GOFILES)
+
+# Lists the files rather than only failing, so the fix is one `make fmt` away
+# and nobody has to run gofmt -l to find out what it meant.
+.PHONY: fmt-check
+fmt-check: ## Fail, naming the files, if any Go source is not gofmt -s clean
+	@out="$$(gofmt -s -l $(GOFILES))"; \
+	if [ -n "$$out" ]; then echo "not gofmt -s clean (run make fmt):"; echo "$$out"; exit 1; fi
+
+.PHONY: test-unit
+test-unit: ## The Go tests, with the race detector. No network
+	@GO=$(GO) scripts/go-test -race ./...
+
+.PHONY: test
+test: lint test-unit ## Everything CI runs that needs no network, in CI's order
+
+# ---------------------------------------------------------------- build and run
+
+# Static, because the server has no Go and gets this one file: a binary linked
+# against the build machine's glibc dies on the host with a loader error. The
+# check is on the file itself, so a cgo dependency that sneaks in later fails
+# here and not on the server. -trimpath keeps this machine's paths out of the
+# binary. The commit is stamped by the go command (foundation/build), so there
+# are no -X flags to forget.
+.PHONY: release
+release: ## The static linux/amd64 binary the server runs, checked static
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -trimpath -ldflags='-s -w' -o $(APP)-linux-amd64 $(MAIN)
+	@file $(APP)-linux-amd64 | grep -q 'statically linked' \
+		|| { echo "$(APP)-linux-amd64 is not statically linked:"; file $(APP)-linux-amd64; exit 1; }
+	@echo "built $(APP)-linux-amd64 ($$(du -h $(APP)-linux-amd64 | cut -f1))"
+
+# config.toml is gitignored; the example is a working local config.
+.PHONY: dev
+dev: ## Run the app on this machine, from config.toml (made from the example if missing)
+	@[ -f config.toml ] || { cp config.example.toml config.toml && chmod 600 config.toml && echo "made config.toml from config.example.toml"; }
+	@$(GO) run $(MAIN) -config config.toml

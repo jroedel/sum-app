@@ -1,0 +1,77 @@
+/* The holding page, in the brand of docs/10-design.md. Alegreya is not served
+   yet, so the stacks fall back to the system's serif and sans: the fonts arrive,
+   self-hosted, with the first real screen. */
+
+:root {
+  --ground: #f4f6f9;
+  --ink: #15223a;
+  --ink-muted: #4d5b72;
+  --primary: #2f4260;
+  --brand-mantle: #2f4260;
+  --brand-thread: #e6d9b8;
+  --brand-veil: #f4f6f9;
+  --focus: #b5521f;
+  --font-display: Alegreya, "Iowan Old Style", Georgia, serif;
+  --font-text: "Alegreya Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ground: #111c30;
+    --ink: #eee7d6;
+    --ink-muted: #aeb7c6;
+    --primary: #9db4d6;
+    --focus: #f0a070;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--ground);
+  color: var(--ink);
+  font: 17px/26px var(--font-text);
+  display: grid;
+  place-items: center;
+  padding: 48px max(16px, env(safe-area-inset-right)) 48px max(16px, env(safe-area-inset-left));
+}
+
+main { width: 100%; max-width: 36rem; text-align: center; }
+
+.eyebrow {
+  margin: 0;
+  font-size: 13px;
+  line-height: 16px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+h1 {
+  margin: 8px 0 0;
+  font: 700 88px/1 var(--font-display);
+  letter-spacing: -.01em;
+}
+
+.voice {
+  margin: 12px 0 32px;
+  font: italic 400 20px/28px var(--font-display);
+  color: var(--ink-muted);
+}
+
+/* The one arch on the screen (docs/10-design.md, "Shape"). */
+.arch {
+  background: var(--brand-mantle);
+  color: var(--brand-veil);
+  border-radius: 50% 50% 18px 18px / 120px 120px 18px 18px;
+  padding: 88px 24px 28px;
+}
+
+.arch p { margin: 0; font: 600 22px/28px var(--font-display); }
+.arch .small { margin-top: 8px; font: 400 15px/22px var(--font-text); color: var(--brand-thread); }
+.arch a { color: var(--brand-thread); }
+a:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
