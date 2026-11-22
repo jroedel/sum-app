@@ -129,8 +129,12 @@ check-workflows: ## The workflows, checked by the pinned actionlint
 vuln-check: ## Dependencies and the standard library against the Go vulnerability database (needs network)
 	@$(GO) tool govulncheck ./...
 
+.PHONY: secrets-template-check
+secrets-template-check: ## secrets.env.example documents exactly the keys scripts/secrets sends
+	@scripts/secrets template-check
+
 .PHONY: test
-test: lint test-unit shell-test check-scripts check-workflows ## Everything CI runs that needs no network, in CI's order
+test: lint test-unit shell-test check-scripts check-workflows secrets-template-check ## Everything CI runs that needs no network, in CI's order
 
 # ---------------------------------------------------------------- build and run
 
@@ -152,3 +156,63 @@ release: ## The static linux/amd64 binary the server runs, checked static
 dev: ## Run the app on this machine, from config.toml (made from the example if missing)
 	@[ -f config.toml ] || { cp config.example.toml config.toml && chmod 600 config.toml && echo "made config.toml from config.example.toml"; }
 	@$(GO) run $(MAIN) -config config.toml
+
+# The scripts and template a release carries beside the binary. Exactly these
+# three names: deploy/receive.sh refuses a kit holding anything else.
+.PHONY: deploy-kit
+deploy-kit: ## The deploy kit a release carries (deploy.yml runs this)
+	@tar -czf deploy-kit.tar.gz -C deploy htaccess.template run.sh supervise.sh
+
+# ---------------------------------------------------------------- secrets and production
+#
+# For a person at a terminal. .claude/settings.json denies every target below
+# except secrets-check to agents (CLAUDE.md section 6). The first-time order is
+# in deploy/README.md.
+
+.PHONY: secrets-check
+secrets-check: ## Is secrets.env complete and private? Names what is missing; shows no value
+	@scripts/secrets check
+
+.PHONY: secrets-keygen
+secrets-keygen: ## Mint the deploy key and pin the server's host key, into secrets.env
+	@scripts/secrets keygen
+
+.PHONY: secrets-push
+secrets-push: ## The deploy secrets and variables to GitHub, read back
+	@scripts/secrets push
+
+.PHONY: secrets-install
+secrets-install: ## config.toml to the server, checked by the live binary, over your own ssh
+	@scripts/secrets install
+
+.PHONY: prod-install
+prod-install: ## Install or reinstall the deploy receiver, and restrict the deploy key to it
+	@scripts/prod install
+
+.PHONY: prod-ports
+prod-ports: ## Free loopback ports on the shared account, to choose APP_PORT
+	@scripts/prod ports
+
+.PHONY: prod-status
+prod-status: ## What is live on the server, and whether it answers
+	@scripts/prod status
+
+.PHONY: prod-logs
+prod-logs: ## The end of the app's log on the server (LINES=200 for more)
+	@scripts/prod logs
+
+.PHONY: prod-restart
+prod-restart: ## Stop and start the app on the server
+	@scripts/prod restart
+
+.PHONY: deploy-status
+deploy-status: ## One verdict across this machine, GitHub, the server and the public site
+	@scripts/prod deploy-status
+
+# By hand, through the same receiver and the same supersede check as the
+# workflow. The commit's build must already be published as build-<sha12>,
+# which the workflow does; normally just re-run the workflow instead.
+.PHONY: deploy
+deploy: ## Deploy a published build by hand (make deploy SHA=<40-character commit>)
+	@if [ -z "$(SHA)" ]; then echo "usage: make deploy SHA=<40-character commit>" >&2; exit 2; fi
+	@scripts/prod deploy "$(SHA)"

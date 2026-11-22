@@ -1,0 +1,39 @@
+# Proxy app.sumatx.us to the loopback port the Go server listens on.
+#
+# mod_rewrite's [P] flag rather than ProxyPass, because ProxyPass is not
+# permitted in .htaccess on konsoleH and this account has no access to the
+# server config.
+#
+# deploy/receive.sh writes this into the docroot (public_html/app.sumatx.us/public)
+# on every deploy, substituting __APP_PORT__ from receive.conf. Edit it here, in
+# a pull request; an edit made on the server is overwritten by the next deploy.
+# (From stewards and drop-in forms.)
+
+# mod_dir must not answer for the front page. Left on, Apache maps "/" onto the
+# docroot directory, substitutes the DirectoryIndex, and the internal redirect
+# re-enters the rules below, so the Go server is asked for /index.html and the
+# front page is a 404 while every other path works. That is what
+# intentions.schoenstatt.link did on 2026-09-22, with /healthz answering 200.
+DirectoryIndex disabled
+
+RewriteEngine On
+
+# ACME first, and it must stay first. Certificate renewal fetches a file under
+# this path, and a rewrite that swallowed it would let the certificate lapse
+# silently, which is discovered months later by the site going down.
+RewriteRule ^\.well-known/ - [L]
+
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# Belt and braces for the DirectoryIndex above, in case AllowOverride does not
+# let it be disabled: ask the Go server for the front page rather than for a
+# file it has no route for.
+RewriteRule ^index\.html$ http://127.0.0.1:__APP_PORT__/ [P,QSA,L]
+
+RewriteRule ^(.*)$ http://127.0.0.1:__APP_PORT__/$1 [P,QSA,L]
+
+# No security headers here, deliberately. The Go server sets its own, and two
+# enforced Content-Security-Policy headers are evaluated independently, so a
+# second one here would block the app while looking as though ours was ignored.

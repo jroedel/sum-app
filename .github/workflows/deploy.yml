@@ -1,0 +1,148 @@
+# Push to deploy: every commit CI passes on main goes to app.sumatx.us.
+# The whole design is docs/13-ci-cd.md; deploy/README.md is the first-time
+# setup.
+#
+#   1. publish the binary CI built, unchanged, as the prerelease build-<sha12>
+#   2. scripts/deploy-ci: the server's receiver fetches and stages it, a newer
+#      commit on main supersedes it, or it is activated; then the public checks
+#   3. keep the newest ten build-* prereleases
+#
+# It follows CI by the name "CI" (workflow_run). Rename ci.yml's `name:` and
+# this never runs again, with no red anywhere; scripts/workflow-names-test.sh
+# fails CI instead.
+#
+# Grey, not red, until a person has set up the server and run
+# make secrets-push: the job is skipped while APP_HOST is unset. Variables are
+# repository-level, because a job-level `if: vars.X` cannot see environment
+# variables (eumaeus' deploy was skipped silently because of it).
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+  # A deploy by hand, of main's tip. It runs the tests first, because it may
+  # name a commit no CI run saw.
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# One deploy at a time, and NEVER cancel-in-progress: cancelled between the stop
+# and the start, a deploy leaves the app down until the watchdog notices. A
+# newer run waits here, replacing any older one still waiting (the second layer
+# of superseding); the third is inside scripts/deploy-ci.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: >-
+      vars.APP_HOST != '' &&
+      (github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success')
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    permissions:
+      contents: write # publish the build-* prerelease the server fetches
+      actions: read # download CI's artifact
+
+    env:
+      COMMIT: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ env.COMMIT }}
+
+      # Every required secret and variable at once, named, never shown. A run
+      # that stops at the first missing one teaches the next missing one a run
+      # later. (From drop-in forms.)
+      - name: every secret and variable is set
+        env:
+          DEPLOY_SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
+          DEPLOY_SSH_USER: ${{ secrets.DEPLOY_SSH_USER }}
+          DEPLOY_SSH_PORT: ${{ secrets.DEPLOY_SSH_PORT }}
+          DEPLOY_SSH_KEY_B64: ${{ secrets.DEPLOY_SSH_KEY_B64 }}
+          DEPLOY_KNOWN_HOSTS_B64: ${{ secrets.DEPLOY_KNOWN_HOSTS_B64 }}
+          APP_HOST: ${{ vars.APP_HOST }}
+        run: |
+          missing=""
+          for key in DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT DEPLOY_SSH_KEY_B64 DEPLOY_KNOWN_HOSTS_B64 APP_HOST; do
+            [ -n "${!key}" ] || missing="$missing $key"
+          done
+          if [ -n "$missing" ]; then
+            echo "::error::not configured:$missing. A person runs make secrets-push (deploy/README.md)."
+            exit 1
+          fi
+
+      # The exact binary CI built and tested for this commit (docs/13-ci-cd.md,
+      # principle 2), not a rebuild.
+      - name: the binary CI built
+        if: github.event_name == 'workflow_run'
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: sum-app-linux-amd64
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        if: github.event_name == 'workflow_dispatch'
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: by hand, so test and build here
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          make tools
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+          PATH="$HOME/.local/bin:$PATH" make test release
+
+      - name: package the release
+        run: |
+          chmod 0755 sum-app-linux-amd64
+          file sum-app-linux-amd64 | grep -q 'statically linked'
+          make deploy-kit
+          sha256sum sum-app-linux-amd64 deploy-kit.tar.gz > SHA256SUMS
+          cat SHA256SUMS
+
+      # A prerelease, so the repository's "latest release" never points at a
+      # build. Re-running a deploy finds the release already there and
+      # replaces its files with the same ones.
+      - name: publish build-${{ env.COMMIT }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          tag="build-${COMMIT:0:12}"
+          if gh release view "$tag" >/dev/null 2>&1; then
+            gh release upload "$tag" sum-app-linux-amd64 deploy-kit.tar.gz SHA256SUMS --clobber
+          else
+            gh release create "$tag" sum-app-linux-amd64 deploy-kit.tar.gz SHA256SUMS \
+              --target "$COMMIT" --prerelease --title "$tag" \
+              --notes "The build of $COMMIT that the deploy fetched. Kept for the ten most recent deploys."
+          fi
+
+      - name: deploy
+        env:
+          DEPLOY_SSH_HOST: ${{ secrets.DEPLOY_SSH_HOST }}
+          DEPLOY_SSH_USER: ${{ secrets.DEPLOY_SSH_USER }}
+          DEPLOY_SSH_PORT: ${{ secrets.DEPLOY_SSH_PORT }}
+          DEPLOY_SSH_KEY_B64: ${{ secrets.DEPLOY_SSH_KEY_B64 }}
+          DEPLOY_KNOWN_HOSTS_B64: ${{ secrets.DEPLOY_KNOWN_HOSTS_B64 }}
+          APP_HOST: ${{ vars.APP_HOST }}
+        run: scripts/deploy-ci "$COMMIT"
+
+      - name: keep the newest ten builds
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release list --limit 100 --json tagName,createdAt \
+            --jq '[.[] | select(.tagName | startswith("build-"))] | sort_by(.createdAt) | reverse | .[10:] | .[].tagName' |
+          while read -r tag; do
+            gh release delete "$tag" --yes --cleanup-tag
+          done

@@ -1,0 +1,152 @@
+#!/usr/bin/env bash
+#
+# A person's commands for the production server, through make.
+#
+#     scripts/prod install    install or reinstall the deploy receiver and the key's restriction
+#     scripts/prod ports      free loopback ports on the shared account, to choose APP_PORT
+#     scripts/prod status     the receiver's own status: what is live, and whether it answers
+#     scripts/prod logs       the end of the app's log
+#     scripts/prod restart    stop and start the app
+#     scripts/prod deploy-status   one verdict: this machine, GitHub, the server, the public site
+#
+# Every server step goes through the person's own ssh (PROD_SSH), never the
+# deploy key, which can only reach the receiver. Agents never run these
+# (CLAUDE.md section 6; .claude/settings.json denies make prod-*).
+
+set -euo pipefail
+
+cd "$(git rev-parse --show-toplevel)"
+# shellcheck source=scripts/env-lib.sh
+source scripts/env-lib.sh
+
+REPO=jroedel/sum-app
+
+cmd_install() {
+	load_env
+	need PROD_SSH APP_DIR APP_DOCROOT APP_PORT APP_HOST DEPLOY_SSH_KEY_B64
+
+	local dir="${ENV[APP_DIR]}" pubkey tmp
+	tmp="$(mktemp -d)"
+	trap 'rm -rf "$tmp"' EXIT
+
+	base64 -d <<<"${ENV[DEPLOY_SSH_KEY_B64]}" >"$tmp/key"
+	chmod 600 "$tmp/key"
+	pubkey="$(ssh-keygen -y -f "$tmp/key")"
+
+	prod_ssh "umask 077 && mkdir -p '$dir' && cat > '$dir/receive.sh.new'" <deploy/receive.sh
+	prod_ssh bash -s -- "$dir" "${ENV[APP_DOCROOT]}" "${ENV[APP_PORT]}" "https://${ENV[APP_HOST]}" "$REPO" "'$pubkey'" <deploy/install.sh
+}
+
+# Ports are chosen by hand and written down, because the account is shared:
+# drop-in forms holds 8412 and 8413, and other customers on the machine hold
+# others (8410 turned out to be one). Listed, not chosen, so the choice is a
+# person's and goes into secrets.env.
+cmd_ports() {
+	load_env
+	need PROD_SSH
+	prod_ssh bash -s <<'EOF_PORTS'
+free=""
+for p in $(seq 8400 8500); do
+	(exec 3<>"/dev/tcp/127.0.0.1/$p") 2>/dev/null || free="$free $p"
+done
+echo "free loopback ports:$free"
+EOF_PORTS
+}
+
+cmd_status() {
+	load_env
+	need PROD_SSH APP_DIR
+	prod_ssh "cd '${ENV[APP_DIR]}' && ./receive.sh status"
+}
+
+cmd_logs() {
+	load_env
+	need PROD_SSH APP_DIR
+	prod_ssh "tail -n ${LINES:-60} '${ENV[APP_DIR]}/sum-app.log'"
+}
+
+cmd_restart() {
+	load_env
+	need PROD_SSH APP_DIR
+	prod_ssh "cd '${ENV[APP_DIR]}' && ./supervise.sh restart"
+}
+
+# deploy-status: each section in turn, then one line (stewards).
+cmd_deploy_status() {
+	local todo=()
+
+	echo "== this machine"
+	if scripts/secrets check; then :; else todo+=("fill in secrets.env (make secrets-check)"); fi
+	load_env
+
+	echo "== GitHub"
+	local listed key missing=()
+	if listed="$(gh secret list --env production --json name --jq '.[].name' 2>/dev/null; gh variable list --json name --jq '.[].name' 2>/dev/null)"; then
+		for key in DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT DEPLOY_SSH_KEY_B64 DEPLOY_KNOWN_HOSTS_B64 APP_HOST APP_PORT APP_DIR APP_DOCROOT; do
+			grep -qx "$key" <<<"$listed" || missing+=("$key")
+		done
+		if [ "${#missing[@]}" -eq 0 ]; then echo "every deploy secret and variable is set"; else
+			echo "not set: ${missing[*]}"
+			todo+=("make secrets-push")
+		fi
+	else
+		echo "could not ask GitHub (gh auth status?)"
+		todo+=("sign in to gh")
+	fi
+
+	echo "== the server"
+	if [ -n "${ENV[PROD_SSH]:-}" ] && prod_ssh "test -x '${ENV[APP_DIR]:-sum-app}/receive.sh'" 2>/dev/null; then
+		echo "the receiver is installed"
+		if prod_ssh "cd '${ENV[APP_DIR]}' && test -f config.toml" 2>/dev/null; then
+			echo "config.toml is there"
+		else
+			echo "no config.toml"
+			todo+=("make secrets-install")
+		fi
+	else
+		echo "the receiver is not installed, or the server is not reachable as PROD_SSH"
+		todo+=("make prod-install")
+	fi
+
+	echo "== the public site"
+	local host="${ENV[APP_HOST]:-app.sumatx.us}" body
+	if body="$(curl -fsS --max-time 15 "https://$host/healthz" 2>/dev/null)"; then
+		echo "https://$host/healthz: $body"
+	else
+		echo "https://$host/healthz does not answer (DNS, the addon domain, its certificate, or no deploy yet)"
+		todo+=("check DNS and konsoleH for $host (deploy/README.md), then deploy")
+	fi
+
+	echo
+	if [ "${#todo[@]}" -eq 0 ]; then
+		echo "deployable"
+	else
+		echo "not yet deployable. First: ${todo[0]}"
+	fi
+}
+
+# deploy by hand: the deploy keys from secrets.env, parsed and exported to
+# scripts/deploy-ci alone, which then talks to the receiver exactly as the
+# workflow does.
+cmd_deploy() {
+	load_env
+	need DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT DEPLOY_SSH_KEY_B64 DEPLOY_KNOWN_HOSTS_B64 APP_HOST
+	DEPLOY_SSH_HOST="${ENV[DEPLOY_SSH_HOST]}" DEPLOY_SSH_USER="${ENV[DEPLOY_SSH_USER]}" \
+		DEPLOY_SSH_PORT="${ENV[DEPLOY_SSH_PORT]}" DEPLOY_SSH_KEY_B64="${ENV[DEPLOY_SSH_KEY_B64]}" \
+		DEPLOY_KNOWN_HOSTS_B64="${ENV[DEPLOY_KNOWN_HOSTS_B64]}" APP_HOST="${ENV[APP_HOST]}" \
+		scripts/deploy-ci "$1"
+}
+
+case "${1:-}" in
+install) cmd_install ;;
+deploy) cmd_deploy "${2:-}" ;;
+ports) cmd_ports ;;
+status) cmd_status ;;
+logs) cmd_logs ;;
+restart) cmd_restart ;;
+deploy-status) cmd_deploy_status ;;
+*)
+	echo "usage: scripts/prod {install|deploy <commit>|ports|status|logs|restart|deploy-status}" >&2
+	exit 2
+	;;
+esac

@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+#
+# The deploy's GitHub side: tell the server's receiver what to do with one
+# commit, decide at the last free moment whether a newer commit has overtaken
+# it, and check the public site afterwards.
+#
+#     scripts/deploy-ci <commit>
+#
+# deploy.yml runs it, after publishing that commit's build as a release. A
+# person can run it too, through make deploy, with secrets.env loaded. Agents
+# never do (CLAUDE.md section 6).
+#
+# The server end is deploy/receive.sh, the forced command on the deploy key, so
+# every ssh below is a request to it ("stage <commit>") rather than a shell
+# command: the key can do nothing else (docs/13-ci-cd.md).
+#
+# Environment:
+#   DEPLOY_SSH_HOST, DEPLOY_SSH_USER, DEPLOY_SSH_PORT    where the receiver is
+#   DEPLOY_SSH_KEY_B64, DEPLOY_KNOWN_HOSTS_B64           the key, and the server's pinned host key
+#   APP_HOST                                             app.sumatx.us, for the public checks
+#   DEPLOY_ALLOW_BRANCH=1                                deploy a commit that is not main's tip, on purpose
+
+set -euo pipefail
+
+say() { printf '%s\n' "$*"; }
+fail() {
+	printf '::error::%s\n' "$*" >&2
+	exit 1
+}
+
+# superseded answers whether main has moved past the commit being deployed.
+#
+# It is the third layer of superseding (docs/13-ci-cd.md, "Superseding a
+# deploy"), and it runs after `stage`, the last step that leaves the live app
+# untouched, and immediately before `activate`, the first that does not. Three
+# merges in a minute then ship once, not three times.
+#
+# It FAILS OPEN: if GitHub cannot be asked, the answer is "not superseded" and
+# the deploy goes ahead. A deploy that silently does nothing is worse than one
+# extra release. A deliberate branch deploy is never superseded.
+#
+# scripts/deploy-supersede-test.sh runs this very function, extracted from
+# this file, against a real bare repository.
+superseded() {
+	local commit="$1" repo="${2:-.}" tip
+
+	[ "${DEPLOY_ALLOW_BRANCH:-}" = 1 ] && return 1
+
+	tip="$(git -C "$repo" ls-remote origin refs/heads/main 2>/dev/null | cut -f1)" || tip=""
+	if [ -z "$tip" ]; then
+		say "could not read main's tip from GitHub; deploying anyway" >&2
+		return 1
+	fi
+
+	[ "$tip" != "$commit" ]
+}
+
+main() {
+	local commit="${1:-}"
+	[[ "$commit" =~ ^[0-9a-f]{40}$ ]] || fail "usage: scripts/deploy-ci <40-character commit>"
+
+	local missing=() key
+	for key in DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT DEPLOY_SSH_KEY_B64 DEPLOY_KNOWN_HOSTS_B64 APP_HOST; do
+		[ -n "${!key:-}" ] || missing+=("$key")
+	done
+	[ "${#missing[@]}" -eq 0 ] || fail "not set: ${missing[*]}. A person sets them with make secrets-push"
+
+	local tmp
+	tmp="$(mktemp -d)"
+	trap 'rm -rf "$tmp"' EXIT
+	base64 -d <<<"$DEPLOY_SSH_KEY_B64" >"$tmp/key"
+	base64 -d <<<"$DEPLOY_KNOWN_HOSTS_B64" >"$tmp/known_hosts"
+	chmod 600 "$tmp/key"
+
+	receiver() {
+		ssh -i "$tmp/key" -p "$DEPLOY_SSH_PORT" \
+			-o IdentitiesOnly=yes -o BatchMode=yes \
+			-o StrictHostKeyChecking=yes -o UserKnownHostsFile="$tmp/known_hosts" \
+			-o ConnectTimeout=20 \
+			"$DEPLOY_SSH_USER@$DEPLOY_SSH_HOST" "$*"
+	}
+
+	say "== stage ${commit:0:12}"
+	receiver stage "$commit"
+
+	if superseded "$commit"; then
+		receiver discard "$commit"
+		say "A newer commit is already on main; its deploy follows this one. Nothing on the server was changed."
+		return 0
+	fi
+
+	say "== activate ${commit:0:12}"
+	receiver activate "$commit"
+
+	say "== public checks"
+	public_checks "$commit"
+
+	say "${commit:0:12} is live at https://$APP_HOST"
+}
+
+# public_checks looks at the site from outside, as a member's phone would.
+#
+# A failure here keeps the release and fails the run: it cannot tell a bad
+# binary from a misconfigured Apache, and only a failed loopback check, on
+# the server, rolls a binary back.
+public_checks() {
+	local commit="$1" url="https://$APP_HOST" status headers body problems=()
+
+	status="$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "http://$APP_HOST/")" || status="none"
+	[ "$status" = 301 ] || problems+=("http:// answered $status, not a 301 to https")
+
+	headers="$(curl -sS -D - -o /dev/null --max-time 15 "$url/")" || headers=""
+	grep -qi "^content-security-policy: default-src 'none'" <<<"$headers" ||
+		problems+=("/ was not answered by the app (no CSP header): stewards once served a 404 at / while /healthz said 200")
+
+	body="$(curl -sS --max-time 15 "$url/healthz")" || body=""
+	[ "$body" = "ok $commit" ] || problems+=("/healthz says \"$body\", not \"ok $commit\"")
+
+	# What must never be reachable from the web. These live in the app's
+	# directory, outside the docroot, so each should be the app's own 404.
+	local path
+	for path in config.toml receive.conf sum-app.log sum-app.db secrets.env deployed-commit.txt .htaccess; do
+		status="$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$url/$path")" || status="none"
+		[ "$status" != 200 ] || problems+=("$url/$path answered 200; it must not be reachable")
+	done
+
+	if [ "${#problems[@]}" -gt 0 ]; then
+		printf '::error::public check: %s\n' "${problems[@]}" >&2
+		return 1
+	fi
+
+	say "public checks pass: https redirect, the app answers /, /healthz names this commit, nothing private is reachable"
+}
+
+# Sourced by the tests for superseded(); run as a command otherwise.
+if [ "${BASH_SOURCE[0]}" = "$0" ]; then
+	main "$@"
+fi

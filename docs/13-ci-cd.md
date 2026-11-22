@@ -1,9 +1,10 @@
 # 13 — CI and CD
 
-The standard for building, checking and shipping this app. Nothing here is
-built yet: the workflows, the Makefile and the scripts arrive with the first
-code, under the rule in [`CLAUDE.md`](../CLAUDE.md). This document is what
-they must meet.
+The standard for building, checking and shipping this app, and what the
+workflows, the Makefile and the scripts must meet. CI and push to deploy
+were built with the scaffold (2026-11-21). Dependabot, `go-version.yml`,
+`dependabot-merge.yml`, the pre-commit hook and the upgrade check are still
+to come. [`deploy/README.md`](../deploy/README.md) is the operator's guide.
 
 It takes the best of the sibling repositories, each of which paid for its
 lessons:
@@ -139,41 +140,60 @@ exists, it stays grey rather than red (`if: vars.APP_HOST != ''`).
 The first step checks **every required secret and variable at once**, and
 names every missing one together, never a value.
 
-### What `deploy/deploy.sh` does, in order
+### What a deploy does, in order
 
+Built 2026-11-21. The deploy key is restricted to one receiver on the server
+(`deploy/receive.sh`), which fetches builds rather than accepting them
+([below](#the-shared-hosting-account)). So the work is split: the workflow
+side is `scripts/deploy-ci`, and the server side is the receiver's `stage`
+and `activate`. `deploy/README.md` is the operator's view of the same steps.
 Everything before the supersede check leaves the live app exactly as it was.
 
-1. **Refuse** to deploy anything but `main`, unless `DEPLOY_ALLOW_BRANCH=1`.
-2. **Upload** the binary as `sum-app.new`.
-3. **Pre-flight.** The *new* binary runs `-check` against the *live*
-   `config.toml`: a config missing a newly required key fails here, and
-   nothing is swapped. It must say it listens on the port Apache proxies to,
-   and that its base URL is `https://app.sumatx.us`. A stale base URL once
-   sent mass-intentions' sign-in links to a dead host.
-4. **Back up** the database with `sqlite3 .backup`, named by timestamp, and
-   rotated by the timestamp in the name. Rotating by file time once deleted
-   stewards' newest backup.
-5. **Superseded?** [Below](#superseding-a-deploy).
-6. **Swap, under the supervisor's lock** (stewards' `locked()`): stop, keep
-   the current binary as `.prev`, rename `.new` into place, start. Without
-   the lock, the cron watchdog can restart the *old* binary mid-deploy, and
-   the health check then passes against old code.
-7. **Loopback health check.** `/healthz`, which re-checks the schema on
-   every call. If it fails, **roll back** to `.last-good` (kept apart from
-   `.prev`), keep the failed binary as `.failed`, and fail the run. The start
-   is guarded, so `set -e` cannot skip the rollback, which once let four bad
-   deploys in a row through in mass-intentions.
-8. **Front end and schedule, on every deploy**: `.htaccess` and the cron
-   watchdog are reinstalled each time, not once. A cron line that was never
-   installed went unnoticed in mass-intentions.
-9. **Public checks.** `/` must be answered *by the app* (its security
-   headers), not by Apache: stewards once served a 404 at `/` while
-   `/healthz` said 200. `config.toml`, the database, the log and
-   `secrets.env` must be **unreachable** from the web, and the app's
-   directory must not be inside the web root. A failed public check keeps
-   the release, since it cannot tell a bad binary from a misconfigured
-   Apache, and fails the run.
-10. Mark the release `.last-good`, and report what is live.
+1. **Publish.** `deploy.yml` takes CI's binary for the commit and publishes
+   it as the prerelease `build-<sha12>`, with the kit (`run.sh`,
+   `supervise.sh`, `htaccess.template`) and `SHA256SUMS`. The newest ten are
+   kept.
+2. **`stage`** (the receiver):
+   1. Download the release from GitHub and check it against its sums. A kit
+      holding any other file is refused.
+   2. **Pre-flight.** The *new* binary runs `-check` against the *live*
+      `config.toml`. A config missing a newly required key fails here, and
+      nothing is swapped. The output must name:
+      - the port Apache proxies to;
+      - the base URL `https://app.sumatx.us`, because a stale base URL once
+        sent mass-intentions' sign-in links to a dead host;
+      - the very commit asked for. The binary stamps its own commit, so a
+        release whose binary isn't the commit it's filed under fails here.
+   3. **Back up** the database with `sqlite3 .backup`, named by timestamp
+      and rotated by the timestamp in the name. Rotating by file time once
+      deleted stewards' newest backup. This step arrives with the first store.
+3. **Superseded?** [Below](#superseding-a-deploy). If so, `discard`.
+4. **`activate`** (the receiver):
+   1. **Swap, under the supervisor's lock** (stewards' `locked()`): stop,
+      keep the current binary as `.prev`, move the staged one into place.
+      Without the lock, the cron watchdog can restart the *old* binary
+      mid-deploy, and the health check then passes against old code.
+   2. **Start, guarded,** so `set -e` can't skip the rollback. That once let
+      four bad deploys in a row through in mass-intentions.
+   3. **Loopback health check.** `/healthz` must answer `ok <this commit>`,
+      not just 200. If it doesn't, **roll back** to `.last-good` (kept apart
+      from `.prev`), keep the failed binary as `.failed`, and fail the run.
+   4. **Front end and schedule, on every deploy.** The `.htaccess` and the
+      cron watchdog are reinstalled each time, not once; a cron line that was
+      never installed went unnoticed in mass-intentions. The crontab is
+      shared with drop-in forms, so our lines are found by their marker, and
+      the new crontab is refused if any other line would change.
+   5. Mark the release `.last-good`, and record the commit.
+5. **Public checks**, from the runner:
+   - `http://` must redirect to `https://`.
+   - `/` must be answered *by the app* (its CSP header), not by Apache.
+     stewards once served a 404 at `/` while `/healthz` said 200.
+   - `/healthz` must name the commit.
+   - `config.toml`, `receive.conf`, the database and the log must be
+     **unreachable** from the web.
+
+   A failed public check keeps the release and fails the run, since it
+   can't tell a bad binary from a misconfigured Apache.
 
 ### Superseding a deploy
 
@@ -188,11 +208,12 @@ times. There are three layers:
    `cancel-in-progress: false`) runs one deploy at a time. GitHub replaces a
    pending run with a newer one, so at most one waits.
 3. **The deploy checks for itself** (mass-intentions and stewards). After
-   building, uploading, pre-flighting and backing up, and immediately before
-   the swap, it compares the commit it is deploying with the tip of `main`
-   on GitHub (`git ls-remote`). If `main` has moved on, it removes
-   `sum-app.new`, says **"a newer commit is already on main; its deploy
-   follows this one. Nothing on the server was changed"**, and succeeds.
+   `stage` has fetched, pre-flighted and backed up, and immediately before
+   `activate`, `scripts/deploy-ci` compares the commit it is deploying with
+   the tip of `main` on GitHub (`git ls-remote`). If `main` has moved on, it
+   asks the receiver to `discard`, says **"a newer commit is already on
+   main; its deploy follows this one. Nothing on the server was changed"**,
+   and succeeds.
 
 **Never `cancel-in-progress` on the deploy.** Cancelled between the stop and
 the start, it leaves the app down until the watchdog notices. That is why
@@ -205,16 +226,28 @@ branch deploy is never superseded.
 
 Its test (`scripts/deploy-supersede-test.sh`) uses a real bare repository
 and covers five cases: fresh, behind, caught up, unreachable, and a branch
-deploy. It calls the real function from `deploy.sh`, not a copy. The first
-draft in mass-intentions called it through `bash -c`, where it was "command
-not found", so four of five assertions passed whatever the code did.
+deploy. It sources the real function from `scripts/deploy-ci`, not a copy.
+The first draft in mass-intentions called it through `bash -c`, where it was
+"command not found", so four of five assertions passed whatever the code
+did.
 
 ### The deploy is tested end to end
 
-`scripts/deploy-e2e-test.sh` (stewards) runs the real `deploy.sh` against a
-fake home directory with fake `ssh`, `scp` and `curl`, three times: onto an
-empty account, over a running app, and with a broken binary that must be
-rolled back. It runs in CI with the shell tests.
+`scripts/receive-test.sh` runs the real receiver, `supervise.sh` and
+`run.sh` against a throwaway home, with real processes on a loopback port.
+Releases are served from a local directory, and a small fake app claims
+whichever commit the test builds it for. It covers:
+- every refusal: no request, a shell command, a path, a short hash, extra
+  words;
+- a release that is missing, tampered with, or not the commit it claims;
+- a first deploy onto an empty account, then a deploy over a running app;
+- a broken release rolled back to the last good one;
+- a discard that leaves the live app alone;
+- drop-in forms' cron line surviving every deploy.
+
+Its first run found a real bug: the app inherited the receiver's lock, so
+every deploy after the first would have hung. It runs in CI with the shell
+tests.
 
 ## Dependencies and Go itself
 
@@ -347,7 +380,10 @@ Taken from stewards, mass-intentions and eumaeus, with one name per job.
 | `secrets-push` | the deploy block to GitHub |
 | `secrets-install` | the runtime block to the server, and restart |
 | `deploy-status` | one verdict across this machine, GitHub, the server and the public site |
-| `deploy` | deploy by hand |
+| `deploy SHA=` | deploy a published build by hand, through the receiver |
+| `deploy-kit` | the kit a release carries (the workflow runs it) |
+| `prod-install` | install the receiver and restrict the deploy key to it |
+| `prod-ports` | free loopback ports on the shared account |
 | `prod-status`, `prod-logs`, `prod-restart` | |
 | `prod-backup`, `prod-pull-backup DEST=` | a backup on the server; a copy on this machine |
 | `prod-texts-check` | Twilio reachable, with the right number |
@@ -369,20 +405,35 @@ keys) never reach GitHub. On a shared account, though, **sum-app's
 `DEPLOY_SSH_KEY_B64` in GitHub would be a shell next to drop-in forms'
 `config.toml`**, and the reverse.
 
-Options, to decide before the first deploy:
+**Decided 2026-11-21: a forced command.** The key's line in
+`authorized_keys` is `restrict,command="…/sum-app/receive.sh"`, so the key
+can run the receiver and nothing else: no shell, no file transfer, no port
+forwarding. A separate account or SSH user was the other option; accepting
+the shared reach was the third.
 
-- a **separate konsoleH account or SSH user** for this app, if the hosting
-  plan allows one, which keeps each pipeline's reach to its own app;
-- a **forced command** in `authorized_keys` (an OpenSSH option, which needs
-  no root): the key can only run one deploy-receiving script, which checks
-  what it is asked to do. It narrows the key, at the cost of a deploy
-  protocol to maintain;
-- accepting the shared reach knowingly, with the `production` environment
-  requiring a reviewer.
+**Why the receiver fetches instead of receiving.** A forced command alone
+would not protect drop-in forms. If the key could upload a binary, a stolen
+key would upload a malicious one, and it would run as the same Unix user as
+drop-in forms. So the key can only *name a commit*. The receiver downloads
+that commit's build from this repository's GitHub Releases, which only the
+repository's writers and its own workflows can publish. A stolen key can
+redeploy a build already published from `main`, and nothing more.
+
+**The receiver changes only by hand.** `receive.sh` and `install.sh` are
+installed by a person (`make prod-install`), never by a deploy. A deploy
+that could replace the receiver could replace it with one that accepts
+anything. The kit a deploy *does* replace (`run.sh`, `supervise.sh`,
+`htaccess.template`) comes from the same published release.
+
+**What stays exposed.** The running app is still the same Unix user as
+drop-in forms. A bug in sum-app that let someone run code would reach
+drop-in forms' files, and the reverse. Only a separate user closes that. It
+is worth revisiting once the app holds member data or a payment flow.
 
 ## Open questions
 
-- The shared account, above.
+- Whether to move the app to its own Unix user later, which closes the
+  runtime exposure above.
 - Whether the upgrade check may call the live `/healthz` from CI, or reads
   the live commit from somewhere private.
 - The merge method for pull requests (squash, as in drop-in forms, or merge
