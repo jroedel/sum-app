@@ -68,7 +68,7 @@ check("the switcher changes the role, and a click keeps it", async ({ page, url 
 
 check("every page loads only from this server, with no error", async ({ page, url }) => {
 
-  for (const p of ["", "groups.html", "apartment.html", "game.html", "more.html"]) {
+  for (const p of ["", "groups.html", "apartment.html", "game.html", "more.html", "sign-in.html"]) {
     page.requests.length = 0;
     page.errors.length = 0;
     await page.goto(url(p));

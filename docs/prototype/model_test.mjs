@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { DEFAULT_ROLE, ROLES, askToJoin, clashes, clashesWith, clock, isMember, memory, requestFor, roleFrom, schedule, shownFor, span, withRole, years } from "./model.js";
+import { DEFAULT_ROLE, MAX_SENDS, MOCK_CODE, ROLES, askToJoin, clashes, clashesWith, clock, isMember, looksLikeEmail, memory, requestFor, roleFrom, schedule, sendCode, shownFor, span, tryCode, withRole, years } from "./model.js";
 
 test("the role comes from ?as=, then memory, then the default", () => {
   assert.equal(roleFrom("?as=secretary", "mentor"), "secretary");
@@ -135,4 +135,49 @@ test("a booking lists what it overlaps, never itself", () => {
   const c = { id: "c", space: "study", day: "d", start: "18:00", end: "20:00" };
   assert.deepEqual(clashesWith(a, [a, b, c]).map((x) => x.id), ["b"]);
   assert.deepEqual(clashesWith(b, [a, b, c]).map((x) => x.id), ["a", "c"]);
+});
+
+test("an address is checked for a typo before a code is sent", () => {
+  assert.ok(looksLikeEmail("lucas@example.org"));
+  assert.ok(looksLikeEmail("  lucas@example.org "));
+  for (const bad of ["", "lucas", "lucas@", "lucas@example", "lu cas@example.org"]) {
+    assert.ok(!looksLikeEmail(bad), bad);
+  }
+});
+
+test("asking again replaces the code, and too many asks are refused", () => {
+  let s;
+  for (let i = 1; i <= MAX_SENDS; i++) {
+    const r = sendCode(s, "Lucas@Example.org");
+    assert.ok(r.ok, `ask ${i}`);
+    s = r.state;
+  }
+  assert.equal(s.email, "lucas@example.org");
+  assert.deepEqual(sendCode(s, "lucas@example.org").reason, "too-many");
+  assert.ok(sendCode(s, "other@example.org").ok, "another address has its own count");
+});
+
+test("a code: wrong, then used up after five; right signs in", () => {
+  let s = sendCode(undefined, "lucas@example.org").state;
+  let r = tryCode(s, "111111");
+  assert.deepEqual([r.result, r.left], ["wrong", 4]);
+  for (let i = 0; i < 3; i++) r = tryCode(r.state, "111111");
+  assert.deepEqual([r.result, r.left], ["wrong", 1]);
+  r = tryCode(r.state, "111111");
+  assert.equal(r.result, "used-up");
+  assert.equal(tryCode(r.state, MOCK_CODE).result, "used-up", "even the right code, once used up");
+
+  s = sendCode(r.state, "lucas@example.org").state;
+  r = tryCode(s, "246 810");
+  assert.equal(r.result, "ok");
+  assert.equal(r.account, undefined, "a new address signs up");
+  assert.equal(tryCode(sendCode(undefined, "mateo@example.org").state, MOCK_CODE).account, "member");
+});
+
+test("a code that is not six digits is not a try; an expired one needs a new code", () => {
+  const s = sendCode(undefined, "lucas@example.org").state;
+  const r = tryCode(s, "12345");
+  assert.equal(r.result, "malformed");
+  assert.equal(r.state.tries, 0);
+  assert.equal(tryCode({ ...s, expired: true }, MOCK_CODE).result, "expired");
 });

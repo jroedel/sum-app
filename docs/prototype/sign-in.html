@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Sign in · SUM mock-up</title>
+<link rel="icon" href="seal.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="prototype.css">
+<script type="module" src="app.js"></script>
+<script type="module" src="sign-in.js"></script>
+</head>
+<body class="before-tabs">
+<div class="mockup-banner" role="note">
+  <p>Mock-up · not the real SUM app</p>
+  <label>Viewing as
+    <select id="as">
+      <option value="newcomer">Newcomer, no request</option>
+      <option value="pending">Newcomer with a request</option>
+      <option value="member">Member</option>
+      <option value="mentor">Mentor (an alum)</option>
+      <option value="secretary">Secretary</option>
+    </select>
+  </label>
+</div>
+<main class="screen sign-in">
+<div class="sign-in-head">
+  <img class="seal-large" src="seal.svg" alt="" width="96" height="96">
+  <p class="sum-voice"><span class="sum-plus">+</span> Transforming Hearts with Mary <span class="sum-plus">+</span></p>
+</div>
+
+<p class="mock-note" id="mock-note">In this mock-up the code is always <b class="sum-num">246810</b>, and no email is sent. Any address signs up as a new man; <b>mateo@example.org</b> signs in as a member.</p>
+
+<form class="stack" id="step-email" novalidate>
+  <h1 class="screen-title">Sign in to SUM</h1>
+  <p class="muted">Enter your email address and we'll send you a code. The first time, this is also how you sign up.</p>
+  <label class="field">Email address
+    <input type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required>
+  </label>
+  <p class="field-error" id="email-error" role="alert" hidden></p>
+  <button class="sum-btn sum-btn--accent sum-btn--block" type="submit">Send me a code</button>
+</form>
+
+<form class="stack" id="step-code" novalidate hidden>
+  <h1 class="screen-title">Check your email</h1>
+  <p class="muted">We sent a 6-digit code to <b id="sent-to"></b>. It works once, for 10 minutes.</p>
+  <label class="field">Code
+    <input class="code sum-num" type="text" name="code" autocomplete="one-time-code" inputmode="numeric" maxlength="7" pattern="[0-9 ]*">
+  </label>
+  <p class="field-error" id="code-error" role="alert" hidden></p>
+  <button class="sum-btn sum-btn--accent sum-btn--block" type="submit" id="sign-in">Sign in</button>
+  <p class="muted">You'll stay signed in on this phone.</p>
+  <div class="row wrap">
+    <button class="sum-btn sum-btn--quiet" type="button" id="resend">Send a new code</button>
+    <button class="sum-btn sum-btn--quiet" type="button" id="other-email">Use another address</button>
+  </div>
+  <p class="mock-note"><button class="link-button" type="button" id="expire">Pretend 10 minutes have passed</button></p>
+</form>
+
+<form class="stack" id="step-profile" novalidate hidden>
+  <h1 class="screen-title">Welcome to SUM</h1>
+  <p class="muted">Tell us a little about yourself. The secretary will reach out to you, and you can change any of this later.</p>
+
+  <div class="row times">
+    <label class="field grow">First name
+      <input type="text" name="first" autocomplete="given-name" required>
+    </label>
+    <label class="field grow">Last name
+      <input type="text" name="last" autocomplete="family-name">
+    </label>
+  </div>
+
+  <label class="field"><span>Phone <span class="optional">optional</span></span>
+    <input type="tel" name="phone" autocomplete="tel" inputmode="tel">
+  </label>
+  <label class="check">
+    <input type="checkbox" name="texts">
+    <span>Text me reminders at this number. Reply STOP at any time to stop them.</span>
+  </label>
+
+  <label class="field"><span>School <span class="optional">optional</span></span>
+    <input type="text" name="school" value="UT Austin" autocomplete="organization">
+  </label>
+  <label class="field"><span>Major <span class="optional">optional</span></span>
+    <input type="text" name="major">
+  </label>
+  <label class="field"><span>Year of graduation <span class="optional">optional</span></span>
+    <select name="year">
+      <option value="">Not saying</option>
+        <option>2026</option>
+        <option>2027</option>
+        <option>2028</option>
+        <option>2029</option>
+        <option>2030</option>
+        <option>2031</option>
+        <option>2032</option>
+    </select>
+  </label>
+
+  <p class="field-error" id="profile-error" role="alert" hidden></p>
+  <button class="sum-btn sum-btn--accent sum-btn--block" type="submit">Continue</button>
+</form>
+</main>
+</body>
+</html>

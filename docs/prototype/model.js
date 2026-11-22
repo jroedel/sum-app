@@ -206,3 +206,52 @@ export function memory(win) {
     },
   };
 }
+
+// --- signing in (doc 03, doc 14 flow 1) -------------------------------------
+//
+// The mock-up's stand-in for the server: one code that always works, so a
+// designer can click through, and the limits doc 03 proposes, so each of its
+// messages can be seen. Nothing leaves the browser and no email is sent.
+
+export const MOCK_CODE = "246810";
+export const MAX_TRIES = 5;
+
+// MAX_SENDS is how many codes one address may ask for before being told to
+// wait. Doc 03 says "a few times an hour"; four is the mock-up's guess, and
+// the mock-up counts per visit rather than per hour.
+export const MAX_SENDS = 4;
+
+// KNOWN are the addresses that already have an account: they skip the
+// profile and land on Home as who they are. Any other address signs up.
+export const KNOWN = { "mateo@example.org": "member", "daniel@example.org": "secretary" };
+
+// looksLikeEmail is the check a person gets before a code is sent: enough to
+// catch a typo, not a validation of the address, which only the email does.
+export function looksLikeEmail(s) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s.trim());
+}
+
+// sendCode asks for a code for email. A new request replaces the one before
+// it, with its tries and its ten minutes (doc 03), and counts toward the
+// limit.
+export function sendCode(state, email) {
+  const address = email.trim().toLowerCase();
+  const sends = state?.email === address ? state.sends : 0;
+  if (sends >= MAX_SENDS) {
+    return { ok: false, reason: "too-many", state };
+  }
+  return { ok: true, state: { email: address, sends: sends + 1, tries: 0, expired: false } };
+}
+
+// tryCode checks what was typed. "used-up" is the fifth wrong try and after;
+// "expired" is a code older than ten minutes; both need a new code.
+export function tryCode(state, typed) {
+  const code = typed.replace(/\s/g, "");
+  if (state.expired) return { result: "expired", state };
+  if (state.tries >= MAX_TRIES) return { result: "used-up", state };
+  if (!/^\d{6}$/.test(code)) return { result: "malformed", state };
+  if (code === MOCK_CODE) return { result: "ok", state, account: KNOWN[state.email] };
+
+  const next = { ...state, tries: state.tries + 1 };
+  return { result: next.tries >= MAX_TRIES ? "used-up" : "wrong", state: next, left: MAX_TRIES - next.tries };
+}

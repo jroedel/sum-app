@@ -58,6 +58,21 @@ lists it here, so it is not mistaken for a decision:
 - **Newcomers and the alum mentor** reaching the apartment by its address are
   told it is for members.
 
+- **Signing in:** the name is asked as first and last, and only the first is
+  required; everything else in the profile is optional, as doc 04's "Notes"
+  suggest. The agreement to texts is a separate box, never ticked for him
+  (doc 02). Four codes per address is the mock-up's "a few times an hour"
+  (doc 03), counted per visit.
+
+## Clicking through flow 1
+
+**More → Sign out** opens signing in, which has no tabs. The code is always
+**246810**, and a note on the screen says so. Any address signs up: after the
+code comes the profile, then Home as a newcomer. **mateo@example.org** (a
+member) and **daniel@example.org** (the secretary) skip the profile. A wrong
+code says how many tries are left; after five, or after "Pretend 10 minutes
+have passed", it asks for a new code; a fifth "Send a new code" is refused.
+
 ## Clicking through flow 2
 
 Lucas, the newcomer, has one request in this browser. Choosing **Newcomer, no
