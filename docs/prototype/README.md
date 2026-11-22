@@ -59,8 +59,8 @@ lists it here, so it is not mistaken for a decision:
   told it is for members.
 
 - **Signing in:** the name is asked as first and last, and only the first is
-  required; everything else in the profile is optional, as doc 04's "Notes"
-  suggest. The agreement to texts is a separate box, never ticked for him
+  required. School, major and year of graduation are optional in doc 04; the
+  phone being optional too is the mock-up's guess. The agreement to texts is a separate box, never ticked for him
   (doc 02). Four codes per address is the mock-up's "a few times an hour"
   (doc 03), counted per visit.
 
