@@ -23,6 +23,7 @@ source scripts/env-lib.sh
 REPO=jroedel/sum-app
 
 cmd_install() {
+	on_latest_main || exit 1
 	load_env
 	need DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT APP_DIR APP_DOCROOT APP_PORT APP_HOST DEPLOY_SSH_KEY_B64
 
@@ -134,6 +135,7 @@ cmd_deploy_status() {
 # scripts/deploy-ci alone, which then talks to the receiver exactly as the
 # workflow does.
 cmd_deploy() {
+	on_latest_main || exit 1
 	load_env
 	need DEPLOY_SSH_HOST DEPLOY_SSH_USER DEPLOY_SSH_PORT DEPLOY_SSH_KEY_B64 DEPLOY_KNOWN_HOSTS_B64 APP_HOST
 	DEPLOY_SSH_HOST="${ENV[DEPLOY_SSH_HOST]}" DEPLOY_SSH_USER="${ENV[DEPLOY_SSH_USER]}" \

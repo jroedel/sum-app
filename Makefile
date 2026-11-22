@@ -169,6 +169,13 @@ deploy-kit: ## The deploy kit a release carries (deploy.yml runs this)
 # except secrets-check to agents (CLAUDE.md section 6). The first-time order is
 # in deploy/README.md.
 
+# The commands below that send something from this checkout (prod-install,
+# secrets-install, secrets-push, deploy) refuse unless it is GitHub's main;
+# this is the fix they name. It never discards uncommitted work.
+.PHONY: sync
+sync: ## Switch to main and fast-forward it to GitHub's (refuses if there are uncommitted changes)
+	@scripts/sync
+
 .PHONY: secrets-check
 secrets-check: ## Is secrets.env complete and private? Names what is missing; shows no value
 	@scripts/secrets check

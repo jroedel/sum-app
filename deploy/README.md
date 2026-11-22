@@ -94,6 +94,7 @@ cp secrets.env.example secrets.env && chmod 600 secrets.env
 ### 4. The server
 
 ```sh
+make sync                # on GitHub's main, up to date: the two below refuse otherwise
 make prod-install        # the receiver, receive.conf, and the restricted key line
 make secrets-install     # config.toml
 ```
@@ -129,12 +130,19 @@ copy needs updating.
 
 | | |
 |---|---|
+| `make sync` | switch to main and bring it up to GitHub's; first, before anything below that sends files |
 | `make prod-status` | what is live, and whether it answers |
 | `make prod-logs` | the end of the log (`LINES=200` for more) |
 | `make prod-restart` | stop and start the app |
 | `make deploy SHA=<commit>` | redeploy a published build by hand, through the same receiver |
 | `make prod-install` | after a change to `receive.sh` or `install.sh`, which deploys never touch |
 | `make secrets-install` | after a change to the runtime config |
+
+`prod-install`, `secrets-install`, `secrets-push` and `deploy` send
+something from this checkout, so they refuse unless it is GitHub's `main`
+with no uncommitted changes, and name `make sync` as the fix
+(`ALLOW_BRANCH=1` skips the check, deliberately). The read-only commands run
+from anywhere.
 
 All of these are for a person at a terminal. Agents never run them
 (`CLAUDE.md` §6).
