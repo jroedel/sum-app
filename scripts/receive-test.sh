@@ -59,8 +59,19 @@ addr = "127.0.0.1:$port"
 base_url = "https://app.sumatx.us"
 EOF
 
-# crontab, as a file, already holding another project's line.
-printf '*/5 * * * * cd /home/x/dropin-forms && ./supervise.sh start # dropin-forms (managed by deploy.sh)\n' >"$tmp/crontab"
+# crontab, as a file, shaped like the real one on the account: another
+# project's lines, a comment, a MAILTO and blank lines. The first real deploy
+# was refused by a crontab check that miscounted blank lines, which a crontab
+# of one line could never show.
+cat >"$tmp/crontab" <<'EOF_CRON'
+MAILTO=someone@example.invalid
+
+# drop-in forms
+@reboot cd /home/x/dropin-forms && ./supervise.sh start # dropin-forms (managed by deploy.sh)
+*/5 * * * * cd /home/x/dropin-forms && ./supervise.sh start # dropin-forms (managed by deploy.sh)
+
+EOF_CRON
+cp "$tmp/crontab" "$tmp/crontab.theirs"
 cat >"$tmp/bin/crontab" <<EOF
 #!/usr/bin/env bash
 if [ "\${1:-}" = -l ]; then cat "$tmp/crontab" 2>/dev/null || exit 1; else cp "\$1" "$tmp/crontab"; fi
@@ -126,6 +137,7 @@ if [ "$(healthz)" = "ok $A" ]; then pass "A answers /healthz"; else nope "A is n
 if grep -q "http://127.0.0.1:$port/\$1 \[P,QSA,L\]" "$docroot/.htaccess"; then pass "the .htaccess proxies to the port"; else nope "the .htaccess is wrong or missing"; fi
 if grep -q 'dropin-forms' "$tmp/crontab"; then pass "drop-in forms' cron line survived"; else nope "drop-in forms' cron line was lost"; fi
 if [ "$(grep -c ' # sum-app$' "$tmp/crontab")" = 2 ]; then pass "two cron lines of ours"; else nope "cron: $(cat "$tmp/crontab")"; fi
+if grep -v ' # sum-app$' "$tmp/crontab" | cmp -s - "$tmp/crontab.theirs"; then pass "every other crontab line is kept byte for byte, blank lines too"; else nope "the other lines changed: $(diff <(grep -v ' # sum-app$' "$tmp/crontab") "$tmp/crontab.theirs")"; fi
 if [ "$(cat "$app/deployed-commit.txt")" = "$A" ]; then pass "deployed-commit.txt says A"; else nope "deployed-commit.txt is wrong"; fi
 
 # --- second deploy, over a running app ------------------------------------------
@@ -133,6 +145,7 @@ if [ "$(cat "$app/deployed-commit.txt")" = "$A" ]; then pass "deployed-commit.tx
 if receive stage "$B" && receive activate "$B"; then pass "second deploy of B"; else nope "second deploy of B: $(cat "$tmp/out")"; fi
 if [ "$(healthz)" = "ok $B" ]; then pass "B answers /healthz"; else nope "B is not answering: $(healthz)"; fi
 if [ "$(grep -c ' # sum-app$' "$tmp/crontab")" = 2 ]; then pass "still two cron lines of ours"; else nope "cron lines multiplied: $(cat "$tmp/crontab")"; fi
+if grep -v ' # sum-app$' "$tmp/crontab" | cmp -s - "$tmp/crontab.theirs"; then pass "and still byte for byte after a second deploy"; else nope "the other lines changed on the second deploy"; fi
 
 # --- a broken release is rolled back ---------------------------------------------
 
