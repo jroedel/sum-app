@@ -7,7 +7,7 @@ The app is a standard operating procedure manual written into software. The
 One mechanism serves three uses:
 
 1. **A life group's semester**: the steps every life group goes through.
-2. **An event**: branch day, Friendsgiving, the opening and closing branch
+2. **An event**: branch day, Brosgiving, the opening and closing branch
    retreats of each semester.
 3. **A person's milestones**: the checkpoints of a member's path in SUM.
 
@@ -86,7 +86,7 @@ done, which are coming up, and which are overdue.
 ## 2. Events
 
 The pattern described earlier for branch day applies to every event:
-Friendsgiving and the four yearly branch retreats (the opening and closing
+Brosgiving and the four yearly branch retreats (the opening and closing
 retreat of each semester, fall and spring). Each has something special, and
 points in common.
 
@@ -119,6 +119,59 @@ reached, not due.
 
 **In the MVP** (decided 2026-11-19). **The member records his own** milestone,
 or **the secretary** records it for him.
+
+## 4. A leadership path
+
+Proposed 2026-11-22, for the branch to agree.
+
+Formation is largely growing in competence: learning how to do things and how
+to serve the community. A man should be able to see how to take on more, and
+the core team should be able to see who is willing to help.
+
+Until now the branch has asked for this with a **leadership interest form**,
+usually a simple Google form. It records that a man is interested and says
+nothing about what comes next. The app can lay out the steps, each a small
+one:
+
+1. **Deputy** (sub-lead) of a small event.
+2. **Lead** of a small event.
+3. Only then is he considered for the core team, the Good Friday pilgrimage
+   or Ignis, which come after some experience in the group.
+
+Small events are branch day, Brosgiving and the Seder meal. A role can also
+be smaller and last all year:
+
+- **Queen's Guard** makes sure the Blessed Mother arrives at each event. There
+  could be several.
+- **Stocking the pantry** is small, and of great value when it is done well.
+- **Adoration setup** is a larger role, and should have a deputy too.
+
+Two things should follow. A new man knows what is expected of him and which
+step is next. The core team sees who has said he is willing, so it can hand a
+task to someone else early rather than improvising at the last minute. Leading
+means delegating: giving the new man a chance and involving more people.
+
+**The app does not score a man.** The core team looks at his progress, and
+there are qualities that no number shows. Someone who is faithful in small
+matters will be entrusted with greater ones, and that counts for more than a
+good résumé.
+
+### The interest form
+
+The **leadership interest form** is the way a man says he is willing, and it
+stays. When it is open is still to be thought through. The proposal is that it
+opens at the **closing branch retreat** of the fall and spring semesters, so
+that positions are filled mostly at the **opening branch retreat** of the next
+one (lead and sub-lead of each branch day are already assigned at the latest
+then, section 2). A man who fills it in should be assigned fairly soon after.
+
+The roles already exist for events (**lead** and **sub-lead**, section 2), and
+the path is those roles over time. What is not decided is how much of it the
+app records; see the open questions. As with everything here, it must stay
+small enough for a student branch to maintain.
+
+An evaluation after each event, which would show the core team how it went, is
+in [11](11-later.md).
 
 ## Deliberately left out
 
@@ -155,3 +208,15 @@ recommended order is the life group semester next, and events after that.
 - What "hook" means for an event.
 - Who creates events and assigns people.
 - Whether a budget is a single amount, or tracks what is spent.
+- Whether the leadership path ([section 4](#4-a-leadership-path)) is in the
+  MVP. It builds on events, which are still to decide.
+- Which roles have a deputy, and which can have several people (Queen's
+  Guard).
+- Who decides that a man is ready for the next step, and who sees his
+  progress.
+- When the interest form opens and closes, and how soon after a man fills it
+  in he is assigned.
+- How the core team sees who has filled the form in, and whether the form
+  lives in the app or stays a separate form that the app links to.
+- Whether a step is a milestone on the member's profile (section 3) or is
+  worked out from the events he has been sub-lead and lead of.
