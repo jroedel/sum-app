@@ -1,0 +1,23 @@
+# The runtime configuration. Copy to config.toml (gitignored) and edit.
+#
+# On the server, config.toml is written by `make secrets-install` from
+# secrets.env on a person's machine, never by CI (docs/13-ci-cd.md, "Secrets").
+# An unknown key is a startup error, so a typo is caught, not ignored.
+
+[server]
+# The loopback address the .htaccess proxies to. No default: the hosting
+# account is shared, so the port is chosen on purpose (make prod-ports).
+addr = "127.0.0.1:8460"
+
+# The public address. https://app.sumatx.us in production; http is allowed
+# only for this machine.
+base_url = "http://localhost:8460"
+
+# How long in-flight requests get to finish when the process is stopped.
+# shutdown_grace = "15s"
+
+[log]
+# debug, info, warn or error.
+level = "info"
+# Empty means stderr, which the supervisor on the server sends to a file.
+# file = ""

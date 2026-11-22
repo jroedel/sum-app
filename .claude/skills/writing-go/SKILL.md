@@ -203,6 +203,8 @@ toolchain or the docs (`go doc uuid.NewV7`) rather than from memory;
 method-and-wildcard patterns (`mux.HandleFunc("POST /groups/{id}/requests", …)`),
 `http.Server` with its timeouts set, and `html/template` are the whole
 framework. Reach for a dependency when the standard library genuinely has no
-answer, and say in a comment which answer was missing. The one expected
-dependency is the SQLite driver, `modernc.org/sqlite`, which needs no C
-compiler and so builds the same on a laptop, in CI and for the server.
+answer, and say in a comment which answer was missing. Two dependencies are
+expected: `github.com/BurntSushi/toml` for `config.toml` (the standard library
+reads no TOML; the siblings use the same one), and, with the first store, the
+SQLite driver `modernc.org/sqlite`, which needs no C compiler and so builds
+the same on a laptop, in CI and for the server.
