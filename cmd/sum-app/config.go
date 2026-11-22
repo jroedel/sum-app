@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/url"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -43,6 +44,11 @@ type config struct {
 		File  string `toml:"file"`
 	} `toml:"log"`
 }
+
+// minPort is the lowest port an ordinary account may listen on. Below it,
+// Linux lets only root (or a process granted CAP_NET_BIND_SERVICE) bind, and
+// nothing on a shared hosting account is either.
+const minPort = 1024
 
 // duration is a time.Duration that TOML can read as "15s".
 type duration struct{ time.Duration }
@@ -87,16 +93,24 @@ func loadConfig(path string) (config, error) {
 	// and the ports on it, so a default would one day be somebody else's
 	// port, and the deploy's pre-flight must find the port the .htaccess
 	// names written down rather than assumed.
-	host, _, err := net.SplitHostPort(cfg.Server.Addr)
+	host, portText, err := net.SplitHostPort(cfg.Server.Addr)
+	port, portErr := strconv.Atoi(portText)
 	switch {
 	case cfg.Server.Addr == "":
 		return cfg, fmt.Errorf("%s needs [server] addr, the loopback address to listen on, such as 127.0.0.1:8460", path)
-	case err != nil:
+	case err != nil || portErr != nil || port < 1 || port > 65535:
 		return cfg, fmt.Errorf("%s has [server] addr %q; write a host and port, such as 127.0.0.1:8460", path, cfg.Server.Addr)
 	case !isLoopback(host):
 		// Apache is the only way in. A port open on every interface would
 		// be a second front door with no TLS in front of it.
 		return cfg, fmt.Errorf("%s has [server] addr %q; listen on the loopback only, such as 127.0.0.1:8460", path, cfg.Server.Addr)
+	case port < minPort:
+		// Refused here rather than at bind, because here is the deploy's
+		// pre-flight, while the old binary still serves. The first deploy
+		// got as far as the bind with port 222 (the account's SSH port,
+		// written into APP_PORT by mistake): "permission denied", after the
+		// swap, with nothing to roll back to.
+		return cfg, fmt.Errorf("%s has [server] addr %q; ports below %d are reserved for the server's administrator and cannot be opened by this account. Choose a free one with make prod-ports, put it in APP_PORT, and run make secrets-install", path, cfg.Server.Addr, minPort)
 	}
 
 	base, err := url.Parse(cfg.Server.BaseURL)

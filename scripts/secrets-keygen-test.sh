@@ -68,6 +68,23 @@ if [ -z "$(ls -A "$tmp/mktemp")" ]; then pass "nothing is left in the temporary 
 
 if [ "$(stat -c %a "$tmp/secrets.env")" = 600 ]; then pass "secrets.env is still mode 600"; else nope "secrets.env is mode $(stat -c %a "$tmp/secrets.env")"; fi
 
+# secrets check on APP_PORT: the first deploy failed on APP_PORT=222, the SSH
+# port. Every key is given a value so that only the port can fail the check.
+port_check() {
+	local port="$1"
+	{
+		grep -v '^APP_PORT=' "$tmp/secrets.env"
+		printf 'DEPLOY_SSH_USER=u\nAPP_DIR=sum-app\nAPP_DOCROOT=public_html/app.sumatx.us/public\nAPP_PORT=%s\n' "$port"
+	} >"$tmp/port.env"
+	chmod 600 "$tmp/port.env"
+	(cd "$repo_root" && SECRETS_ENV="$tmp/port.env" scripts/secrets check) >"$tmp/port.out" 2>&1
+}
+
+if port_check 8460; then pass "secrets check accepts APP_PORT=8460"; else nope "APP_PORT=8460 refused: $(cat "$tmp/port.out")"; fi
+if port_check 222; then nope "secrets check accepted APP_PORT=222"; elif grep -q 'from 1024 to 65535' "$tmp/port.out"; then pass "secrets check refuses APP_PORT=222, below 1024"; else nope "APP_PORT=222 refused for another reason: $(cat "$tmp/port.out")"; fi
+sed -i 's/^DEPLOY_SSH_PORT=.*/DEPLOY_SSH_PORT=2222/' "$tmp/secrets.env"
+if port_check 2222; then nope "secrets check accepted APP_PORT equal to DEPLOY_SSH_PORT"; elif grep -q 'not the SSH port' "$tmp/port.out"; then pass "secrets check refuses APP_PORT equal to DEPLOY_SSH_PORT"; else nope "APP_PORT=DEPLOY_SSH_PORT refused for another reason: $(cat "$tmp/port.out")"; fi
+
 if [ "$failures" -gt 0 ]; then
 	echo "$failures keygen tests failed"
 	exit 1
