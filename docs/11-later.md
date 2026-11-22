@@ -12,7 +12,7 @@ grow into them.
 | Leadership roles | Core team positions in the app. The secretary is already in the MVP ([03](03-accounts-and-access.md)) | Adding more core team roles without changing how roles work |
 | Native applications | App store apps | The web app working well when installed |
 | Event sign-ups | Through drop-in forms ([12](12-forms.md)); tied to events later | Events from [09](09-checklists-and-milestones.md) |
-| Evaluations | ? | |
+| Evaluations | Proposed 2026-11-22: a short evaluation generated automatically after each event, answered in about 30 seconds. Its questions are phrased to bring constructive feedback and not to feel personal. It can be answered anonymously or not. The core team gets the statistics and the feedback on the docket for its next meeting. It never scores a man ([09](09-checklists-and-milestones.md), "A leadership path") | Events from [09](09-checklists-and-milestones.md), so each event has something to evaluate |
 | Voting | ? | |
 | COG | ? | |
 | Song streaming | Playing songs in the app | Songs as pages in [07](07-pages-and-menu.md) |
@@ -21,4 +21,7 @@ grow into them.
 ## Open questions
 
 - What "COG" stands for.
-- What meeting scheduling, LG coordination, evaluations and voting each mean.
+- What meeting scheduling, LG coordination and voting each mean.
+- Whether the evaluation above is what the board meant by "evaluations", what
+  its questions are, and whether the person answering chooses to be anonymous
+  or the branch sets it for each form.
