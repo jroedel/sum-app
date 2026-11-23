@@ -27,15 +27,32 @@ not.
 
 ## Pages
 
-WordPress-style: a page is stored in the database, can be edited in the app,
-and has structure (to be defined here: headings, text, images, links,
-embedded audio, embedded forms ([12](12-forms.md))?).
+WordPress-style: a page is stored in the database and can be edited in the
+app.
+
+### What a page is made of
+
+Decided 2026-11-22, for review.
+
+- **A page is a list of blocks:** a heading, text, an image, audio, an
+  embedded form ([12](12-forms.md)).
+- **A group of blocks can be named and reused on other pages.** Changing it
+  changes every page that uses it, so a reused group has its own drafts and
+  shows where it is used. The proposal is to build plain blocks first and
+  reusable groups straight after, not both at once
+  ([15](15-decisions-for-review.md#pages-and-songs)).
+- **Drafts.** An edit is a draft until it is published, and **the editor
+  publishes his own**; there is no second approval.
+- **Public pages.** An editor can mark a page public, readable without
+  signing in. Everything else needs signing in. Doc 03's test applies: would
+  we put it on sumatx.us?
 
 This part should be reusable in other projects.
 
 ### Editing through an MCP endpoint
 
-Proposed 2026-11-22. Pages are the part of the app where one endpoint reaches
+Proposed 2026-11-22; the decisions below are of the same day, for review.
+Pages are the part of the app where one endpoint reaches
 the most content: the feature and upcoming events on the home page, the
 documents, the knowledge base and the songs are all pages. An **MCP endpoint**
 over pages would let the core team read and change them from Claude, as well
@@ -43,15 +60,19 @@ as in the app. Drop-in forms already has one for forms ([12](12-forms.md)).
 It would be another way to do what the editing screens do, with the same
 permissions.
 
+- **Page editors** may use it, under **the same rules as the app**: it saves
+  drafts, and publishes only what the editor could publish himself.
+- **It covers people as well as pages.** Moving the branch in at launch is
+  done through it: the roster is read from a spreadsheet with Claude and
+  entered through the endpoint
+  ([04](04-roster-and-life-groups.md#moving-the-branch-in)). So the endpoint
+  for people is needed before the first release.
+
 ## The menu
 
-The menu is **fixed in code**. What is open is how a menu item reaches its
-page:
-
-- **the page is named in code** (by its slug), so the menu and its targets
-  change only through a pull request; or
-- **a page is assigned to a menu item in the app**, so the code defines the
-  item and an editor chooses which page it opens.
+The menu is **fixed in code**, and **an editor chooses in the app which page
+each menu item opens** (2026-11-22, for review). Changing a target needs no
+pull request.
 
 ## The first pages
 
@@ -62,7 +83,9 @@ From the board:
   document, branch day organization document.
 - **Schoenstatt knowledge base**: formation material, founding documents.
 - **Songs**. The lyrics come first and must open quickly. Chords, recordings,
-  video and tabs are later ([11](11-later.md)).
+  video and tabs are later ([11](11-later.md)). **Listed A to Z, with a search
+  over titles and words, and saved for reading offline**, for the apartment
+  and retreats (2026-11-22, for review).
 - **Event sign-ups**: a page with a form from drop-in forms
   ([12](12-forms.md)).
 
@@ -73,14 +96,15 @@ event type in [09](09-checklists-and-milestones.md) to its how-to page.
 
 ## Who edits
 
-Who can create, edit and publish pages, and whether there are drafts.
+Decided 2026-11-22, for review.
+
+- **Every core team member** can edit and publish pages, automatically.
+- **A page editor role** can be given to anyone else, **for a group of
+  pages**: someone can be allowed to edit the songs and nothing else.
 
 ## Open questions
 
-- The menu question above.
-- What structure a page has.
-- Whether any page is visible without logging in.
-- Drafts and history: whether an edit can be undone.
-- Who may use the MCP endpoint, and whether it can publish a page or only save a
-  draft.
-- Whether the endpoint covers anything beyond pages in the MVP.
+- The groups of pages that editor roles cover, beyond songs (documents, the
+  knowledge base, events?).
+- Who gives the page editor role: the branch leader, the secretary, or any
+  core team member.

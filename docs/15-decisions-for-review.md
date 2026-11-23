@@ -2,13 +2,14 @@
 
 Working decisions made on 2026-11-22 by going through the open questions in
 documents [01](01-overview.md) to [10](10-design.md), topic by topic. They
-are the plan to build from **until the stakeholders have looked at them**,
-not settled policy. When a decision here is confirmed, it moves into its own
-document and leaves this one; when it is changed, it is changed here first.
+are recorded in those documents, each marked **"2026-11-22, for review"**,
+and are the plan to build from **until the stakeholders have looked at
+them**. This document is the agenda for that review: for each topic, where
+its decisions are, and its **pressure points**, the decisions made with some
+doubt, that pull against another one, or that cost more than they look.
 
-Each topic lists what was decided, then its **pressure points**: the
-decisions that were made with some doubt, that pull against another one, or
-that cost more than they look. Those are the ones to talk through.
+When a pressure point is settled, it leaves this document and its "for
+review" mark leaves the other.
 
 ## The pressure points, at a glance
 
@@ -40,32 +41,7 @@ that cost more than they look. Those are the ones to talk through.
 
 ## Membership
 
-**Decided:**
-
-- Anyone can sign up and start as a **newcomer**. Being a newcomer is meant
-  to be short.
-- **The front door is a life group.** A newcomer sees the open groups: each
-  member's first name, graduation year and major, and when the group meets.
-  He asks to join one.
-- **Mentors are the check.** The group's mentors are told of each request,
-  and are asked to approve **only someone they know**: someone they have met
-  in person, or whose phone number or email they have confirmed. This is
-  what keeps bots and strangers out.
-- **A newcomer becomes a member by paying dues, even in his first
-  semester**, and only after a mentor has approved him into a group. Paying
-  the $60 is the decision to belong.
-- **The first dues earn the free SUM sweatshirt.** The first payment marks a
-  sweatshirt as owed and puts it in the secretary's feed; the secretary marks
-  it given when it is handed over.
-- **A member gets everything:** the full roster with email and phone, the
-  apartment schedule and booking, and later the apartment's door code. The
-  app is meant to become the official record of who belongs.
-- **A member without a life group** is rare but possible. The secretary can
-  make someone a member by hand.
-- **Stale newcomers:** around the third week of each semester, the secretary
-  is told who signed up the semester before and never came through. He
-  **deactivates** them (reversible), rather than deleting.
-- **The name stays "newcomer".**
+The decisions are recorded in [03](03-accounts-and-access.md#decided-2026-11-22-for-review), [04](04-roster-and-life-groups.md#requesting-to-join) and [06](06-dues.md).
 
 **Pressure points:**
 
@@ -85,16 +61,7 @@ that cost more than they look. Those are the ones to talk through.
 
 ## Accounts
 
-**Decided:**
-
-- **Newcomers do not see the apartment schedule.** It is for members.
-- **What a newcomer sees of people:** the members of open groups (first
-  name, graduation year, major) and **the core team, by full name and role**
-  (for example "Secretary"). No contact details.
-- **New sign-ups reach the secretary twice:** in his feed in the app, and by
-  email.
-- **A bot check at sign-up** (a challenge such as Cloudflare Turnstile), on
-  the email step, before a code is sent.
+The decisions are recorded in [03](03-accounts-and-access.md).
 
 **Pressure points:**
 
@@ -106,26 +73,7 @@ that cost more than they look. Those are the ones to talk through.
 
 ## Roles and powers
 
-**Decided:**
-
-- **Priest moderators hold every power the branch leader and the secretary
-  hold.** Keeping things on track is their full-time job.
-- **The secretary and the branch leader hold the keys**, but two kinds of
-  power are **the secretary's alone** (and the priest moderators'), not the
-  branch leader's, so that the branch leader has to delegate to him:
-  - deactivating or removing accounts;
-  - recording and matching dues (a payment the app could not match, a
-    semester settled by hand, the sweatshirt).
-- **The secretary stays the same** from year to year; **the core team roles
-  change**, so the app lets them be named and changed rather than fixing
-  them in code.
-- **Passing the baton:** a priest moderator, or the outgoing branch leader,
-  makes the new branch leader. The branch leader or a priest moderator then
-  gives core team roles.
-- **Mentor accounts** (a priest or an alum, who is not a member) are made
-  mentors by a **priest moderator**, as whoever assigns mentors.
-- **Who sees that a man is out of good standing:** the core team and the
-  priest moderators.
+The decisions are recorded in [03](03-accounts-and-access.md#roles).
 
 **Pressure points:**
 
@@ -135,30 +83,13 @@ that cost more than they look. Those are the ones to talk through.
 - **The core team sees good standing.** That is wider than "him, the
   secretary and the branch leader"; every core team member sees who is
   behind on dues.
+- **Passing the baton.** On 2026-11-19 the outgoing secretary could also make
+  the new branch leader; now only the outgoing branch leader or a priest
+  moderator does.
 
 ## Roster and life groups
 
-**Decided:**
-
-- **Phone numbers are always shown to members.** There is no switch to hide
-  one.
-- **Profiles are confirmed each semester:** at the start of each semester,
-  Home asks each member to look over his profile and tap Confirm.
-- **A mentor sees his own groups** with their members' contact details, plus
-  what any newcomer sees. Not the whole roster.
-- **Moving between groups:** while a man's group is still **open**, moving
-  to another open group is easy: he asks to join it, as a newcomer does, and
-  leaves his old group when he is approved. Once his group has closed, a move
-  goes through the secretary.
-- **Members see newcomers on the roster**, marked as newcomers, so they can
-  welcome them.
-- **One leader per group; one group per member.**
-- **Each group sets where it meets.** Usually the apartment; only apartment
-  meetings go on its schedule.
-- **A group is closed** (no longer taking requests) **by its mentor or the
-  secretary**, usually at the first overnight.
-- **Inactive is the secretary's call**, never automatic. An inactive member
-  can sign in and see pages and events, like a newcomer, and owes no dues.
+The decisions are recorded in [04](04-roster-and-life-groups.md).
 
 **Pressure points:**
 
@@ -170,37 +101,19 @@ that cost more than they look. Those are the ones to talk through.
 
 ## Dues
 
-**Decided:**
-
-- **Overdue after the end of week 6** of each semester, every semester.
-- **"Good standing"** (or a similar phrase) is the word for whether a man's
-  dues are paid. It is separate from active or inactive.
-- **Being out of good standing costs nothing.** It is shown, and reminders
-  go out; nothing is taken away.
-- **Exceptions:** the secretary can mark a semester settled by hand, with a
-  short note ("paid cash", "waived"). It counts like a payment, including for
-  the first-dues sweatshirt.
+The decisions are recorded in [06](06-dues.md).
 
 **Pressure points:**
 
 - **Nothing enforced.** The alternative considered was that a man out of good
   standing cannot book the apartment until he pays.
+- **Dues outside the app.** On 2026-11-19 nothing but drop-in forms was to
+  be recorded; now the secretary can mark a semester settled by hand ("paid
+  cash", "waived"). It is the way in for waivers, and also for cash.
 
 ## Moving the branch in
 
-**Decided:**
-
-- About **80 men** are in the branch today. Everyone the branch knows is
-  entered **as a member**; anyone not personally known enters as a newcomer.
-- **First semester:** during the changeover, each man says which semester
-  was his first in SUM, since nobody has a record of it.
-- **They come in through an MCP endpoint.** The branch already keeps a
-  roster in a spreadsheet in Google Drive. A person with the right role works
-  with Claude to read it and enter each man through the app's MCP endpoint,
-  rather than anyone typing 80 profiles into screens. So **the MCP endpoint
-  covers people, not only pages**, and it is needed **before** the first
-  release, not after: the branch has to be in the database for anyone to
-  sign in to it.
+The decisions are recorded in [04](04-roster-and-life-groups.md#moving-the-branch-in) and [07](07-pages-and-menu.md#editing-through-an-mcp-endpoint).
 
 **Pressure points:**
 
@@ -222,24 +135,7 @@ that cost more than they look. Those are the ones to talk through.
 
 ## Pages and songs
 
-**Decided:**
-
-- **Who edits:** every core team member, automatically, and anyone given a
-  **page editor** role. Editor roles cover **groups of pages**: someone can be
-  allowed to edit only the songs.
-- **A page is made of blocks** (heading, text, image, audio, embedded form),
-  and **a group of blocks can be named and reused on other pages**.
-- **Drafts and publishing:** an edit is a draft until it is published, and
-  the editor publishes his own; there is no second approval.
-- **Some pages can be public**, chosen per page by an editor. Everything else
-  needs signing in.
-- **The menu:** the code defines the menu items; an editor chooses which page
-  each opens.
-- **The MCP endpoint** (editing pages from Claude) is for page editors, and
-  follows the same rules as the app: it saves drafts, and publishes only what
-  the editor could publish himself.
-- **Songs:** listed A to Z with a search over titles and words, and **saved
-  for reading offline**, for the apartment and retreats.
+The decisions are recorded in [07](07-pages-and-menu.md).
 
 **Pressure points:**
 
@@ -253,20 +149,7 @@ that cost more than they look. Those are the ones to talk through.
 
 ## Apartment
 
-**Decided:**
-
-- **The spaces are named by the secretary** in the app, not in code.
-- **A life group's second-hour room** is chosen once, when the leader sets
-  the weekly meeting. A clash is reported like any double booking.
-- **A member can book up to two weeks ahead.**
-- **Studying never claims a space.** It asks others for quiet; others can
-  still be there.
-- **A meeting claims a space.** Any member can book a space for a meeting,
-  such as a priest's conversation with a student.
-- **Who can bump a booking:** core team and priests. Otherwise only a life
-  group meeting takes precedence.
-- **The apartment order** (house rules) is linked at the top of the
-  schedule.
+The decisions are recorded in [05](05-apartment-schedule.md).
 
 **Pressure points:**
 
@@ -276,22 +159,11 @@ that cost more than they look. Those are the ones to talk through.
 
 ## Notifications
 
-**Decided:**
-
-- **Channel:** push if the person allowed it, otherwise a text if he agreed
-  to texts, otherwise email. Sign-in codes always go by email.
+The decisions are recorded in [02](02-architecture.md#notifications).
 
 ## Scope and the first release
 
-**Decided:**
-
-- **English only.** (Recorded in [10](10-design.md).)
-- **The MVP priority order** in [01](01-overview.md) is agreed.
-- **In the first release:** personal milestones, and each life group's
-  semester checklist ([09](09-checklists-and-milestones.md)).
-- **Not in the first release:** the daily game. It arrives once it is chosen
-  and built.
-- **Something should be live for the fall closing branch retreat 2026.**
+The decisions are recorded in [01](01-overview.md#the-first-release) and [09](09-checklists-and-milestones.md).
 
 **Pressure points:**
 

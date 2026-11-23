@@ -23,18 +23,21 @@ never makes school, major or graduation year a condition of anything.
 |---|---|
 | Name | |
 | Email | The sign-in address ([03](03-accounts-and-access.md)) |
-| Phone | With a separate agreement to receive texts ([02](02-architecture.md#texts-need-consent)) |
+| Phone | With a separate agreement to receive texts ([02](02-architecture.md#texts-need-consent)). Always shown to members; there is no hiding it (2026-11-22, for review) |
 | Life group | |
 | School | Defaults to UT Austin; optional |
 | Major | Optional; editable |
 | Year of graduation | Optional; editable |
-| Active / inactive | Set by the secretary |
+| Active / inactive | Set by the secretary ([below](#active-and-inactive)) |
 | Newcomer / member | Set by the secretary ([03](03-accounts-and-access.md)) |
-| First semester in the branch | Needed for dues ([06](06-dues.md)) |
+| First semester in the branch | For the record ([06](06-dues.md)). For the men moved in at launch, each says which it was ([below](#moving-the-branch-in)) |
+| Good standing | Whether this semester's dues are paid; worked out, not entered ([06](06-dues.md)) |
+| Sweatshirt | Owed on his first dues; the secretary marks it given ([06](06-dues.md)) |
 | Personal milestones | Wristband, Home Shrine Kit, Covenant of Love, consecration of the personal ideal ([09](09-checklists-and-milestones.md)) |
 
-The member edits everything except active/inactive, newcomer/member and first
-semester. The secretary can edit anything. Who records milestones is open in
+The member edits everything except active/inactive, newcomer/member,
+good standing and the sweatshirt. He sets his first semester only during the
+changeover at launch. The secretary can edit anything. Who records milestones is open in
 [09](09-checklists-and-milestones.md).
 
 ## Life groups
@@ -42,18 +45,26 @@ semester. The secretary can edit anything. Who records milestones is open in
 The branch is made up of life groups. A life group has:
 
 - its members;
-- a leader, chosen at the first or second overnight;
+- **one** leader, chosen at the first or second overnight;
 - **one or two mentors** ([below](#mentors));
 - a **weekly meeting time**. Meetings are typically **2 hours**. This is also
   an input to the apartment schedule ([05](05-apartment-schedule.md));
+- a **place**, set by the group: usually the apartment. Only meetings at the
+  apartment go on its schedule;
 - **open or closed** status;
 - its semester checklist ([09](09-checklists-and-milestones.md)).
+
+A member is in **one life group** at a time (2026-11-22, for review).
 
 ### Open life groups
 
 An **open** life group is one forming in the current semester. Many close at
 their first overnight. Open life groups are how a newcomer finds his place, so
-**newcomers can see them** ([03](03-accounts-and-access.md)).
+**newcomers can see them** ([03](03-accounts-and-access.md)): each member's
+first name, graduation year and major, and when and where the group meets.
+
+**A group is closed** (no longer taking requests) **by its mentor or the
+secretary**, usually at the first overnight (2026-11-22, for review).
 
 **Composition is shown, because graduation years matter.** A group's members
 should generally share a similar graduation year: a group of four seniors and
@@ -79,6 +90,15 @@ secretary**, approves the request, and he is in the group.
   goes to the **secretary's feed** ([03](03-accounts-and-access.md)).
 - **There is no decline.** A mentor approves or ignores; that is all. Kept
   deliberately simple (decided 2026-11-19).
+- **A mentor approves only someone he knows** (2026-11-22, for review): a man
+  he has met in person, or whose phone number or email he has confirmed. The
+  app says so beside Approve. This approval is what lets a newcomer pay dues
+  and become a member ([03](03-accounts-and-access.md)), so it is the branch's
+  main check against strangers.
+- **Moving.** While a man's group is still open, he can move to another open
+  group the same way: he asks to join it, and leaves his old group when he is
+  approved. Once his group has closed, a move goes through the secretary
+  (2026-11-22, for review).
 
 ### Mentors
 
@@ -101,33 +121,58 @@ that is neither newcomer nor member ([03](03-accounts-and-access.md)). This
 brings a narrow part of "alumni functionality" into the MVP: an alum can sign
 in, as a mentor, and see his groups.
 
+**What a mentor sees** (2026-11-22, for review): the groups he mentors, with
+their members' full names and contact details, and what any newcomer sees.
+Not the whole roster.
+
 ## Who sees contact details
 
-Email addresses and phone numbers are visible to **members**: people who are
-signed in and confirmed by the secretary. Newcomers do not see them.
+Email addresses and phone numbers are visible to **members**. Newcomers do
+not see them. A member cannot hide his phone number from other members
+(2026-11-22, for review).
+
+**Members see newcomers on the roster**, marked as newcomers, with their
+contact details, so they can welcome them (2026-11-22, for review).
 
 ## Active and inactive
 
-What makes a member inactive, and what an inactive member can still see and
-do.
+Decided 2026-11-22, for review.
+
+- **Inactive is the secretary's call.** Nothing makes a member inactive on
+  its own: not graduation, not unpaid dues.
+- **An inactive member** can sign in and see pages and events, as a newcomer
+  can. He loses the roster and the apartment, and owes no dues. Coming back
+  is the secretary setting him active again.
+- **Good standing is separate.** A member whose dues are overdue is out of
+  good standing, not inactive ([06](06-dues.md)).
 
 ## Keeping it current
 
-Self-maintenance is the main way. The open question is how the app prompts
-it, without becoming a chore.
+Self-maintenance is the main way. **At the start of each semester, Home asks
+each member to look over his profile and tap Confirm**, one tap if nothing
+changed (2026-11-22, for review).
+
+## Moving the branch in
+
+Decided 2026-11-22, for review. About **80 men** are in the branch when the
+app launches.
+
+- **Everyone the branch knows enters as a member**; anyone not personally
+  known enters as a newcomer.
+- **They come in through the app's MCP endpoint.** The branch's roster is a
+  spreadsheet in Google Drive. A person with the secretary's powers works with
+  Claude to read it and enter each man through the endpoint, rather than
+  typing 80 profiles into screens ([07](07-pages-and-menu.md#editing-through-an-mcp-endpoint)).
+  The endpoint matches on email address, so a man who has already signed up
+  is updated rather than added twice.
+- **First semester:** nobody has a record of it, so during the changeover
+  each man says which semester was his first in SUM.
+
+Members' names, emails and phone numbers pass through Claude on the way in.
+The branch is told, once, that this is how the move is done.
 
 ## Open questions
 
-- How the app prompts members to keep their profile current: for example,
-  asking each member to confirm it at the start of each semester.
-- Whether a member can hide his phone number from other members.
-- What an open group shows a newcomer besides graduation years: meeting day
-  and time, where it meets, first names and majors?
-- Whether a member who is already in a group can request to move.
-- What a mentor sees: only his groups, or the whole roster like a member.
-- Whether every life group has one leader, or can have more.
-- Whether a member can be in more than one life group.
-- Whether members see newcomers on the roster (so they can welcome them).
-- Where a life group meets, if not always the apartment.
-- What "inactive" means, and whether it is ever automatic (for example, after
-  graduation).
+- Who may enter people through the MCP endpoint after the move, and what it
+  may do then. The proposal: the secretary and the priest moderators, with
+  exactly the powers of their screens.

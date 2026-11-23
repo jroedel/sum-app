@@ -125,6 +125,11 @@ a **request to join a life group**, which goes to the group's mentors
 SMS is what reaches a mentor who never installs the app, such as a priest
 or an alum, so the costs above are worth paying from the start.
 
+**Which channel** (decided 2026-11-22, for review): **push** if the person
+allowed it, otherwise a **text** if he agreed to texts, otherwise **email**.
+Sign-in codes always go by email. A new sign-up reaches the secretary by
+email as well as in his feed ([03](03-accounts-and-access.md)).
+
 The Twilio credentials are runtime secrets. Following `CLAUDE.md`, a person
 puts them on the server from his own machine. They never go through CI and
 are never read by an agent.
@@ -145,9 +150,6 @@ last time, marked as possibly out of date.
 ## Open questions
 
 - Who controls DNS for sumatx.us, to point `app.sumatx.us` at the server.
-- Which notification goes by which channel. Proposed: a request to join goes
-  to each mentor by push if he allowed it, otherwise by SMS if he agreed to
-  texts, otherwise by email. Sign-in codes go by email only.
 - What the consent to texts says, word for word. The approved campaign
   (drop-in forms issue #97) describes opt-in as members agreeing verbally,
   with sample messages about an alumni lunch and a BBQ. Texts about requests

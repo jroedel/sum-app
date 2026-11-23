@@ -29,6 +29,8 @@ area, which is one space for this purpose. An entry names a **space** and a
 - **A member can reserve a room to study or work**, for example from 3 to 4 or
   3 to 6, when it is free. The branch asks people to respect it and not to
   disturb him. The app shows the reservation; it does not enforce quiet.
+  **Study never claims a space** (2026-11-22, for review): others can still be
+  there; it asks them for quiet.
 - **The schedule is kept in the app's database**, so a screen in the apartment
   can show it later ([11](11-later.md)). The MVP does not need the screen, only
   to keep the schedule in a form a screen could read.
@@ -46,16 +48,33 @@ being refused.
   scheduled ahead, at a constant weekly time, so a member can see them coming.
 - **A single member who is displaced is told himself.**
 
+### Decided (2026-11-22, for review)
+
+- **Who uses it:** members. A newcomer, an inactive member and an alum mentor
+  do not see the schedule. A member out of good standing still uses it
+  ([06](06-dues.md)).
+- **The spaces are named by the secretary** in the app, not in code: the two
+  rooms and the dining and living area.
+- **A life group's second-hour room** is chosen once, when the leader sets the
+  weekly meeting, and stays. A clash is reported like any other double
+  booking.
+- **The kinds of booking:**
+
+  | Kind | Claims the space? | Who can book it |
+  |---|---|---|
+  | Studying | No; asks others for quiet | any member |
+  | Being there | No; shared | any member |
+  | A meeting (a priest's conversation with a student, for example) | Yes | any member |
+  | A life group meeting | Yes | from the group's weekly time ([04](04-roster-and-life-groups.md)) |
+
+- **Who can bump a booking:** the core team and the priests. Otherwise only a
+  life group meeting takes precedence. Whoever is bumped is told.
+- **A member can book up to two weeks ahead.**
+- **The apartment order** (house rules) is linked at the top of the
+  schedule. It is a page, edited like any other ([07](07-pages-and-menu.md)).
+
 ## Open questions
 
-- What the two rooms are called.
-- How a life group leader chooses the room for his second hour, and whether a
-  meeting without a room free in its second hour is reported like any other
-  double booking.
-- Whether a study reservation can be displaced by something other than a life
-  group meeting.
-- Whether some uses need a space to themselves and others can share it.
-- Whether there is an "apt order" document ([07](07-pages-and-menu.md)) with
-  house rules the schedule should link to.
-- How far ahead a member can put himself on the schedule.
-- Whether inactive members, or members who have not paid dues, can use it.
+- Whether a meeting booking needs a limit (on how long, or with whom), since
+  a member wanting a room to himself could book a "meeting"
+  ([15](15-decisions-for-review.md#apartment)).
