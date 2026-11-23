@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { DEFAULT_ROLE, MAX_SENDS, MOCK_CODE, ROLES, askToJoin, clashes, clashesWith, clock, outcome, overlaps, firstDues, isMember, looksLikeEmail, memberNow, memory, requestFor, roleFrom, schedule, sendCode, shownFor, span, standing, tryCode, withRole, years } from "./model.js";
+import { DEFAULT_ROLE, MAX_SENDS, MOCK_CODE, ROLES, askToJoin, clashes, clashesWith, clock, findSongs, firstDues, fold, outcome, overlaps, isMember, looksLikeEmail, memberNow, memory, requestFor, roleFrom, schedule, sendCode, shownFor, span, standing, tryCode, withRole, years } from "./model.js";
 
 test("the role comes from ?as=, then memory, then the default", () => {
   assert.equal(roleFrom("?as=secretary", "mentor"), "secretary");
@@ -223,4 +223,23 @@ test("a semester stands paid, settled, due or overdue", () => {
   assert.equal(standing({ settled: "paid cash" }, true), "settled");
   assert.equal(standing({}, false), "due");
   assert.equal(standing(undefined, true), "overdue");
+});
+
+test("songs: A to Z, and a search over titles then words", () => {
+  const songs = [
+    { title: "Salve Regina", verses: [["Salve, Regina, mater misericordiae"]] },
+    { title: "Amazing Grace", verses: [["Amazing grace! how sweet the sound"], ["Was blind, but now I see."]] },
+    { title: "Hail, Holy Queen", verses: [["Salve, salve, salve, Regina!"]] },
+  ];
+  assert.deepEqual(findSongs(songs, "").map((h) => h.song.title), ["Amazing Grace", "Hail, Holy Queen", "Salve Regina"]);
+  assert.deepEqual(
+    findSongs(songs, "salve regina").map((h) => [h.song.title, h.in]),
+    [
+      ["Salve Regina", "title"],
+      ["Hail, Holy Queen", "words"],
+    ],
+  );
+  assert.equal(findSongs(songs, "BLIND")[0].line, "Was blind, but now I see.");
+  assert.deepEqual(findSongs(songs, "nothing like this"), []);
+  assert.equal(fold("Ave, Maríá!"), "ave maria");
 });

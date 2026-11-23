@@ -56,6 +56,11 @@ lists it here, so it is not mistaken for a decision:
 - **Dues:** the payment page stands for the drop-in forms dues form; the
   mock-up's semester is Fall 2026, past its week 6, so Mateo's unpaid dues
   show him out of good standing. Settling a semester by hand asks for a note.
+- **Songs:** a song found by its words shows the line it was found in, and a
+  larger text size, for reading across a room, is remembered. Only
+  public-domain texts are in the mock-up: the branch's own songs are mostly
+  under copyright and belong in the app's database, never in this public
+  repository.
 - **Game, More and anything marked "not in this mock-up"** are placeholders:
   tapping one says so rather than doing nothing.
 
@@ -88,6 +93,10 @@ and his group's page shows contact details. As **Member**, Mateo's Fall dues
 are overdue: he is out of good standing, and nothing else changes until he
 pays. As **Secretary**, More → Everyone's dues matches a payment by hand,
 marks a sweatshirt given, and settles a semester with a note.
+
+**Flow 4, a song.** **More → Songs** lists them A to Z; the search narrows by
+title, then by words ("salve regina" finds both the chant and the hymn that
+ends with it). A song opens with its words; the larger **A** stays chosen.
 
 **Flow 5, the apartment.** As **Member**, Apartment shows the two weeks from
 Monday, November 23, with each life group meeting as its two halves and the
