@@ -41,15 +41,19 @@ check("the banner is on screen, and the page is not the app", async ({ page, url
   assert.ok(top <= 0.5, `the banner scrolled away (top ${top})`);
 });
 
-check("a newcomer has no Apartment tab; a member does", async ({ page, url }) => {
+check("the apartment is under More for a member, and not for a newcomer", async ({ page, url }) => {
 
-  await page.goto(url("?as=newcomer"));
+  await page.goto(url("more.html?as=newcomer"));
   await page.waitFor(`document.documentElement.dataset.role === "newcomer"`);
-  assert.equal(await page.evaluate(visible(`.sum-tab[href^="apartment.html"]`)), false);
+  assert.equal(await page.evaluate(visible("#apartment-row")), false);
 
-  await page.goto(url("?as=member"));
+  await page.goto(url("more.html?as=member"));
   await page.waitFor(`document.documentElement.dataset.role === "member"`);
-  assert.equal(await page.evaluate(visible(`.sum-tab[href^="apartment.html"]`)), true);
+  assert.equal(await page.evaluate(visible("#apartment-row")), true);
+  assert.deepEqual(
+    await page.evaluate(`[...document.querySelectorAll(".sum-tab")].map((t) => t.textContent.trim())`),
+    ["Home", "LGs", "Songs", "Game", "More"],
+  );
 });
 
 check("the switcher changes the role, and a click keeps it", async ({ page, url }) => {

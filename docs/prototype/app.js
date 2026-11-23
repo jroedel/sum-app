@@ -67,7 +67,7 @@ export function apply(root = document) {
     }
   }
 
-  // The Apartment tab is a member's (doc 10, "The app's layout").
+  // The apartment is a member's (doc 05): in the mock-up it is under More.
   for (const el of root.querySelectorAll("[data-members]")) {
     el.hidden = !member;
   }

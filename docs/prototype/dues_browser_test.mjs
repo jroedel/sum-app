@@ -49,11 +49,13 @@ check("approved, he pays his first dues and is a member", async ({ page, url }) 
   await page.tap("#request-lucas [data-slot=approve]");
   await page.waitFor(visible("#request-lucas [data-slot=approved]"));
 
-  // Home asks for his first dues; no Apartment tab yet, no contacts.
+  // Home asks for his first dues; no apartment under More yet, no contacts.
   await page.goto(url("?as=pending"));
   await page.waitFor(visible("#first-dues-home"));
-  assert.equal(await page.evaluate(visible(`.sum-tab[href^="apartment.html"]`)), false);
-  await page.goto(url("group.html?g=emmaus&as=pending"));
+  await page.goto(url("more.html?as=pending"));
+  await page.waitFor(roleIs("pending"));
+  assert.equal(await page.evaluate(visible("#apartment-row")), false);
+  await page.goto(url("group.html?g=lg38&as=pending"));
   await page.waitFor(`document.querySelectorAll("#group .row-link").length > 0`);
   assert.equal(await page.evaluate(`document.querySelectorAll("#group .contact").length`), 0, "no contacts before he is a member");
 
@@ -69,11 +71,12 @@ check("approved, he pays his first dues and is a member", async ({ page, url }) 
   await page.waitFor(`location.pathname.endsWith("/dues.html") && ${roleIs("pending")}`);
   await page.waitFor(visible("#first-paid"));
 
-  // A member now: the Apartment tab, Home's welcome, and his group's contacts.
+  // A member now: Home's welcome, the apartment under More, and his group's contacts.
   await page.goto(url("?as=pending"));
   await page.waitFor(visible("#member-now-home"));
-  assert.ok(await page.evaluate(visible(`.sum-tab[href^="apartment.html"]`)));
-  await page.goto(url("group.html?g=emmaus&as=pending"));
+  await page.goto(url("more.html?as=pending"));
+  await page.waitFor(visible("#apartment-row"));
+  await page.goto(url("group.html?g=lg38&as=pending"));
   await page.waitFor(`document.querySelectorAll("#group .contact").length === 4`);
 
   // The secretary sees his first dues and the sweatshirt he is owed.
@@ -86,7 +89,12 @@ check("a member out of good standing is told so, and nothing else changes; then 
   await fresh(page, url, "dues.html?as=member");
   await page.waitFor(visible("#this-semester"));
   assert.match(await page.evaluate(text("#this-semester")), /Overdue[\s\S]*out of good standing\. Nothing changes for you/);
-  assert.ok(await page.evaluate(visible(`.sum-tab[href^="apartment.html"]`)), "the apartment stays open");
+
+  // Out of good standing, the apartment stays open to him.
+  await page.goto(url("more.html?as=member"));
+  await page.waitFor(visible("#apartment-row"));
+  await page.goto(url("dues.html?as=member"));
+  await page.waitFor(visible("#pay-own"));
 
   await page.tap("#pay-own a");
   await page.waitFor(`location.pathname.endsWith("/pay.html")`);
@@ -122,15 +130,15 @@ check("the secretary matches a payment, hands over a sweatshirt, and settles a s
 });
 
 check("a mentor sees contacts in the groups he mentors only; a newcomer never", async ({ page, url }) => {
-  await page.goto(url("group.html?g=emmaus&as=mentor"));
+  await page.goto(url("group.html?g=lg38&as=mentor"));
   await page.waitFor(`document.querySelectorAll("#group .contact").length === 4`);
   assert.match(await page.evaluate(text("#group .contact")), /@example\.org · \(512\) 555-01\d\d/);
 
-  await page.goto(url("group.html?g=cana&as=mentor"));
+  await page.goto(url("group.html?g=lg39&as=mentor"));
   await page.waitFor(`document.querySelectorAll("#group .row-link").length === 5`);
   assert.equal(await page.evaluate(`document.querySelectorAll("#group .contact").length`), 0);
 
-  await page.goto(url("group.html?g=cana&as=newcomer"));
+  await page.goto(url("group.html?g=lg39&as=newcomer"));
   await page.waitFor(`document.querySelectorAll("#group .row-link").length === 5`);
   assert.equal(await page.evaluate(`document.querySelectorAll("#group .contact").length`), 0);
 });

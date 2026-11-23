@@ -35,12 +35,12 @@ check("two weeks, with the meetings in two halves, and sharing never a double bo
   await page.waitFor(`document.querySelectorAll("#days section").length === 14`);
   assert.ok(await page.evaluate(visible("#house-rules")), "the apartment order is linked at the top");
 
-  assert.match(await page.evaluate(text("#b-emmaus-2026-11-24-1")), /7:00–8:00 PM[\s\S]*Emmaus life group[\s\S]*Dining and living area, first hour/);
-  assert.match(await page.evaluate(text("#b-emmaus-2026-11-24-2")), /8:00–9:00 PM[\s\S]*Second room, second hour/);
-  assert.ok(await page.evaluate(`!!document.getElementById("b-emmaus-2026-12-01-1")`), "and again in the second week");
+  assert.match(await page.evaluate(text("#b-lg38-2026-11-24-1")), /7:00–8:00 PM[\s\S]*LG38[\s\S]*Dining and living area, first hour/);
+  assert.match(await page.evaluate(text("#b-lg38-2026-11-24-2")), /8:00–9:00 PM[\s\S]*Second room, second hour/);
+  assert.ok(await page.evaluate(`!!document.getElementById("b-lg38-2026-12-01-1")`), "and again in the second week");
 
-  // Cana's second hour claims the study room over Mateo's study time.
-  assert.match(await page.evaluate(text("#b-cana-2026-11-25-2")), /Overlaps/);
+  // The Servants' second hour claims the study room over Mateo's study time.
+  assert.match(await page.evaluate(text("#b-servants-2026-11-25-2")), /Overlaps/);
   assert.match(await page.evaluate(text("#b-mateo-wed")), /Overlaps/);
 
   // Simon there while Isaac studies is sharing.
@@ -65,11 +65,11 @@ async function add(page, url, { space, kind, day, start, end }) {
 }
 
 check("being there during a life group meeting is accepted, and gives way", async ({ page, url }) => {
-  // The dining room on Tuesday, 6:30 to 7:30: Emmaus's first hour from 7.
+  // The dining room on Tuesday, 6:30 to 7:30: LG38's first hour from 7.
   await add(page, url, { space: "dining", kind: "here", day: "2026-11-24", start: "18:30", end: "19:30" });
   assert.ok(await page.evaluate(visible("#overlap")));
   const told = await page.evaluate(text("#told"));
-  assert.match(told, /Emmaus's meeting has the room from 7:00–8:00 PM, and comes first\. Its leader is told/);
+  assert.match(told, /The LG38 meeting has the room from 7:00–8:00 PM, and comes first\. Its leader is told/);
   assert.doesNotMatch(told, /Mateo/, "Mateo's own time there is shared, not a clash");
 
   // On the schedule, marked, and removable by him.
@@ -128,7 +128,7 @@ check("a member removes only his own; the secretary can bump others, never a lif
 
   await page.goto(url("apartment.html?as=secretary"));
   await page.waitFor(`document.querySelectorAll("#days section").length === 14`);
-  assert.equal(await page.evaluate(visible("#b-emmaus-2026-11-24-1 [data-slot=bump]")), false, "a life group is not bumped");
+  assert.equal(await page.evaluate(visible("#b-lg38-2026-11-24-1 [data-slot=bump]")), false, "a life group is not bumped");
   assert.equal(await page.evaluate(visible("#b-daniel-sat [data-slot=remove]")), true, "the secretary's own");
   await page.tap("#b-isaac-mon [data-slot=bump]");
   await page.waitFor(`!document.getElementById("b-isaac-mon") && (document.querySelector(".toast")?.textContent ?? "").includes("Isaac is told")`);

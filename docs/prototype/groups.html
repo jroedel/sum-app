@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<title>Groups · SUM mock-up</title>
+<title>LGs · SUM mock-up</title>
 <link rel="icon" href="seal.svg" type="image/svg+xml">
 <link rel="stylesheet" href="fonts/fonts.css">
 <link rel="stylesheet" href="tokens.css">
@@ -28,19 +28,19 @@
 </div>
 <header class="topbar">
   <img class="seal" src="seal.svg" alt="" width="32" height="32">
-  <p class="name">Groups</p>
+  <p class="name">LGs</p>
   <span class="avatar" aria-hidden="true"><span data-for="newcomer pending">L</span><span data-for="member">M</span><span data-for="mentor">A</span><span data-for="secretary">D</span></span>
 </header>
 <main class="screen">
-<h1 class="screen-title">Groups</h1>
+<h1 class="screen-title">LGs</h1>
 
 <section class="sec" aria-labelledby="mine" data-for="member secretary">
   <h2 id="mine">My life group</h2>
   <div class="sum-card list-card">
-    <a class="row-link" href="group.html?g=tabor">
+    <a class="row-link" href="group.html?g=lg30">
       <svg class="icon primary-icon" aria-hidden="true"><use href="icons.svg#users"/></svg>
       <div class="grow">
-        <p class="sum-event-title">Tabor</p>
+        <p class="sum-event-title">LG30</p>
         <p class="muted sum-num">Thu · 8:00–10:00 PM · The apartment</p>
       </div>
       <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
@@ -83,15 +83,18 @@
       <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
     </div>
     <p class="muted sum-num" data-slot="meets"></p>
-    <div class="chips" data-slot="years"></div>
+    <div class="row years-row">
+      <span class="muted">Class of:</span>
+      <div class="chips" data-slot="years"></div>
+    </div>
   </a>
 </template>
 </main>
 <nav class="sum-tabbar tabbar" aria-label="Menu">
   <img class="rail-seal" src="seal.svg" alt="">
   <a class="sum-tab" href="./"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#house"/></svg></span>Home</a>
-  <a class="sum-tab" href="groups.html" aria-current="page"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#users"/></svg></span>Groups</a>
-  <a class="sum-tab" href="apartment.html" data-members><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#calendar-days"/></svg></span>Apartment</a>
+  <a class="sum-tab" href="groups.html" aria-current="page"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#users"/></svg></span>LGs</a>
+  <a class="sum-tab" href="songs.html"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#music"/></svg></span>Songs</a>
   <a class="sum-tab" href="game.html"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#grid-3x3"/></svg></span>Game</a>
   <a class="sum-tab" href="more.html"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#ellipsis"/></svg></span>More</a>
 </nav>
