@@ -53,7 +53,7 @@ form.addEventListener("submit", (e) => {
   for (const o of before) {
     const what = outcome(b, o);
     if (!what) continue;
-    const who = o.kind === "group" ? `${group(o.group).name}'s meeting` : o.who;
+    const who = o.kind === "group" ? `The ${group(o.group).name} meeting` : o.who;
     const when = span(o.start, o.end);
     const li = document.createElement("li");
     li.textContent = {

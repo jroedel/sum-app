@@ -18,7 +18,7 @@ for. Home and the menu change with it:
 
 | Role | Who |
 |---|---|
-| Newcomer, no request | Signed up, not yet in a life group. No Apartment tab |
+| Newcomer, no request | Signed up, not yet in a life group. No apartment under More |
 | Newcomer with a request | Has asked to join a group, and is waiting |
 | Member | Confirmed by the secretary, in a group |
 | Mentor (an alum) | Mentors a group from outside it; not a member |
@@ -61,11 +61,18 @@ lists it here, so it is not mistaken for a decision:
   public-domain texts are in the mock-up: the branch's own songs are mostly
   under copyright and belong in the app's database, never in this public
   repository.
+- **The menu** is **Home, LGs, Songs, Game, More**, with the apartment under
+  More, for this review. Docs 10 and 14 still give the apartment a tab of its
+  own; which way it goes is for the reviewers.
+- **The feature** is the Closing Branch Retreat; its date in Upcoming is
+  invented.
 - **Game, More and anything marked "not in this mock-up"** are placeholders:
   tapping one says so rather than doing nothing.
 
 The people (Lucas, Mateo, Andrew, Daniel, Owen, Noah, Ethan, Caleb and the
-groups' members) and the groups (Emmaus, Cana, Nazareth, Tabor) are invented.
+groups' members) are invented. The groups follow the branch's own way of
+naming them: a number (LG30, and the open LG38, LG39 and LG40) until a group
+chooses a name (Servants).
 Their emails are at example.org and their phone numbers in 555-0100 to
 555-0199, which are set aside for fiction.
 
@@ -81,29 +88,29 @@ a new code" is refused.
 
 **Flow 2, a request to join.** Lucas, the newcomer, has one request in this
 browser. Choosing **Newcomer, no request** starts him over. He opens a group
-from Groups and taps **Request to join**; Home then shows Pending. Asking a
+from **LGs** and taps **Request to join**; Home then shows Pending. Asking a
 second group asks him to withdraw the first. As **Mentor**, Requests to join
-(from Home or Groups) has **Approve**. Before he has done anything, the
-mock-up's example is a request to Emmaus sent on Saturday.
+(from Home or LGs) has **Approve**. Before he has done anything, the
+mock-up's example is a request to LG38 sent on Saturday.
 
 **Flow 3, dues.** Approved, Lucas's Home asks for his **first dues**; before
 that, Dues says they come after his group. Paying them (the payment page,
-then back) makes him a member: Home welcomes him, the Apartment tab appears,
+then back) makes him a member: Home welcomes him, the apartment appears under More,
 and his group's page shows contact details. As **Member**, Mateo's Fall dues
 are overdue: he is out of good standing, and nothing else changes until he
 pays. As **Secretary**, More → Everyone's dues matches a payment by hand,
 marks a sweatshirt given, and settles a semester with a note.
 
-**Flow 4, a song.** **More → Songs** lists them A to Z; the search narrows by
+**Flow 4, a song.** The **Songs** tab lists them A to Z; the search narrows by
 title, then by words ("salve regina" finds both the chant and the hymn that
 ends with it). A song opens with its words; the larger **A** stays chosen.
 
-**Flow 5, the apartment.** As **Member**, Apartment shows the two weeks from
+**Flow 5, the apartment.** As **Member**, **More → The schedule** shows the two weeks from
 Monday, November 23, with each life group meeting as its two halves and the
 apartment order linked at the top. Studying and being there share a room
 (Simon is there while Isaac studies); a meeting claims it (Fr. Thomas, on
-Friday). Mateo's Wednesday study time is overlapped by Cana's second hour,
-and Home says so. **Add yourself** is always accepted, and says who is told:
+Friday). Mateo's Wednesday study time is overlapped by the Servants' second hour,
+and Home says so. **Get on the schedule** is always accepted, and says who is told:
 try a meeting in the study room on Monday afternoon, or being there in the
 dining room on Tuesday at 6:30. **Remove me** takes off his own; as
 **Secretary**, **Bump** takes off someone else's.

@@ -32,10 +32,10 @@ check("the open groups show their members' years, and no closed group", async ({
   await page.waitFor(`document.querySelectorAll(".group-card").length === 3`);
 
   const names = await page.evaluate(`[...document.querySelectorAll(".group-card [data-slot=name]")].map((e) => e.textContent)`);
-  assert.deepEqual(names, ["Emmaus", "Cana", "Nazareth"]);
+  assert.deepEqual(names, ["LG38", "LG39", "LG40"]);
 
-  const cana = await page.evaluate(`[...document.querySelectorAll(".group-card")][1].querySelector("[data-slot=years]").textContent`);
-  assert.equal(cana, "20272027202720272028");
+  const lg39 = await page.evaluate(`[...document.querySelectorAll(".group-card")][1].querySelector("[data-slot=years]").textContent`);
+  assert.equal(lg39, "20272029203020302030");
 });
 
 check("a newcomer asks, waits, is asked to withdraw before asking another, and is approved", async ({ page, url }) => {
@@ -46,33 +46,33 @@ check("a newcomer asks, waits, is asked to withdraw before asking another, and i
   await page.goto(url("?as=newcomer"));
   await page.waitFor(roleIs("newcomer"));
 
-  // He opens Cana and asks to join.
-  await page.goto(url("group.html?g=cana"));
-  await page.waitFor(`document.querySelector("#group [data-slot=name]").textContent === "Cana"`);
-  assert.equal(await page.evaluate(`document.querySelectorAll("#group .row-link").length`), 5, "Cana's five members");
+  // He opens LG39 and asks to join.
+  await page.goto(url("group.html?g=lg39"));
+  await page.waitFor(`document.querySelector("#group [data-slot=name]").textContent === "LG39"`);
+  assert.equal(await page.evaluate(`document.querySelectorAll("#group .row-link").length`), 5, "LG39's five members");
   await page.tap("#request");
 
-  // Home shows Pending, for Cana.
+  // Home shows Pending, for LG39.
   await page.waitFor(`location.pathname.endsWith("/prototype/") && ${roleIs("pending")}`);
   await page.waitFor(visible("#request-pending"));
-  assert.equal(await page.evaluate(`document.querySelector("#request-pending [data-fill=group-name]").textContent`), "Cana");
+  assert.equal(await page.evaluate(`document.querySelector("#request-pending [data-fill=group-name]").textContent`), "LG39");
 
-  // Asking Emmaus too is refused until he withdraws.
-  await page.goto(url("group.html?g=emmaus"));
-  await page.waitFor(`document.querySelector("#group [data-slot=name]").textContent === "Emmaus"`);
+  // Asking LG38 too is refused until he withdraws.
+  await page.goto(url("group.html?g=lg38"));
+  await page.waitFor(`document.querySelector("#group [data-slot=name]").textContent === "LG38"`);
   await page.tap("#request");
   await page.waitFor(visible("#withdraw-first"));
   await page.tap("#withdraw-first [data-withdraw]");
-  await page.waitFor(`location.search.includes("g=emmaus") && ${roleIs("newcomer")}`);
+  await page.waitFor(`location.search.includes("g=lg38") && ${roleIs("newcomer")}`);
   await page.waitFor(visible("#request"));
   await page.tap("#request");
   await page.waitFor(`location.pathname.endsWith("/prototype/") && ${roleIs("pending")}`);
-  assert.equal(await page.evaluate(`document.querySelector("#request-pending [data-fill=group-name]").textContent`), "Emmaus");
+  assert.equal(await page.evaluate(`document.querySelector("#request-pending [data-fill=group-name]").textContent`), "LG38");
 
-  // Andrew, who mentors Emmaus, approves him.
+  // Andrew, who mentors LG38, approves him.
   await page.goto(url("requests.html?as=mentor"));
   await page.waitFor(visible("#request-lucas"));
-  assert.match(await page.evaluate(`document.querySelector("#request-lucas [data-slot=title]").textContent`), /Lucas wants to join Emmaus/);
+  assert.match(await page.evaluate(`document.querySelector("#request-lucas [data-slot=title]").textContent`), /Lucas wants to join LG38/);
   await page.tap("#request-lucas [data-slot=approve]");
   await page.waitFor(visible("#request-lucas [data-slot=approved]"));
 
@@ -80,7 +80,7 @@ check("a newcomer asks, waits, is asked to withdraw before asking another, and i
   await page.goto(url("?as=pending"));
   await page.waitFor(visible("#request-approved"));
   assert.equal(await page.evaluate(visible("#request-pending")), false);
-  assert.match(await page.evaluate(`document.querySelector("#request-approved").textContent`), /Emmaus[\s\S]*Tue · 7:00–9:00 PM/);
+  assert.match(await page.evaluate(`document.querySelector("#request-approved").textContent`), /LG38[\s\S]*Tue · 7:00–9:00 PM/);
 });
 
 check("Withdraw on Home takes the request back", async ({ page, url }) => {
@@ -98,14 +98,14 @@ check("a mentor sees only his groups' requests; the secretary sees them all", as
   await page.evaluate(`localStorage.clear()`);
   await page.goto(url("?as=newcomer"));
   await page.waitFor(roleIs("newcomer"));
-  await page.goto(url("group.html?g=nazareth"));
+  await page.goto(url("group.html?g=lg40"));
   await page.waitFor(visible("#request"));
   await page.tap("#request");
   await page.waitFor(roleIs("pending"));
 
   await page.goto(url("requests.html?as=mentor"));
   await page.waitFor(`document.querySelectorAll(".request").length > 0`);
-  assert.equal(await page.evaluate(`!!document.getElementById("request-lucas")`), false, "Nazareth is not Andrew's");
+  assert.equal(await page.evaluate(`!!document.getElementById("request-lucas")`), false, "LG40 is not Andrew's");
   assert.equal(await page.evaluate(`!!document.getElementById("request-noah")`), true);
 
   await page.goto(url("requests.html?as=secretary"));
@@ -114,7 +114,7 @@ check("a mentor sees only his groups' requests; the secretary sees them all", as
 });
 
 check("the flow's pages run without errors", async ({ page, url }) => {
-  for (const p of ["groups.html?as=member", "group.html?g=tabor&as=member", "group.html?g=nope", "requests.html?as=secretary"]) {
+  for (const p of ["groups.html?as=member", "group.html?g=lg30&as=member", "group.html?g=nope", "requests.html?as=secretary"]) {
     page.errors.length = 0;
     await page.goto(url(p));
     await page.waitFor(`document.readyState === "complete"`);

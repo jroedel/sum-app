@@ -348,3 +348,4 @@ a { color: var(--primary); }
 .size [aria-pressed="true"] { background: var(--primary-tint); border-color: var(--primary); }
 .sum-btn.small.large-a { font-size: 22px; }
 .song .later { font-style: italic; }
+.years-row { gap: var(--space-2); flex-wrap: wrap; }

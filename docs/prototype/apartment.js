@@ -43,7 +43,7 @@ function render() {
       row.querySelector('[data-slot="time"]').textContent = span(b.start, b.end);
 
       const half = b.kind === "group" ? (b.space === "dining" ? ", first hour" : ", second hour") : "";
-      row.querySelector('[data-slot="who"]').textContent = b.kind === "group" ? `${group(b.group).name} life group` : b.who;
+      row.querySelector('[data-slot="who"]').textContent = b.kind === "group" ? group(b.group).name : b.who;
       row.querySelector('[data-slot="space"]').textContent = space(b.space).name + half;
 
       const chips = row.querySelector('[data-slot="chips"]');

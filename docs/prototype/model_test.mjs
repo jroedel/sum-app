@@ -9,7 +9,7 @@ test("the role comes from ?as=, then memory, then the default", () => {
   assert.equal(roleFrom("", "mentor"), "mentor");
   assert.equal(roleFrom("", undefined), DEFAULT_ROLE);
   assert.equal(roleFrom("?as=admin", "nobody"), DEFAULT_ROLE, "an unknown role is ignored, not trusted");
-  assert.equal(roleFrom("?g=emmaus&as=pending", undefined), "pending");
+  assert.equal(roleFrom("?g=lg38&as=pending", undefined), "pending");
 });
 
 test("the five roles doc 14 asks for", () => {
@@ -38,7 +38,7 @@ test("members see what members see; a newcomer and an alum mentor do not", () =>
 test("a link to another mock-up page carries the role", () => {
   assert.equal(withRole("groups.html", "mentor"), "groups.html?as=mentor");
   assert.equal(withRole("./", "member"), "./?as=member");
-  assert.equal(withRole("group.html?g=emmaus", "pending"), "group.html?g=emmaus&as=pending");
+  assert.equal(withRole("group.html?g=lg38", "pending"), "group.html?g=lg38&as=pending");
   assert.equal(withRole("group.html?as=member#members", "secretary"), "group.html?as=secretary#members");
 });
 
@@ -99,29 +99,29 @@ test("memory keeps values in localStorage as JSON", () => {
       removeItem: (k) => store.delete(k),
     },
   };
-  memory(win).set("request", { group: "emmaus", status: "pending" });
-  assert.deepEqual(memory(win).get("request"), { group: "emmaus", status: "pending" });
+  memory(win).set("request", { group: "lg38", status: "pending" });
+  assert.deepEqual(memory(win).get("request"), { group: "lg38", status: "pending" });
 });
 
 test("the request follows the role", () => {
-  const made = { group: "cana", status: "pending", sent: "just now" };
+  const made = { group: "lg39", status: "pending", sent: "just now" };
   assert.equal(requestFor("newcomer", made), undefined, "no request, whatever is remembered");
   assert.deepEqual(requestFor("pending", made), made);
-  assert.equal(requestFor("pending", undefined).group, "emmaus", "the mock-up's own example");
+  assert.equal(requestFor("pending", undefined).group, "lg38", "the mock-up's own example");
   assert.deepEqual(requestFor("mentor", made), made);
-  assert.equal(requestFor("mentor", undefined).group, "emmaus", "a first visit has the example to approve");
+  assert.equal(requestFor("mentor", undefined).group, "lg38", "a first visit has the example to approve");
   assert.equal(requestFor("mentor", null), undefined, "withdrawn is remembered as none");
-  assert.equal(requestFor("pending", null).group, "emmaus", "the pending newcomer always has one");
+  assert.equal(requestFor("pending", null).group, "lg38", "the pending newcomer always has one");
 });
 
 test("one request at a time (doc 04)", () => {
-  const first = askToJoin(undefined, "cana");
+  const first = askToJoin(undefined, "lg39");
   assert.ok(first.ok);
-  assert.deepEqual([first.request.group, first.request.status], ["cana", "pending"]);
+  assert.deepEqual([first.request.group, first.request.status], ["lg39", "pending"]);
 
-  assert.deepEqual(askToJoin(first.request, "emmaus"), { ok: false, reason: "withdraw-first" });
-  assert.deepEqual(askToJoin(first.request, "cana"), { ok: false, reason: "already" });
-  assert.deepEqual(askToJoin({ group: "cana", status: "approved" }, "emmaus"), { ok: false, reason: "in-group" });
+  assert.deepEqual(askToJoin(first.request, "lg38"), { ok: false, reason: "withdraw-first" });
+  assert.deepEqual(askToJoin(first.request, "lg39"), { ok: false, reason: "already" });
+  assert.deepEqual(askToJoin({ group: "lg39", status: "approved" }, "lg38"), { ok: false, reason: "in-group" });
 });
 
 test("a group's years, earliest first", () => {
@@ -138,7 +138,7 @@ test("times read as a phone shows them", () => {
 
 test("a meeting is two halves: the dining room, then a room", () => {
   const days = [{ iso: "2026-11-24", weekday: 2 }, { iso: "2026-11-25", weekday: 3 }];
-  const all = schedule([{ group: "emmaus", weekday: 2, start: "19:00", middle: "20:00", end: "21:00", room: "second" }], days, []);
+  const all = schedule([{ group: "lg38", weekday: 2, start: "19:00", middle: "20:00", end: "21:00", room: "second" }], days, []);
   assert.deepEqual(
     all.map((b) => [b.space, b.day, b.start, b.end]),
     [
@@ -203,14 +203,14 @@ test("a code that is not six digits is not a try; an expired one needs a new cod
 
 test("first dues wait for a mentor's approval (doc 06)", () => {
   assert.equal(firstDues(undefined, false), "not-yet");
-  assert.equal(firstDues({ group: "emmaus", status: "pending" }, false), "not-yet");
-  assert.equal(firstDues({ group: "emmaus", status: "approved" }, false), "due");
-  assert.equal(firstDues({ group: "emmaus", status: "approved" }, true), "paid");
-  assert.equal(firstDues({ group: "emmaus", status: "pending" }, true), "not-yet", "paid without approval is not possible");
+  assert.equal(firstDues({ group: "lg38", status: "pending" }, false), "not-yet");
+  assert.equal(firstDues({ group: "lg38", status: "approved" }, false), "due");
+  assert.equal(firstDues({ group: "lg38", status: "approved" }, true), "paid");
+  assert.equal(firstDues({ group: "lg38", status: "pending" }, true), "not-yet", "paid without approval is not possible");
 });
 
 test("first dues make the newcomer a member (doc 03)", () => {
-  const approved = { group: "emmaus", status: "approved" };
+  const approved = { group: "lg38", status: "approved" };
   assert.ok(!memberNow("pending", approved, false));
   assert.ok(memberNow("pending", approved, true));
   assert.ok(!memberNow("newcomer", undefined, true));

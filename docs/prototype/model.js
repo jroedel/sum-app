@@ -85,11 +85,11 @@ function splitOnce(s, sep) {
 //
 // "Newcomer, no request" has none, whatever this browser remembers. Everyone
 // else sees the one he made, or, before he has made one, the mock-up's own
-// example: Lucas asked Emmaus on Saturday, so the mentor has a request to
+// example: Lucas asked LG38 on Saturday, so the mentor has a request to
 // approve on a first visit. Choosing "Newcomer, no request" forgets his, which
 // starts the flow over, and a tap on Request to join moves the role from one
 // newcomer to the other.
-export const EXAMPLE_REQUEST = { group: "emmaus", status: "pending", sent: "Saturday" };
+export const EXAMPLE_REQUEST = { group: "lg38", status: "pending", sent: "Saturday" };
 
 // remembered is undefined when this browser has seen nothing yet, and null
 // once a request was withdrawn or the flow started over.

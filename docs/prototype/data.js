@@ -2,14 +2,16 @@
 // may be: the repository is public (CLAUDE.md, "This repository is public").
 // Names are first names only, as an open group shows them (doc 14, flow 2).
 
-// GROUPS are the life groups. The first three are open, forming this
-// semester, with deliberately different mixes of graduation years: doc 04
-// shows composition because a group of mixed years comes apart, but leaves
-// the choice to the newcomer. Tabor is closed; it is Mateo's.
+// GROUPS are the life groups. A group is known by its number (LG26 to LG40
+// in the branch today) until it chooses a name. The three open ones are
+// forming this semester, with deliberately different mixes of graduation
+// years: doc 04 shows composition because a group of mixed years comes apart,
+// but leaves the choice to the newcomer. LG30 (Mateo's) and Servants are
+// closed.
 export const GROUPS = [
   {
-    id: "emmaus",
-    name: "Emmaus",
+    id: "lg38",
+    name: "LG38",
     open: true,
     meets: "Tue · 7:00–9:00 PM",
     place: "The apartment",
@@ -22,23 +24,23 @@ export const GROUPS = [
     ],
   },
   {
-    id: "cana",
-    name: "Cana",
+    id: "lg39",
+    name: "LG39",
     open: true,
-    meets: "Wed · 8:00–10:00 PM",
+    meets: "Thu · 6:00–8:00 PM",
     place: "The apartment",
     mentors: ["James"],
     members: [
-      { name: "Isaac", year: 2027, major: "Finance" },
-      { name: "Simon", year: 2027, major: "Nursing" },
-      { name: "Jude", year: 2027, major: "Architecture" },
-      { name: "Peter", year: 2028, major: "Computer science" },
-      { name: "Miles", year: 2027, major: "Biology" },
+      { name: "Ben", year: 2030, major: "Undeclared" },
+      { name: "Ezra", year: 2029, major: "Economics" },
+      { name: "Felix", year: 2030, major: "Biology" },
+      { name: "Hugo", year: 2027, major: "Finance" },
+      { name: "Ian", year: 2030, major: "Computer science" },
     ],
   },
   {
-    id: "nazareth",
-    name: "Nazareth",
+    id: "lg40",
+    name: "LG40",
     open: true,
     meets: "Sun · 4:30–6:30 PM",
     place: "The apartment",
@@ -50,8 +52,8 @@ export const GROUPS = [
     ],
   },
   {
-    id: "tabor",
-    name: "Tabor",
+    id: "lg30",
+    name: "LG30",
     open: false,
     meets: "Thu · 8:00–10:00 PM",
     place: "The apartment",
@@ -61,6 +63,21 @@ export const GROUPS = [
       { name: "Daniel", year: 2027, major: "Accounting" },
       { name: "Adrian", year: 2027, major: "Spanish" },
       { name: "Paul", year: 2026, major: "Philosophy" },
+    ],
+  },
+  {
+    id: "servants",
+    name: "Servants",
+    open: false,
+    meets: "Wed · 8:00–10:00 PM",
+    place: "The apartment",
+    mentors: ["James"],
+    members: [
+      { name: "Isaac", year: 2027, major: "Finance" },
+      { name: "Simon", year: 2027, major: "Nursing" },
+      { name: "Jude", year: 2027, major: "Architecture" },
+      { name: "Peter", year: 2028, major: "Computer science" },
+      { name: "Miles", year: 2027, major: "Biology" },
     ],
   },
 ];
@@ -78,8 +95,8 @@ export const mentors = (g) => g.mentors.includes(MENTOR);
 export const NEWCOMER = { name: "Lucas", year: 2029, major: "Mechanical engineering" };
 
 export const OTHER_REQUESTS = [
-  { id: "noah", name: "Noah", year: 2028, major: "Economics", group: "emmaus", sent: "today", for: ["mentor", "secretary"] },
-  { id: "caleb", name: "Caleb", year: 2027, major: "Finance", group: "cana", sent: "3 days ago", unanswered: true, for: ["secretary"] },
+  { id: "noah", name: "Noah", year: 2028, major: "Economics", group: "lg38", sent: "today", for: ["mentor", "secretary"] },
+  { id: "caleb", name: "Caleb", year: 2027, major: "Finance", group: "lg39", sent: "3 days ago", unanswered: true, for: ["secretary"] },
 ];
 
 // The apartment (doc 05): two rooms and the dining and living area, which is
@@ -117,14 +134,14 @@ export const DAYS = [
 // then one of the two rooms for the second. Which room is open in doc 05;
 // here each group has one.
 export const MEETINGS = [
-  { group: "emmaus", weekday: 2, start: "19:00", middle: "20:00", end: "21:00", room: "second" },
-  { group: "cana", weekday: 3, start: "20:00", middle: "21:00", end: "22:00", room: "study" },
-  { group: "tabor", weekday: 4, start: "20:00", middle: "21:00", end: "22:00", room: "second" },
-  { group: "nazareth", weekday: 0, start: "16:30", middle: "17:30", end: "18:30", room: "second" },
+  { group: "lg38", weekday: 2, start: "19:00", middle: "20:00", end: "21:00", room: "second" },
+  { group: "servants", weekday: 3, start: "20:00", middle: "21:00", end: "22:00", room: "study" },
+  { group: "lg30", weekday: 4, start: "20:00", middle: "21:00", end: "22:00", room: "second" },
+  { group: "lg40", weekday: 0, start: "16:30", middle: "17:30", end: "18:30", room: "second" },
 ];
 
 // BOOKINGS are what members (and a priest) have put on the schedule
-// themselves. Mateo's study time on Wednesday is overlapped by Cana's second
+// themselves. Mateo's study time on Wednesday is overlapped by the Servants' second
 // hour, which claims the room, so the member has a displacement waiting on
 // Home (doc 05: a single member who is displaced is told himself). Simon is
 // there while Isaac studies, which is sharing, not a double booking.
@@ -164,16 +181,16 @@ export const HISTORY = [
 // EVERYONE is the secretary's list for this semester. Each paid entry is the
 // day it was paid; a settled one carries the secretary's note.
 export const EVERYONE = [
-  { id: "mateo", name: "Mateo", group: "Tabor" },
-  { id: "daniel", name: "Daniel", group: "Tabor", paid: "September 2" },
-  { id: "adrian", name: "Adrian", group: "Tabor", paid: "September 9" },
-  { id: "paul", name: "Paul", group: "Tabor", settled: "Waived: hardship" },
-  { id: "isaac", name: "Isaac", group: "Cana", paid: "September 4" },
-  { id: "simon", name: "Simon", group: "Cana" },
-  { id: "jude", name: "Jude", group: "Cana", paid: "September 18" },
-  { id: "peter", name: "Peter", group: "Cana", paid: "September 1" },
-  { id: "miles", name: "Miles", group: "Cana" },
-  { id: "owen", name: "Owen", group: "Emmaus", paid: "November 20", first: true },
+  { id: "mateo", name: "Mateo", group: "LG30" },
+  { id: "daniel", name: "Daniel", group: "LG30", paid: "September 2" },
+  { id: "adrian", name: "Adrian", group: "LG30", paid: "September 9" },
+  { id: "paul", name: "Paul", group: "LG30", settled: "Waived: hardship" },
+  { id: "isaac", name: "Isaac", group: "Servants", paid: "September 4" },
+  { id: "simon", name: "Simon", group: "Servants" },
+  { id: "jude", name: "Jude", group: "Servants", paid: "September 18" },
+  { id: "peter", name: "Peter", group: "Servants", paid: "September 1" },
+  { id: "miles", name: "Miles", group: "Servants" },
+  { id: "owen", name: "Owen", group: "LG38", paid: "November 20", first: true },
 ];
 
 // A payment the form could not match to anyone: its address is not a
