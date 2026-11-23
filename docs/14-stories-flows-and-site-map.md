@@ -148,8 +148,8 @@ path splits. There is one for each of the five items.
 2. He sees the list of songs and taps a title.
 3. The song opens quickly as a page with its words, and he reads or scrolls.
    Later the page can also show chords, recordings, video and guitar tabs.
-   **Open:** how the list is ordered or searched, and whether a song stays
-   readable with a poor signal.
+   The list is A to Z with a search over titles and words, and the songs are
+   saved on the phone to read with no signal ([07](07-pages-and-menu.md)).
 
 ### 5. A member puts himself on the apartment schedule
 

@@ -307,3 +307,29 @@ export function standing(entry, pastDue) {
   if (entry?.settled) return "settled";
   return pastDue ? "overdue" : "due";
 }
+
+// --- songs (doc 07) ------------------------------------------------------------
+
+// fold makes text comparable for a search: lower case, without accents or
+// punctuation, so "salve regina" finds "Salve, Regina" and "heaven" finds
+// "Heav'n" only if typed as written.
+export function fold(text) {
+  return text.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+// findSongs is the list A to Z, narrowed by a search over titles and words
+// (doc 07, decided 2026-11-22). A title that matches comes before a song that
+// only has the words somewhere in it; each hit says which it was.
+export function findSongs(songs, query) {
+  const az = [...songs].sort((a, b) => a.title.localeCompare(b.title));
+  const q = fold(query ?? "");
+  if (!q) return az.map((s) => ({ song: s, in: "all" }));
+
+  const inTitle = az.filter((s) => fold(s.title).includes(q)).map((s) => ({ song: s, in: "title" }));
+  const inWords = az
+    .filter((s) => !fold(s.title).includes(q))
+    .map((s) => ({ song: s, line: s.verses.flat().find((l) => fold(l).includes(q)) }))
+    .filter((h) => h.line)
+    .map((h) => ({ ...h, in: "words" }));
+  return [...inTitle, ...inWords];
+}
