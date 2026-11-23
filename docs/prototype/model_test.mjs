@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { DEFAULT_ROLE, MAX_SENDS, MOCK_CODE, ROLES, askToJoin, clashes, clashesWith, clock, firstDues, isMember, looksLikeEmail, memberNow, memory, requestFor, roleFrom, schedule, sendCode, shownFor, span, standing, tryCode, withRole, years } from "./model.js";
+import { DEFAULT_ROLE, MAX_SENDS, MOCK_CODE, ROLES, askToJoin, clashes, clashesWith, clock, outcome, overlaps, firstDues, isMember, looksLikeEmail, memberNow, memory, requestFor, roleFrom, schedule, sendCode, shownFor, span, standing, tryCode, withRole, years } from "./model.js";
 
 test("the role comes from ?as=, then memory, then the default", () => {
   assert.equal(roleFrom("?as=secretary", "mentor"), "secretary");
@@ -48,14 +48,33 @@ test("a link elsewhere is left alone", () => {
   }
 });
 
-test("bookings clash in the same space, on the same day, at overlapping times", () => {
+test("bookings overlap in the same space, on the same day, at overlapping times", () => {
   const meeting = { space: "dining", day: "2026-11-24", start: "16:30", end: "17:30" };
 
-  assert.ok(clashes(meeting, { space: "dining", day: "2026-11-24", start: "17:00", end: "18:00" }));
-  assert.ok(clashes(meeting, { space: "dining", day: "2026-11-24", start: "15:00", end: "21:00" }), "one inside the other");
-  assert.ok(!clashes(meeting, { space: "dining", day: "2026-11-24", start: "17:30", end: "18:30" }), "touching ends are a hand-over");
-  assert.ok(!clashes(meeting, { space: "study", day: "2026-11-24", start: "16:30", end: "17:30" }), "another space");
-  assert.ok(!clashes(meeting, { space: "dining", day: "2026-11-25", start: "16:30", end: "17:30" }), "another day");
+  assert.ok(overlaps(meeting, { space: "dining", day: "2026-11-24", start: "17:00", end: "18:00" }));
+  assert.ok(overlaps(meeting, { space: "dining", day: "2026-11-24", start: "15:00", end: "21:00" }), "one inside the other");
+  assert.ok(!overlaps(meeting, { space: "dining", day: "2026-11-24", start: "17:30", end: "18:30" }), "touching ends are a hand-over");
+  assert.ok(!overlaps(meeting, { space: "study", day: "2026-11-24", start: "16:30", end: "17:30" }), "another space");
+  assert.ok(!overlaps(meeting, { space: "dining", day: "2026-11-25", start: "16:30", end: "17:30" }), "another day");
+});
+
+test("only a booking that claims the space makes a double booking (doc 05)", () => {
+  const at = (kind, start, end) => ({ kind, space: "study", day: "d", start, end });
+  assert.ok(!clashes(at("study", "15:00", "18:00"), at("here", "16:00", "17:00")), "studying and being there share");
+  assert.ok(!clashes(at("study", "15:00", "18:00"), at("study", "16:00", "17:00")), "two men studying share");
+  assert.ok(clashes(at("study", "15:00", "18:00"), at("meeting", "16:00", "17:00")), "a meeting claims the room");
+  assert.ok(clashes(at("meeting", "15:00", "18:00"), at("group", "16:00", "17:00")));
+});
+
+test("who is displaced: a group over a meeting over study; two meetings are level", () => {
+  const at = (kind, start, end) => ({ kind, space: "study", day: "d", start, end });
+  assert.equal(outcome(at("meeting", "16:00", "17:00"), at("study", "15:00", "18:00")), "displaces");
+  assert.equal(outcome(at("study", "16:00", "17:00"), at("group", "15:00", "18:00")), "is-displaced");
+  assert.equal(outcome(at("meeting", "16:00", "17:00"), at("group", "15:00", "18:00")), "is-displaced");
+  assert.equal(outcome(at("meeting", "16:00", "17:00"), at("meeting", "15:00", "18:00")), "level");
+  assert.equal(outcome(at("here", "16:00", "17:00"), at("study", "15:00", "18:00")), "quiet");
+  assert.equal(outcome(at("here", "16:00", "17:00"), at("here", "15:00", "18:00")), null);
+  assert.equal(outcome(at("meeting", "18:00", "19:00"), at("study", "15:00", "18:00")), null, "no overlap");
 });
 
 test("memory works without localStorage, and never throws", () => {
@@ -129,10 +148,10 @@ test("a meeting is two halves: the dining room, then a room", () => {
   );
 });
 
-test("a booking lists what it overlaps, never itself", () => {
-  const a = { id: "a", space: "study", day: "d", start: "15:00", end: "18:00" };
-  const b = { id: "b", space: "study", day: "d", start: "17:00", end: "19:00" };
-  const c = { id: "c", space: "study", day: "d", start: "18:00", end: "20:00" };
+test("a booking lists what it is double booked with, never itself", () => {
+  const a = { id: "a", kind: "study", space: "study", day: "d", start: "15:00", end: "18:00" };
+  const b = { id: "b", kind: "meeting", space: "study", day: "d", start: "17:00", end: "19:00" };
+  const c = { id: "c", kind: "here", space: "study", day: "d", start: "18:00", end: "20:00" };
   assert.deepEqual(clashesWith(a, [a, b, c]).map((x) => x.id), ["b"]);
   assert.deepEqual(clashesWith(b, [a, b, c]).map((x) => x.id), ["a", "c"]);
 });

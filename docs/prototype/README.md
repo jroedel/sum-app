@@ -44,7 +44,12 @@ lists it here, so it is not mistaken for a decision:
 - **The rooms' names.** Doc 05 has the secretary name the spaces; "Study
   room" and "Second room" stand in for whatever he calls them.
 - **An overlap is marked on both bookings** ("Overlaps"), and adding one says
-  who is told.
+  who is told. **Who gives way** (doc 05 decides what claims a room, not the
+  order between claims): a life group's meeting comes first, then a meeting,
+  then studying and being there, which share. Two meetings at once are both
+  told to settle it.
+- **Bumping** a booking (the core team's and the priests' power) is shown for
+  the secretary, on anything but a life group's meeting.
 - **Signing in:** the name is asked as first and last, and only the first is
   required. The phone being optional is the mock-up's guess. Four codes per
   address is the mock-up's "a few times an hour" (doc 03), counted per visit.
@@ -84,11 +89,15 @@ are overdue: he is out of good standing, and nothing else changes until he
 pays. As **Secretary**, More → Everyone's dues matches a payment by hand,
 marks a sweatshirt given, and settles a semester with a note.
 
-**Flow 5, the apartment.** As **Member**, Apartment shows the week from
-Monday, November 23, with each life group meeting as its two halves. Mateo's
-Wednesday study time overlaps Cana's second hour, and Home says so. **Add
-yourself** is always accepted; one that overlaps lists who is told. **Remove
-me** takes off his own.
+**Flow 5, the apartment.** As **Member**, Apartment shows the two weeks from
+Monday, November 23, with each life group meeting as its two halves and the
+apartment order linked at the top. Studying and being there share a room
+(Simon is there while Isaac studies); a meeting claims it (Fr. Thomas, on
+Friday). Mateo's Wednesday study time is overlapped by Cana's second hour,
+and Home says so. **Add yourself** is always accepted, and says who is told:
+try a meeting in the study room on Monday afternoon, or being there in the
+dining room on Tuesday at 6:30. **Remove me** takes off his own; as
+**Secretary**, **Bump** takes off someone else's.
 
 **Contact details** (doc 04) show on a group's page for members, and for a
 mentor in the groups he mentors. A newcomer sees first names, years and

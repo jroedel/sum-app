@@ -1,9 +1,12 @@
 // Putting yourself on the apartment schedule (doc 14, flow 5). It is always
-// accepted; an overlap says who is told about it (doc 05): a life group's
-// leader for a meeting, a member himself for his own booking.
+// accepted. What an overlap means depends on what each booking claims (doc
+// 05, model.js outcome): a meeting displaces someone studying, and he is told
+// himself; a life group's meeting displaces anything, so a booking over one
+// is told to give way; two meetings settle it between them; being there
+// where someone studies is only a reminder to keep it quiet.
 import { role, saved } from "./app.js";
 import { BOOKINGS, DAYS, MEETINGS, ME, group, space } from "./data.js";
-import { clashesWith, minutes, schedule, span, withRole } from "./model.js";
+import { minutes, outcome, schedule, span, withRole } from "./model.js";
 
 const form = document.getElementById("add");
 const day = document.getElementById("day");
@@ -47,16 +50,31 @@ form.addEventListener("submit", (e) => {
 
   const told = document.getElementById("told");
   told.replaceChildren();
-  for (const o of clashesWith(b, before)) {
+  for (const o of before) {
+    const what = outcome(b, o);
+    if (!what) continue;
+    const who = o.kind === "group" ? `${group(o.group).name}'s meeting` : o.who;
+    const when = span(o.start, o.end);
     const li = document.createElement("li");
-    li.textContent =
-      o.kind === "meeting"
-        ? `${group(o.group).name} meets there from ${span(o.start, o.end)}. Its leader is told, so you can settle it before the meeting.`
-        : `${o.who} is there from ${span(o.start, o.end)}. He is told himself.`;
+    li.textContent = {
+      displaces: `${o.who} is there from ${when}, and your meeting comes first. He is told himself.`,
+      "is-displaced":
+        o.kind === "group"
+          ? `${who} has the room from ${when}, and comes first. Its leader is told, so you can settle it before then.`
+          : `${o.who} has the room for a meeting from ${when}, and comes first. He is told, so you can settle it.`,
+      level: `${o.who} has the room for a meeting from ${when} too. You are both told, to settle it between you.`,
+      quiet: `${o.who} is studying there from ${when}. Keep it quiet.`,
+    }[what];
     told.append(li);
   }
 
-  document.getElementById("overlap").hidden = told.children.length === 0;
+  // Sharing a room with someone studying tells nobody; it only reminds.
+  const overlap = document.getElementById("overlap");
+  const onlyQuiet = before.every((o) => [null, "quiet"].includes(outcome(b, o)));
+  overlap.querySelector(".sum-event-title").textContent = onlyQuiet ? "Someone is studying there" : "It overlaps a booking";
+  overlap.querySelector(".sum-chip").hidden = onlyQuiet;
+  overlap.querySelector("p.muted").hidden = onlyQuiet;
+  overlap.hidden = told.children.length === 0;
   form.hidden = true;
   document.getElementById("added").hidden = false;
 });

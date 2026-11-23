@@ -35,7 +35,15 @@
 <h1 class="screen-title">The apartment</h1>
 
 <div class="stack" data-for="member secretary">
-  <p class="muted">Who will be there, and when. Life group meetings are on it already. Double bookings are allowed: whoever one displaces is told, so it can be settled beforehand.</p>
+  <a class="sum-card row-link" href="more.html" data-not-here id="house-rules">
+    <svg class="icon primary-icon" aria-hidden="true"><use href="icons.svg#book-open"/></svg>
+    <div class="grow">
+      <p class="sum-event-title">The apartment order</p>
+      <p class="muted">The house rules, for everyone who uses it</p>
+    </div>
+    <svg class="icon chev" aria-hidden="true"><use href="icons.svg#chevron-right"/></svg>
+  </a>
+  <p class="muted">Who will be there in the next two weeks. Life group meetings are on it already. Studying and being there share a room; a meeting claims it. A double booking is never refused: whoever it displaces is told, so it can be settled beforehand.</p>
   <div class="stack" id="days"></div>
   <div class="thumb-action">
     <a class="sum-btn sum-btn--accent sum-btn--block" href="apartment-add.html">Add yourself</a>
@@ -63,6 +71,7 @@
       <div class="chips" data-slot="chips"></div>
     </div>
     <button class="sum-btn sum-btn--quiet small" type="button" data-slot="remove" hidden>Remove me</button>
+    <button class="sum-btn sum-btn--quiet small" type="button" data-slot="bump" hidden>Bump</button>
   </div>
 </template>
 </main>

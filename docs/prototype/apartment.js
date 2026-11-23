@@ -1,7 +1,9 @@
-// The apartment schedule (doc 14, flow 5): the coming week, with the life
-// group meetings already on it, and a member's own bookings, which he can
-// remove. An overlap is shown, never refused (doc 05).
-import { apply, role, saved } from "./app.js";
+// The apartment schedule (doc 14, flow 5): the next two weeks, with the life
+// group meetings already on it, and the members' own bookings: studying and
+// being there, which share a room, and meetings, which claim it (doc 05). A
+// double booking is shown, never refused. A member removes his own; the core
+// team and the priests can bump someone's.
+import { apply, notHere, role, saved } from "./app.js";
 import { BOOKINGS, DAYS, MEETINGS, ME, group, space } from "./data.js";
 import { clashesWith, schedule, span } from "./model.js";
 
@@ -40,21 +42,35 @@ function render() {
       row.id = `b-${b.id}`;
       row.querySelector('[data-slot="time"]').textContent = span(b.start, b.end);
 
-      const half = b.kind === "meeting" ? (b.space === "dining" ? ", first hour" : ", second hour") : "";
-      row.querySelector('[data-slot="who"]').textContent = b.kind === "meeting" ? `${group(b.group).name} life group` : b.who;
+      const half = b.kind === "group" ? (b.space === "dining" ? ", first hour" : ", second hour") : "";
+      row.querySelector('[data-slot="who"]').textContent = b.kind === "group" ? `${group(b.group).name} life group` : b.who;
       row.querySelector('[data-slot="space"]').textContent = space(b.space).name + half;
 
       const chips = row.querySelector('[data-slot="chips"]');
+      if (b.kind === "group") chips.append(chip("track", "Life group"));
       if (b.kind === "meeting") chips.append(chip("track", "Meeting"));
       if (b.kind === "study") chips.append(chip("soon", "Studying"));
       if (clashesWith(b, all).length > 0) chips.append(chip("overdue", "Overlaps"));
 
+      const mine = b.kind !== "group" && b.who === ME[role];
       const remove = row.querySelector('[data-slot="remove"]');
-      if (b.kind !== "meeting" && b.who === ME[role]) {
+      if (mine) {
         remove.hidden = false;
         remove.addEventListener("click", () => {
           saved.set("removed", [...removed, b.id]);
           render();
+        });
+      }
+
+      // The core team and the priests can bump a booking (doc 05). In the
+      // mock-up that is the secretary; a life group's meeting is not bumped.
+      const bump = row.querySelector('[data-slot="bump"]');
+      if (role === "secretary" && !mine && b.kind !== "group") {
+        bump.hidden = false;
+        bump.addEventListener("click", () => {
+          saved.set("removed", [...removed, b.id]);
+          render();
+          notHere(`Bumped. ${b.who} is told.`);
         });
       }
 

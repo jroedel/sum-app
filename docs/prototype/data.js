@@ -93,7 +93,8 @@ export const SPACES = [
 
 export const space = (id) => SPACES.find((s) => s.id === id);
 
-// DAYS are the week the mock-up shows, starting on the Monday Home names.
+// DAYS are the two weeks a member can book ahead (doc 05), starting on the
+// Monday Home names.
 export const DAYS = [
   { iso: "2026-11-23", label: "Monday, November 23", weekday: 1 },
   { iso: "2026-11-24", label: "Tuesday, November 24", weekday: 2 },
@@ -102,6 +103,13 @@ export const DAYS = [
   { iso: "2026-11-27", label: "Friday, November 27", weekday: 5 },
   { iso: "2026-11-28", label: "Saturday, November 28", weekday: 6 },
   { iso: "2026-11-29", label: "Sunday, November 29", weekday: 0 },
+  { iso: "2026-11-30", label: "Monday, November 30", weekday: 1 },
+  { iso: "2026-12-01", label: "Tuesday, December 1", weekday: 2 },
+  { iso: "2026-12-02", label: "Wednesday, December 2", weekday: 3 },
+  { iso: "2026-12-03", label: "Thursday, December 3", weekday: 4 },
+  { iso: "2026-12-04", label: "Friday, December 4", weekday: 5 },
+  { iso: "2026-12-05", label: "Saturday, December 5", weekday: 6 },
+  { iso: "2026-12-06", label: "Sunday, December 6", weekday: 0 },
 ];
 
 // MEETINGS are each life group's weekly meeting on the schedule, put there
@@ -115,15 +123,19 @@ export const MEETINGS = [
   { group: "nazareth", weekday: 0, start: "16:30", middle: "17:30", end: "18:30", room: "second" },
 ];
 
-// BOOKINGS are what members have put on the schedule themselves. Mateo's
-// study booking on Wednesday is overlapped by Cana's second hour, so the
-// member has a displacement waiting on Home (doc 05: a single member who is
-// displaced is told himself).
+// BOOKINGS are what members (and a priest) have put on the schedule
+// themselves. Mateo's study time on Wednesday is overlapped by Cana's second
+// hour, which claims the room, so the member has a displacement waiting on
+// Home (doc 05: a single member who is displaced is told himself). Simon is
+// there while Isaac studies, which is sharing, not a double booking.
 export const BOOKINGS = [
   { id: "isaac-mon", who: "Isaac", kind: "study", space: "study", day: "2026-11-23", start: "15:00", end: "18:00" },
+  { id: "simon-mon", who: "Simon", kind: "here", space: "study", day: "2026-11-23", start: "16:00", end: "17:00" },
   { id: "mateo-tue", who: "Mateo", kind: "here", space: "dining", day: "2026-11-24", start: "17:00", end: "19:00" },
   { id: "mateo-wed", who: "Mateo", kind: "study", space: "study", day: "2026-11-25", start: "20:30", end: "22:00" },
+  { id: "thomas-fri", who: "Fr. Thomas", kind: "meeting", space: "second", day: "2026-11-27", start: "15:00", end: "16:00" },
   { id: "peter-fri", who: "Peter", kind: "here", space: "dining", day: "2026-11-27", start: "18:00", end: "21:00" },
+  { id: "jude-wed2", who: "Jude", kind: "study", space: "study", day: "2026-12-02", start: "14:00", end: "17:00" },
   { id: "daniel-sat", who: "Daniel", kind: "study", space: "study", day: "2026-11-28", start: "10:00", end: "13:00" },
 ];
 
