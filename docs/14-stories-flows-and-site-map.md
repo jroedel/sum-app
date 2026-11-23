@@ -144,7 +144,7 @@ path splits. There is one for each of the five items.
 
 ### 4. A member opens a song
 
-1. The member opens the menu and taps Songs.
+1. The member taps the Songs tab.
 2. He sees the list of songs and taps a title.
 3. The song opens quickly as a page with its words, and he reads or scrolls.
    Later the page can also show chords, recordings, video and guitar tabs.
@@ -153,7 +153,7 @@ path splits. There is one for each of the five items.
 
 ### 5. A member puts himself on the apartment schedule
 
-1. The member opens the schedule from the menu and sees the coming days, with
+1. The member opens the schedule from More and sees the coming days, with
    life group meetings already on it.
 2. He picks a space (a room, or the dining and living area, which is one
    space), a day up to two weeks ahead, a time, and why: to study, to be
@@ -169,10 +169,11 @@ path splits. There is one for each of the five items.
 
 ## The site map
 
-The top level is the tab bar from [10](10-design.md#the-apps-layout): members
-see **Home, Groups, Apartment, Game, More**; a newcomer sees the same without
-Apartment ([03](03-accounts-and-access.md)). The first release has no Game
-tab ([01](01-overview.md#the-first-release)). A new feature goes under More;
+The top level is the tab bar from [10](10-design.md#the-apps-layout):
+**Home, LGs, Songs, Game, More**, the same for everyone (decided 2026-11-23).
+The apartment is under More, for members only
+([03](03-accounts-and-access.md)). The first release has no Game tab
+([01](01-overview.md#the-first-release)). A new feature goes under More;
 there is never a sixth tab.
 
 - **Before the tabs**
@@ -187,29 +188,30 @@ there is never a sixth tab.
   - Your group, then My life group
   - The daily game's tile, then Game
   - The milestone ring, then My milestones
-- **Groups**
+- **LGs**, the branch's word for its life groups
   - Open life groups (a newcomer sees these too)
-    - A group: its members' graduation years, its meeting time, and Request
-      to join
+    - A group: its members' first names, graduation years ("Class of") and
+      majors, its meeting time, and Request to join
   - My life group (members)
     - Its members, its meeting time, and its semester checklist
   - Roster (members only), with newcomers marked
     - A member's profile, with email and phone
   - Requests to join (for a mentor)
-- **Apartment**
-  - The schedule: the coming two weeks, with life group meetings already on
-    it, and the apartment order linked at the top
-  - Add a booking: the space (two rooms, or the dining and living area), the
-    day, the time, and why (to study, to be there, a meeting)
-  - A notice that a booking displaced yours, then the booking
+- **Songs**: the list A to Z with a search, then a song
 - **Game**
   - Today's game (not chosen yet), with the branch's event promotion
 - **More**
+  - The apartment (members only)
+    - The schedule: the coming two weeks, with life group meetings already on
+      it, and the apartment order linked at the top
+    - Get on the schedule: the space (two rooms, or the dining and living
+      area), the day, the time, and why (to study, to be there, a meeting)
+    - A notice that a booking displaced yours, then the booking
   - Pages
     - Documentation: apartment order, conduct policy, first overnight
       document, branch day organization document
     - Schoenstatt knowledge base: formation material and founding documents
-    - Songs, then a song
+    - Songs, which also has its own tab
   - Dues: this semester, whether paid, and Pay; a newcomer's first dues make
     him a member
   - My profile: edit my details, my milestones, sign out

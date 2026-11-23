@@ -61,9 +61,6 @@ lists it here, so it is not mistaken for a decision:
   public-domain texts are in the mock-up: the branch's own songs are mostly
   under copyright and belong in the app's database, never in this public
   repository.
-- **The menu** is **Home, LGs, Songs, Game, More**, with the apartment under
-  More, for this review. Docs 10 and 14 still give the apartment a tab of its
-  own; which way it goes is for the reviewers.
 - **The feature** is the Closing Branch Retreat; its date in Upcoming is
   invented.
 - **Game, More and anything marked "not in this mock-up"** are placeholders:

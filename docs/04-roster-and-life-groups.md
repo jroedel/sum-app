@@ -56,6 +56,11 @@ The branch is made up of life groups. A life group has:
 
 A member is in **one life group** at a time (2026-11-22, for review).
 
+**A group goes by its number until it chooses a name** (decided
+2026-11-23). The branch numbers its groups in order, **LG26 to LG40** today;
+a group that has chosen a name, such as *Servants*, goes by that. The app
+calls them **LGs**, the branch's own word ([10](10-design.md#the-apps-layout)).
+
 ### Open life groups
 
 An **open** life group is one forming in the current semester. Many close at
@@ -173,6 +178,9 @@ The branch is told, once, that this is how the move is done.
 
 ## Open questions
 
+- Who opens a new group, and whether its number is simply the next one.
+- Who records a group's name once it has chosen one, and whether the app
+  keeps showing its number beside the name.
 - Who may enter people through the MCP endpoint after the move, and what it
   may do then. The proposal: the secretary and the priest moderators, with
   exactly the powers of their screens.
