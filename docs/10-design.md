@@ -208,10 +208,13 @@ One column, mobile first, under one arch.
   At 32 px the seal is decoration, so it has no alt text; the name beside it
   is the label.
 - **The menu** is fixed in code ([07](07-pages-and-menu.md)). On a phone it
-  is a tab bar at the bottom: 64 px plus the home-indicator inset. Members see
-  **Home, Groups, Apartment, Game, More**. A newcomer sees **Home, Groups,
-  Game, More**. *More* holds the pages, dues, the profile and, for the
-  secretary and priest moderators, their tools. The active tab is its icon
+  is a tab bar at the bottom: 64 px plus the home-indicator inset. Everyone
+  sees **Home, LGs, Songs, Game, More** (decided 2026-11-23). *LGs* is the
+  branch's own word for its life groups. *Songs* has a tab because it is
+  opened at every gathering. *More* holds the apartment (for members), the
+  pages, dues, the profile and, for the secretary and priest moderators, their
+  tools. Until the daily game is chosen, there is no Game tab
+  ([01](01-overview.md#the-first-release)). The active tab is its icon
   and label on a `primary-tint` pill. A new feature goes under *More*; there
   is never a sixth tab.
 - **From 960 px wide**, the column stays at most 36 rem (about 600 px) and
