@@ -129,3 +129,41 @@ export const BOOKINGS = [
 
 // ME is who "Remove me" and a new booking belong to, by role.
 export const ME = { member: "Mateo", secretary: "Daniel" };
+
+// contact is a member's invented email and phone. The addresses are at
+// example.org and the numbers in 555-0100 to 555-0199, which are set aside
+// for fiction, so none can reach a real person.
+export function contact(name) {
+  const n = [...name].reduce((sum, c) => sum + c.charCodeAt(0), 0) % 100;
+  return { email: `${name.toLowerCase()}@example.org`, phone: `(512) 555-01${String(n).padStart(2, "0")}` };
+}
+
+// DUES is the semester the mock-up is in. Week 6 ended on Friday, October 2,
+// so on Monday, November 23 an unpaid member is out of good standing.
+export const DUES = { semester: "Fall 2026", amount: 60, dueBy: "Friday, October 2", pastDue: true };
+
+// HISTORY is Mateo's earlier semesters, for his Dues screen.
+export const HISTORY = [
+  { semester: "Spring 2026", paid: "January 28" },
+  { semester: "Fall 2025", settled: "Paid cash at the branch retreat" },
+  { semester: "Spring 2025", paid: "February 3" },
+];
+
+// EVERYONE is the secretary's list for this semester. Each paid entry is the
+// day it was paid; a settled one carries the secretary's note.
+export const EVERYONE = [
+  { id: "mateo", name: "Mateo", group: "Tabor" },
+  { id: "daniel", name: "Daniel", group: "Tabor", paid: "September 2" },
+  { id: "adrian", name: "Adrian", group: "Tabor", paid: "September 9" },
+  { id: "paul", name: "Paul", group: "Tabor", settled: "Waived: hardship" },
+  { id: "isaac", name: "Isaac", group: "Cana", paid: "September 4" },
+  { id: "simon", name: "Simon", group: "Cana" },
+  { id: "jude", name: "Jude", group: "Cana", paid: "September 18" },
+  { id: "peter", name: "Peter", group: "Cana", paid: "September 1" },
+  { id: "miles", name: "Miles", group: "Cana" },
+  { id: "owen", name: "Owen", group: "Emmaus", paid: "November 20", first: true },
+];
+
+// A payment the form could not match to anyone: its address is not a
+// member's (doc 06). The secretary matches it by hand.
+export const UNMATCHED = { id: "pay-1120", amount: 60, from: "s.k.dev@example.org", on: "November 20" };

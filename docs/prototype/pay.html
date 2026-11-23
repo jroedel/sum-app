@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Pay dues · SUM mock-up</title>
+<link rel="icon" href="seal.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="prototype.css">
+<script type="module" src="app.js"></script>
+<script type="module" src="pay.js"></script>
+</head>
+<body class="before-tabs">
+<div class="mockup-banner" role="note">
+  <p>Mock-up · not the real SUM app</p>
+  <label>Viewing as
+    <select id="as">
+      <option value="newcomer">Newcomer, no request</option>
+      <option value="pending">Newcomer with a request</option>
+      <option value="member">Member</option>
+      <option value="mentor">Mentor (an alum)</option>
+      <option value="secretary">Secretary</option>
+    </select>
+  </label>
+</div>
+<header class="topbar">
+  <a class="back" href="dues.html" aria-label="Back"><svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg></a>
+  <p class="name">Payment</p>
+  <span class="avatar" aria-hidden="true"><span data-for="newcomer pending">L</span><span data-for="member">M</span><span data-for="mentor">A</span><span data-for="secretary">D</span></span>
+</header>
+<main class="screen">
+<p class="mock-note">This stands for the semester's dues form in drop-in forms, where Stripe takes the card. In the app it opens from Dues and comes back when paid. Nothing is charged here.</p>
+
+<div class="sum-card stack pay-form">
+  <p class="sum-eyebrow">Schoenstatt University Men</p>
+  <h1 class="screen-title">Fall 2026 dues</h1>
+  <p class="pay-amount sum-num">$60.00</p>
+  <p class="muted">For <b data-slot="payer">you</b>, signed in from the SUM app.</p>
+  <button class="sum-btn sum-btn--block apple-pay" type="button" data-pay>Pay with Apple Pay</button>
+  <button class="sum-btn sum-btn--quiet sum-btn--block" type="button" data-pay>Pay by card</button>
+  <a class="sum-btn sum-btn--quiet sum-btn--block" href="dues.html">Cancel</a>
+</div>
+</main>
+
+</body>
+</html>

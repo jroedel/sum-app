@@ -7,7 +7,7 @@
 // its own, which imports `role` and `saved` from here. Module scripts run in
 // the order the page lists them, so this one has run by then.
 import { group } from "./data.js";
-import { isMember, memory, requestFor, roleFrom, shownFor, withRole } from "./model.js";
+import { firstDues, memberNow, memory, requestFor, roleFrom, shownFor, withRole } from "./model.js";
 
 export const saved = memory(window);
 export const role = roleFrom(window.location.search, saved.get("role"));
@@ -18,6 +18,13 @@ saved.set("role", role);
 // is remembered as null, so the example does not come back on its own.
 export const request = requestFor(role, saved.get("request"));
 saved.set("request", request ?? null);
+
+// firstPaid is whether Lucas has paid his first dues, and member whether the
+// person looked at is a member now: Lucas becomes one by paying (doc 03), so
+// the Apartment tab and the roster's contacts open to him then.
+export const firstPaid = saved.get("first-dues") === true && request?.status === "approved";
+export const member = memberNow(role, request, firstPaid);
+export const firstDuesState = firstDues(request, firstPaid);
 
 // setRequest and withdraw change it, and go where the flow goes next: Home,
 // as the newcomer with or without a request, unless the page says otherwise.
@@ -36,14 +43,16 @@ export function withdraw(then = withRole("./", "newcomer")) {
 // need today but a screen's script may.
 export function apply(root = document) {
   document.documentElement.dataset.role = role;
-  document.documentElement.dataset.member = String(isMember(role));
+  document.documentElement.dataset.member = String(member);
 
   // data-for is who sees an element; data-request, which state of the
   // newcomer's request it belongs to (pending or approved). Both must hold.
-  for (const el of root.querySelectorAll("[data-for], [data-request]")) {
+  // data-first-dues, which state of his first dues (doc 06).
+  for (const el of root.querySelectorAll("[data-for], [data-request], [data-first-dues]")) {
     const forRole = !("for" in el.dataset) || shownFor(el.dataset.for, role);
     const forRequest = !("request" in el.dataset) || el.dataset.request === request?.status;
-    el.hidden = !(forRole && forRequest);
+    const forDues = !("firstDues" in el.dataset) || el.dataset.firstDues === firstDuesState;
+    el.hidden = !(forRole && forRequest && forDues);
   }
 
   // The request's group, wherever a page names it.
@@ -60,7 +69,7 @@ export function apply(root = document) {
 
   // The Apartment tab is a member's (doc 10, "The app's layout").
   for (const el of root.querySelectorAll("[data-members]")) {
-    el.hidden = !isMember(role);
+    el.hidden = !member;
   }
 
   for (const a of root.querySelectorAll("a[href]")) {

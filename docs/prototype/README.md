@@ -32,60 +32,67 @@ you click, and in the browser's storage where it allows that.
 Where a screen needed an answer the docs leave open, the mock-up picks one and
 lists it here, so it is not mistaken for a decision:
 
-- **An alum mentor has no Apartment tab.** Doc 10 gives the tab to members;
-  doc 04 makes the alum mentor not a member.
 - **Home's sections, per role** (doc 07's table, in doc 10's order). The
-  secretary's feed holds a new sign-up, a request nobody answered in 3 days,
-  and a payment to match (doc 03, doc 06). A member's *Waiting on you* is dues
-  when they are due. The mentor sees his groups under *Your groups*.
+  secretary's feed holds a new sign-up, a request nobody answered in 3 days, a
+  payment to match and a sweatshirt to hand over. The mentor sees his groups
+  under *Your groups*.
 - **The secretary is a member,** with his own group, streak and milestones.
-- **What a group shows** (open in doc 14, flow 2): its members' first names,
-  graduation years and majors, its meeting time and place, and its mentors.
-  The open groups list shows each member's year as a chip.
 - **Withdrawing to ask another group** is offered right where the second
   request is refused, as "Withdraw it", rather than only on Home.
 - **A mentor sees requests to his own groups only;** the secretary sees every
   request, with the ones unanswered for 3 days marked.
-
-- **The rooms are "Study room" and "Second room".** Their names are open in
-  doc 05, and so is how a group picks its second-hour room: here each group
-  always uses the same one.
+- **The rooms' names.** Doc 05 has the secretary name the spaces; "Study
+  room" and "Second room" stand in for whatever he calls them.
 - **An overlap is marked on both bookings** ("Overlaps"), and adding one says
-  who is told: a life group's leader for a meeting, a member himself for his
-  own booking. Doc 05 says the displaced are told; the mock-up tells everyone
-  the new booking overlaps.
-- **A member removes only his own bookings,** never a meeting.
-- **Newcomers and the alum mentor** reaching the apartment by its address are
-  told it is for members.
-
+  who is told.
 - **Signing in:** the name is asked as first and last, and only the first is
-  required. School, major and year of graduation are optional in doc 04; the
-  phone being optional too is the mock-up's guess. The agreement to texts is a separate box, never ticked for him
-  (doc 02). Four codes per address is the mock-up's "a few times an hour"
-  (doc 03), counted per visit.
-
-## Clicking through flow 1
-
-**More → Sign out** opens signing in, which has no tabs. The code is always
-**246810**, and a note on the screen says so. Any address signs up: after the
-code comes the profile, then Home as a newcomer. **mateo@example.org** (a
-member) and **daniel@example.org** (the secretary) skip the profile. A wrong
-code says how many tries are left; after five, or after "Pretend 10 minutes
-have passed", it asks for a new code; a fifth "Send a new code" is refused.
-
-## Clicking through flow 2
-
-Lucas, the newcomer, has one request in this browser. Choosing **Newcomer, no
-request** starts him over. He opens a group from Groups and taps **Request to
-join**; Home then shows Pending. Asking a second group asks him to withdraw the
-first. As **Mentor**, Requests to join (from Home or Groups) has **Approve**;
-back as **Newcomer with a request**, Home shows his group. Before he has done
-anything, the mock-up's example is a request to Emmaus sent on Saturday.
+  required. The phone being optional is the mock-up's guess. Four codes per
+  address is the mock-up's "a few times an hour" (doc 03), counted per visit.
+- **Dues:** the payment page stands for the drop-in forms dues form; the
+  mock-up's semester is Fall 2026, past its week 6, so Mateo's unpaid dues
+  show him out of good standing. Settling a semester by hand asks for a note.
 - **Game, More and anything marked "not in this mock-up"** are placeholders:
   tapping one says so rather than doing nothing.
 
-The people (Lucas, Mateo, Andrew, Daniel, Noah, Ethan, Caleb) and the groups
-(Emmaus, Cana, Tabor) are invented.
+The people (Lucas, Mateo, Andrew, Daniel, Owen, Noah, Ethan, Caleb and the
+groups' members) and the groups (Emmaus, Cana, Nazareth, Tabor) are invented.
+Their emails are at example.org and their phone numbers in 555-0100 to
+555-0199, which are set aside for fiction.
+
+## Clicking through the flows
+
+**Flow 1, signing in.** **More → Sign out** opens it, with no tabs. The code
+is always **246810**, and a note on the screen says so. Any address signs up:
+after the code comes the profile, then Home as a newcomer.
+**mateo@example.org** (a member) and **daniel@example.org** (the secretary)
+skip the profile. A wrong code says how many tries are left; after five, or
+after "Pretend 10 minutes have passed", it asks for a new code; a fifth "Send
+a new code" is refused.
+
+**Flow 2, a request to join.** Lucas, the newcomer, has one request in this
+browser. Choosing **Newcomer, no request** starts him over. He opens a group
+from Groups and taps **Request to join**; Home then shows Pending. Asking a
+second group asks him to withdraw the first. As **Mentor**, Requests to join
+(from Home or Groups) has **Approve**. Before he has done anything, the
+mock-up's example is a request to Emmaus sent on Saturday.
+
+**Flow 3, dues.** Approved, Lucas's Home asks for his **first dues**; before
+that, Dues says they come after his group. Paying them (the payment page,
+then back) makes him a member: Home welcomes him, the Apartment tab appears,
+and his group's page shows contact details. As **Member**, Mateo's Fall dues
+are overdue: he is out of good standing, and nothing else changes until he
+pays. As **Secretary**, More → Everyone's dues matches a payment by hand,
+marks a sweatshirt given, and settles a semester with a note.
+
+**Flow 5, the apartment.** As **Member**, Apartment shows the week from
+Monday, November 23, with each life group meeting as its two halves. Mateo's
+Wednesday study time overlaps Cana's second hour, and Home says so. **Add
+yourself** is always accepted; one that overlaps lists who is told. **Remove
+me** takes off his own.
+
+**Contact details** (doc 04) show on a group's page for members, and for a
+mentor in the groups he mentors. A newcomer sees first names, years and
+majors.
 
 ## How it is built
 
@@ -138,11 +145,3 @@ When the real screens replace them (issue #8):
    the brand sheet's route too.
 3. Remove the `/prototype/` case from `app/sdk/page/policy.go`.
 4. Take `docs/prototype` out of `scripts/js-test` once nothing is left there.
-
-## Clicking through flow 5
-
-As **Member**, Apartment shows the week from Monday, November 23, with each
-life group meeting as its two halves. Mateo's Wednesday study time overlaps
-Cana's second hour, and Home says so under *Waiting on you*. **Add yourself**
-is always accepted; one that overlaps lists who is told. **Remove me** takes
-off his own.

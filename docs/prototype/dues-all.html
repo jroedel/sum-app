@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Everyone's dues · SUM mock-up</title>
+<link rel="icon" href="seal.svg" type="image/svg+xml">
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="components.css">
+<link rel="stylesheet" href="prototype.css">
+<script type="module" src="app.js"></script>
+<script type="module" src="dues-all.js"></script>
+</head>
+<body>
+<div class="mockup-banner" role="note">
+  <p>Mock-up · not the real SUM app</p>
+  <label>Viewing as
+    <select id="as">
+      <option value="newcomer">Newcomer, no request</option>
+      <option value="pending">Newcomer with a request</option>
+      <option value="member">Member</option>
+      <option value="mentor">Mentor (an alum)</option>
+      <option value="secretary">Secretary</option>
+    </select>
+  </label>
+</div>
+<header class="topbar">
+  <a class="back" href="more.html" aria-label="Back"><svg class="icon" aria-hidden="true"><use href="icons.svg#chevron-left"/></svg></a>
+  <p class="name">Dues</p>
+  <span class="avatar" aria-hidden="true"><span data-for="newcomer pending">L</span><span data-for="member">M</span><span data-for="mentor">A</span><span data-for="secretary">D</span></span>
+</header>
+<main class="screen">
+<h1 class="screen-title">Everyone's dues</h1>
+
+<div class="sum-card stack" data-for="newcomer pending member mentor" id="secretary-only">
+  <p class="sum-event-title">For the secretary</p>
+  <p class="muted">Everyone's dues are the secretary's to keep (doc 03). Choose Secretary in the banner to see this screen.</p>
+</div>
+
+<div class="stack" data-for="secretary" id="secretary-dues">
+  <p class="muted sum-num" id="summary"></p>
+
+  <section class="sec" aria-labelledby="to-match" id="match-section">
+    <h2 id="to-match">A payment to match</h2>
+    <div class="sum-card stack" id="unmatched">
+      <p><b class="sum-num">$60</b> from <b data-slot="from"></b> on <span data-slot="on"></span>. No member has this address.</p>
+      <label class="field">Who paid it
+        <select id="match-who"></select>
+      </label>
+      <button class="sum-btn sum-btn--primary" type="button" id="match">Match it</button>
+    </div>
+    <p class="sum-card muted" id="matched" hidden></p>
+  </section>
+
+  <section class="sec" aria-labelledby="sweatshirts">
+    <h2 id="sweatshirts">Sweatshirts owed</h2>
+    <div class="sum-card list-card" id="owed"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="semester">
+    <h2 id="semester">Fall 2026</h2>
+    <div class="sum-card list-card" id="everyone"></div>
+  </section>
+</div>
+
+<template id="person">
+  <div class="row-link person">
+    <span class="avatar" aria-hidden="true" data-slot="initial"></span>
+    <div class="grow">
+      <p class="sum-event-title" data-slot="name"></p>
+      <p class="muted" data-slot="meta"></p>
+      <form class="settle stack" data-slot="settle" hidden>
+        <label class="field">Note
+          <input type="text" name="note" placeholder="Paid cash, waived…">
+        </label>
+        <button class="sum-btn sum-btn--primary small" type="submit">Mark settled</button>
+      </form>
+    </div>
+    <div class="person-end">
+      <span data-slot="chip"></span>
+      <button class="sum-btn sum-btn--quiet small" type="button" data-slot="action" hidden></button>
+    </div>
+  </div>
+</template>
+</main>
+<nav class="sum-tabbar tabbar" aria-label="Menu">
+  <img class="rail-seal" src="seal.svg" alt="">
+  <a class="sum-tab" href="./"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#house"/></svg></span>Home</a>
+  <a class="sum-tab" href="groups.html"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#users"/></svg></span>Groups</a>
+  <a class="sum-tab" href="apartment.html" data-members><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#calendar-days"/></svg></span>Apartment</a>
+  <a class="sum-tab" href="game.html"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#grid-3x3"/></svg></span>Game</a>
+  <a class="sum-tab" href="more.html" aria-current="page"><span class="sum-tab-pill"><svg class="icon" aria-hidden="true"><use href="icons.svg#ellipsis"/></svg></span>More</a>
+</nav>
+</body>
+</html>
