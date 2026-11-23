@@ -22,8 +22,8 @@ items in [01](01-overview.md#priority).
   don't need a password and can start using the app at once.
 - As a member with the app installed on my iPhone, I want to stay signed in
   for months, so that I'm not asked for a code every time I open it.
-- As the secretary, I want to see each new sign-up, so that I can reach out to
-  him and confirm him as a member.
+- As the secretary, I want to hear of each new sign-up, in my feed and by
+  email, so that I can reach out to him.
 - As a priest moderator, I want to hand a role such as secretary to a new man
   with a changeover period, so that he can learn it while the outgoing man can
   still act.
@@ -41,7 +41,8 @@ items in [01](01-overview.md#priority).
 - As a new man, I want to request to join one group, and withdraw the request
   if I change my mind, so that I am never waiting on two groups at once.
 - As a mentor, I want to be told when someone asks to join my group, and to
-  approve him, so that he is in without a meeting about it.
+  approve him once I know him, so that he is in without a meeting about it
+  and no stranger gets in.
 - As the secretary, I want a request nobody has answered in 3 days to land in
   my feed, so that no one is left waiting.
 
@@ -51,8 +52,8 @@ items in [01](01-overview.md#priority).
   whether I owe anything.
 - As a member, I want to pay the $60 from my phone with Apple Pay, so that it
   takes less than a minute.
-- As a man in his first semester, I want to see that nothing is due yet, so
-  that I am not confused.
+- As a newcomer a mentor has approved, I want to pay my first dues from my
+  phone, so that I am a member of the branch, and get my sweatshirt.
 - As the secretary, I want to see who has paid and who has not, so that I
   remind only those who owe.
 - As the secretary, I want a payment the app cannot match to a member to show
@@ -72,6 +73,8 @@ items in [01](01-overview.md#priority).
 
 - As a member, I want to see who will be at the apartment and when, so that I
   can choose a time when someone is there.
+- As a priest, I want to book a room for a conversation with a student, so
+  that we have it to ourselves.
 - As a member, I want to put myself on the schedule, so that others know I will
   be there.
 - As a life group leader, I want my group's weekly meeting to appear on its
@@ -101,8 +104,8 @@ path splits. There is one for each of the five items.
    separate question.
 5. He lands on the home page as a newcomer, which shows the open life groups
    and how to request to join one. He stays signed in on this device.
-6. Meanwhile the secretary sees the new sign-up in his feed and reaches out to
-   him outside the app.
+6. Meanwhile the secretary hears of the new sign-up, in his feed and by
+   email, and reaches out to him outside the app.
 
 ### 2. A newcomer requests to join a life group
 
@@ -113,24 +116,31 @@ path splits. There is one for each of the five items.
 3. He taps Request to join. If he already has a request out, the app asks him
    to withdraw it first.
 4. The group's mentors are notified, and his home page shows Pending.
-5. A mentor or the secretary approves. If nobody answers in 3 days, the request
-   goes to the secretary's feed. He can withdraw at any time and ask another
-   group.
-6. Once approved, his home page shows his group and its meeting time.
+5. A mentor or the secretary approves. A mentor approves only someone he
+   knows: met in person, or his phone or email confirmed. If nobody answers in
+   3 days, the request goes to the secretary's feed. He can withdraw at any
+   time and ask another group.
+6. Once approved, his home page shows his group and its meeting time, and
+   asks for his first dues, which make him a member (flow 3).
 
-### 3. A member pays dues
+### 3. Paying dues, and the first dues
 
-1. The member opens the home page and sees that dues are due for this
-   semester. If it is his first semester, nothing is due and the flow ends
-   here.
+1. The home page shows that this semester's dues are due. For a newcomer, this
+   appears once a mentor has approved him into a group; before that he cannot
+   pay.
 2. He taps to pay. The app opens the semester's dues form from drop-in forms.
 3. He pays $60 with Apple Pay or a card through Stripe. The app never sees card
    details.
 4. The app learns of the payment from the form, and his home page shows that he
-   has paid.
+   has paid. **If these were his first dues, he is now a member:** the roster
+   and the apartment open to him, and a sweatshirt is owed him, which the
+   secretary hands over and marks given.
 5. If the payment cannot be matched to a member (until the form can carry his
    identity, matching is by email address), it goes to the secretary's feed and
    he matches it by hand.
+6. After the end of week 6, a member who has not paid is out of good standing.
+   It is shown, to him and to the core team, and the reminders continue;
+   nothing is taken away.
 
 ### 4. A member opens a song
 
@@ -146,11 +156,14 @@ path splits. There is one for each of the five items.
 1. The member opens the schedule from the menu and sees the coming days, with
    life group meetings already on it.
 2. He picks a space (a room, or the dining and living area, which is one
-   space), a day and a time, and adds himself.
-3. If his time overlaps another booking, the app still accepts it and tells the
-   life group leader of whoever is displaced, so that the two can settle it
-   beforehand. To study, he books the study room the same way, and others are
-   asked to respect it.
+   space), a day up to two weeks ahead, a time, and why: to study, to be
+   there, or for a meeting.
+3. Studying and being there share the space: studying asks others for quiet.
+   A meeting claims it. If his booking overlaps one that claims the space, the
+   app still accepts it and tells whoever is displaced (a life group's
+   leader, or the member himself), so that they can settle it beforehand. A
+   life group meeting takes precedence, and the core team and the priests can
+   bump a booking.
 4. His name appears, so others can see who will be there. He can remove himself
    later.
 
@@ -158,8 +171,9 @@ path splits. There is one for each of the five items.
 
 The top level is the tab bar from [10](10-design.md#the-apps-layout): members
 see **Home, Groups, Apartment, Game, More**; a newcomer sees the same without
-Apartment (**open**, [03](03-accounts-and-access.md#open-questions)). A new
-feature goes under More; there is never a sixth tab.
+Apartment ([03](03-accounts-and-access.md)). The first release has no Game
+tab ([01](01-overview.md#the-first-release)). A new feature goes under More;
+there is never a sixth tab.
 
 - **Before the tabs**
   - Sign in: email address, then the 6-digit code, then (first time only) the
@@ -179,14 +193,14 @@ feature goes under More; there is never a sixth tab.
       to join
   - My life group (members)
     - Its members, its meeting time, and its semester checklist
-  - Roster (members only)
+  - Roster (members only), with newcomers marked
     - A member's profile, with email and phone
   - Requests to join (for a mentor)
 - **Apartment**
-  - The schedule: the coming days, with life group meetings already on it
+  - The schedule: the coming two weeks, with life group meetings already on
+    it, and the apartment order linked at the top
   - Add a booking: the space (two rooms, or the dining and living area), the
-    day and the time
-    - Reserve the study room for studying
+    day, the time, and why (to study, to be there, a meeting)
   - A notice that a booking displaced yours, then the booking
 - **Game**
   - Today's game (not chosen yet), with the branch's event promotion
@@ -196,15 +210,20 @@ feature goes under More; there is never a sixth tab.
       document, branch day organization document
     - Schoenstatt knowledge base: formation material and founding documents
     - Songs, then a song
-  - Dues: this semester, whether paid, and Pay
+  - Dues: this semester, whether paid, and Pay; a newcomer's first dues make
+    him a member
   - My profile: edit my details, my milestones, sign out
   - The secretary's tools: his feed (new sign-ups, requests nobody has
-    answered), confirm members, the roster and active or inactive, everyone's
-    dues, record milestones
-  - The priest moderator's tools: assign mentors, the two switches that let
-    the branch leader or the secretary assign them, give roles with a
-    changeover period
-  - The core team's tools: edit pages in the app, and through the MCP endpoint
+    answered, payments to match, sweatshirts owed, stale newcomers), make a
+    member by hand, the roster and active or inactive, everyone's dues and
+    good standing, a semester settled by hand, record milestones, deactivate
+    an account, name the apartment's spaces
+  - The priest moderator's tools: everything the secretary and the branch
+    leader have, plus assigning mentors, the two switches that delegate it,
+    and giving roles with a changeover period
+  - The core team's tools: edit pages in the app, and through the MCP
+    endpoint (page editors too, for their pages)
+  - The branch leader's tools: give core team roles, and name them
 
 ### Not placed yet
 
@@ -248,8 +267,6 @@ become the app.
 - The empty and error states: a wrong code, no open groups, nobody going.
 - The screen where a person chooses how he is notified, since email, push and
   text each need consent ([02](02-architecture.md#notifications)).
-- What a newcomer sees of the apartment, and how a life group leader picks the
-  room for the second hour ([05](05-apartment-schedule.md)).
 - Where the leadership path, capital of grace, prayer requests and the glossary
   go.
 - Whether flows are wanted for the secretary's feed and for handing over a

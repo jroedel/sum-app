@@ -65,7 +65,8 @@ are a later question.
 
 A life group is **open** while it is forming in the current semester, and
 newcomers can see it and its composition ([04](04-roster-and-life-groups.md)).
-Many groups **close at their first overnight**.
+Many groups **close at their first overnight**. **Its mentor or the
+secretary** marks it closed (2026-11-22, for review).
 
 ### Steps
 
@@ -191,16 +192,14 @@ To keep this maintainable:
 **Personal milestones are in the MVP** (decided 2026-11-19). Being cheap to
 build, they also help newcomers picture their path from the first release.
 
-The life group semester checklist and events are still to decide. The
-recommended order is the life group semester next, and events after that.
+**The life group semester checklist is in the first release** (2026-11-22,
+for review). Events, and the leadership path that builds on them, are still
+to decide.
 
 ## Open questions
 
-- Whether the life group semester checklist is in the MVP, or first after it.
 - Whether checklists live in a repository file (recommended) or are edited
   in the app.
-- Who marks a life group closed: its leader, the secretary, or automatically
-  at the first overnight.
 - Whether the home shrine blessing is a milestone of its own.
 - Whether reminders also go out when a step is overdue, and to whom (the
   life group, its leader, the secretary).

@@ -102,9 +102,24 @@ songs and the other content are built from. They are also valued for a second
 reason: an MCP endpoint over pages lets the core team change a lot of the
 app's content without a screen for each.
 
+### The first release
+
+Decided 2026-11-22, for review.
+
+- **Something should be live for the fall closing branch retreat 2026.**
+  What, and the retreat's date, are still open below. Moving the branch in
+  needs the MCP endpoint for people first
+  ([04](04-roster-and-life-groups.md#moving-the-branch-in)).
+- **In it:** personal milestones, and each life group's semester checklist
+  ([09](09-checklists-and-milestones.md)).
+- **Not in it:** the daily game. It arrives once it is chosen and built
+  ([08](08-daily-game.md)).
+
 ## Open questions
 
 - The MVP test, in one sentence.
-- A target date for the first release.
+- The date of the fall closing branch retreat 2026, and what must be live by
+  then. The smallest useful release would be signing in and the roster: the
+  branch moved in, each man confirming his profile and first semester.
 - Whether the order above is also the order of building, and what is cut first
   if the first release has to be smaller.

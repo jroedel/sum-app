@@ -8,9 +8,20 @@
 [sumatx.us](https://sumatx.us/)). The app keeps track of **who has paid and
 who has not yet paid**.
 
-**Dues are not required in a person's first semester.** They are due from the
-second semester on (decided 2026-11-19). So the app needs to know the semester
-each person joined ([04](04-roster-and-life-groups.md)).
+**Dues are paid from the first semester, and the first payment makes a
+newcomer a member** (2026-11-22, for review; it replaces "not required in the
+first semester", decided 2026-11-19). A newcomer can pay only once a mentor
+has approved him into a life group ([03](03-accounts-and-access.md)), so that
+$60 alone never buys the roster. Paying is the decision to belong: the case
+for it, and against it, is in
+[15](15-decisions-for-review.md#membership).
+
+**The first dues earn the free SUM sweatshirt.** The first payment marks a
+sweatshirt as owed and puts it in the secretary's feed; he marks it given when
+it is handed over.
+
+The semester each man joined is kept for the record
+([04](04-roster-and-life-groups.md)). It no longer decides whether he owes.
 
 ## Semesters
 
@@ -21,8 +32,14 @@ anchors the deadlines in [09](09-checklists-and-milestones.md).
 ## Paying: only through drop-in forms
 
 Decided 2026-11-19. **The secretary is responsible for dues**, and **from the
-app's launch on, members pay only through drop-in forms.** No cash, Venmo or
-Zelle is recorded in the app.
+app's launch on, members pay through drop-in forms.**
+
+**The exception** (2026-11-22, for review; it loosens "no cash, Venmo or Zelle
+is recorded", decided 2026-11-19): the secretary can mark a semester settled
+by hand, with a short note ("paid cash", "waived", "paid before launch"). It
+counts like a payment, including for the sweatshirt. Recording and matching
+dues is the secretary's own power, not the branch leader's
+([03](03-accounts-and-access.md#the-secretarys-own-powers)).
 
 Each semester has a dues form in drop-in forms ([12](12-forms.md)), made from
 a template like any other form, with $60 as its fee. Stripe handles the card,
@@ -40,22 +57,28 @@ and its checkout offers Apple Pay on an iPhone, which covers the board's
   anything that does not match lands in the secretary's feed
   ([03](03-accounts-and-access.md)).
 
+## Good standing
+
+Decided 2026-11-22, for review.
+
+- **A semester's dues are overdue after the end of its week 6.** Reminders go
+  out before then.
+- A member whose dues are overdue is **out of good standing**. The phrase is
+  a working one. It is separate from inactive
+  ([04](04-roster-and-life-groups.md#active-and-inactive)).
+- **Being out of good standing costs nothing.** It is shown, and the
+  reminders continue; the roster and the apartment stay open to him.
+- **Inactive members owe no dues.**
+
 ## Who sees what
 
-A member sees his own status for each semester. The secretary sees
-everyone's.
-
-## What paying, or not paying, affects
-
-Whether unpaid dues affect anything in the app or the member benefits.
+A member sees his own status for each semester. **The core team and the
+priest moderators** see everyone's, and who is out of good standing
+(2026-11-22, for review).
 
 ## Open questions
 
 - Which Stripe account receives the money, and whether the drop-in forms
   account that takes them is the branch's own.
-- Waivers, and dues paid before the app launched: does the secretary mark a
-  semester settled by hand, with a note, or is there no exception at all?
-- Whether unpaid dues affect apartment or basement access.
-- Whether inactive members owe dues.
-- Whether "first semester" means the semester they signed up in the app, or
-  is set by the secretary (for people who joined before the app existed).
+- For a man who signs up after launch, whether his first semester is simply
+  the one he signed up in.
