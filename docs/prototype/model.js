@@ -128,16 +128,42 @@ export function minutes(hhmm) {
   return h * 60 + m;
 }
 
-// clashes says whether two bookings are in the same space on the same day at
-// overlapping times. Touching ends do not clash: the dining room until 5:30
+// overlaps says whether two bookings are in the same space on the same day at
+// overlapping times. Touching ends do not overlap: the dining room until 5:30
 // and from 5:30 is the hand-over doc 05 describes, not a double booking.
-export function clashes(a, b) {
+export function overlaps(a, b) {
   return (
     a.space === b.space &&
     a.day === b.day &&
     minutes(a.start) < minutes(b.end) &&
     minutes(b.start) < minutes(a.end)
   );
+}
+
+// RANK is what a booking claims (doc 05, decided 2026-11-22). Studying and
+// being there claim nothing: they share the space, and studying only asks for
+// quiet. A meeting claims it, and a life group's meeting comes first of all.
+export const RANK = { here: 0, study: 0, meeting: 1, group: 2 };
+
+const claims = (b) => RANK[b.kind] > 0;
+
+// clashes says whether two overlapping bookings are a double booking: at
+// least one of them claims the space. Two that only share it never clash.
+export function clashes(a, b) {
+  return overlaps(a, b) && (claims(a) || claims(b));
+}
+
+// outcome is what a new booking n means for an existing one e that it
+// overlaps: n "displaces" e, n "is-displaced" by e, they are "level" (two
+// meetings: settle it between them), or "quiet" (n shares a space where e is
+// studying). Nothing is refused; this says who is told what. The core team's
+// and the priests' power to bump a booking is a separate action, not a rank.
+export function outcome(n, e) {
+  if (!overlaps(n, e)) return null;
+  if (!claims(n) && !claims(e)) return e.kind === "study" && n.kind === "here" ? "quiet" : null;
+  if (RANK[n.kind] > RANK[e.kind]) return "displaces";
+  if (RANK[n.kind] < RANK[e.kind]) return "is-displaced";
+  return "level";
 }
 
 // clock turns "16:30" into "4:30 PM", and span gives "4:30–5:30 PM", or
@@ -153,21 +179,21 @@ export function span(start, end) {
   return a.slice(-2) === b.slice(-2) ? `${a.slice(0, -3)}–${b}` : `${a}–${b}`;
 }
 
-// schedule is every booking in the week: each life group meeting as its two
+// schedule is every booking in the days given: each life group meeting as its two
 // halves (doc 05), then the members' own, in the order of the day.
 export function schedule(meetings, days, bookings) {
   const out = [...bookings];
   for (const m of meetings) {
     for (const d of days.filter((d) => d.weekday === m.weekday)) {
-      out.push({ id: `${m.group}-${d.iso}-1`, kind: "meeting", group: m.group, space: "dining", day: d.iso, start: m.start, end: m.middle });
-      out.push({ id: `${m.group}-${d.iso}-2`, kind: "meeting", group: m.group, space: m.room, day: d.iso, start: m.middle, end: m.end });
+      out.push({ id: `${m.group}-${d.iso}-1`, kind: "group", group: m.group, space: "dining", day: d.iso, start: m.start, end: m.middle });
+      out.push({ id: `${m.group}-${d.iso}-2`, kind: "group", group: m.group, space: m.room, day: d.iso, start: m.middle, end: m.end });
     }
   }
   return out.sort((a, b) => a.day.localeCompare(b.day) || minutes(a.start) - minutes(b.start) || a.space.localeCompare(b.space));
 }
 
-// clashesWith is every other booking that b overlaps. A double booking is
-// allowed (doc 05): this is who to tell, not a reason to refuse.
+// clashesWith is every other booking that b is double booked with. A double
+// booking is allowed (doc 05): this is who to tell, not a reason to refuse.
 export function clashesWith(b, all) {
   return all.filter((o) => o.id !== b.id && clashes(b, o));
 }
