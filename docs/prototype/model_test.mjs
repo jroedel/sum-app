@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { DEFAULT_ROLE, MAX_SENDS, MOCK_CODE, ROLES, askToJoin, clashes, clashesWith, clock, isMember, looksLikeEmail, memory, requestFor, roleFrom, schedule, sendCode, shownFor, span, tryCode, withRole, years } from "./model.js";
+import { DEFAULT_ROLE, MAX_SENDS, MOCK_CODE, ROLES, askToJoin, clashes, clashesWith, clock, firstDues, isMember, looksLikeEmail, memberNow, memory, requestFor, roleFrom, schedule, sendCode, shownFor, span, standing, tryCode, withRole, years } from "./model.js";
 
 test("the role comes from ?as=, then memory, then the default", () => {
   assert.equal(roleFrom("?as=secretary", "mentor"), "secretary");
@@ -180,4 +180,28 @@ test("a code that is not six digits is not a try; an expired one needs a new cod
   assert.equal(r.result, "malformed");
   assert.equal(r.state.tries, 0);
   assert.equal(tryCode({ ...s, expired: true }, MOCK_CODE).result, "expired");
+});
+
+test("first dues wait for a mentor's approval (doc 06)", () => {
+  assert.equal(firstDues(undefined, false), "not-yet");
+  assert.equal(firstDues({ group: "emmaus", status: "pending" }, false), "not-yet");
+  assert.equal(firstDues({ group: "emmaus", status: "approved" }, false), "due");
+  assert.equal(firstDues({ group: "emmaus", status: "approved" }, true), "paid");
+  assert.equal(firstDues({ group: "emmaus", status: "pending" }, true), "not-yet", "paid without approval is not possible");
+});
+
+test("first dues make the newcomer a member (doc 03)", () => {
+  const approved = { group: "emmaus", status: "approved" };
+  assert.ok(!memberNow("pending", approved, false));
+  assert.ok(memberNow("pending", approved, true));
+  assert.ok(!memberNow("newcomer", undefined, true));
+  assert.ok(memberNow("member", undefined, false));
+  assert.ok(!memberNow("mentor", approved, true), "an alum mentor is not made a member by Lucas's dues");
+});
+
+test("a semester stands paid, settled, due or overdue", () => {
+  assert.equal(standing({ paid: "Sep 3" }, true), "paid");
+  assert.equal(standing({ settled: "paid cash" }, true), "settled");
+  assert.equal(standing({}, false), "due");
+  assert.equal(standing(undefined, true), "overdue");
 });

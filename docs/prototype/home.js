@@ -8,3 +8,8 @@ document.getElementById("withdraw")?.addEventListener("click", () => withdraw())
 if ((saved.get("removed") ?? []).includes("mateo-wed")) {
   document.getElementById("displaced-home")?.remove();
 }
+
+// Mateo's overdue dues go from Waiting on you once he has paid them.
+if (saved.get("paid:mateo")) {
+  document.getElementById("dues-due")?.remove();
+}

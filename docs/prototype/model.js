@@ -255,3 +255,29 @@ export function tryCode(state, typed) {
   const next = { ...state, tries: state.tries + 1 };
   return { result: next.tries >= MAX_TRIES ? "used-up" : "wrong", state: next, left: MAX_TRIES - next.tries };
 }
+
+// --- dues (doc 06, doc 14 flow 3) --------------------------------------------
+
+// firstDues is where the newcomer's first dues stand: "not-yet" until a
+// mentor has approved him into a group (doc 06: group first, so that $60
+// alone never buys the roster), then "due", then "paid".
+export function firstDues(request, paid) {
+  if (request?.status !== "approved") return "not-yet";
+  return paid ? "paid" : "due";
+}
+
+// memberNow says whether the person looked at is a member: the member and the
+// secretary always, and the newcomer once his first dues are paid, which is
+// the step that makes him one (doc 03).
+export function memberNow(role, request, firstPaid) {
+  return isMember(role) || (role === "pending" && firstDues(request, firstPaid) === "paid");
+}
+
+// standing is a member's semester, as the app shows it: paid, settled by the
+// secretary by hand (with his note), due, or overdue after week 6. Overdue is
+// "out of good standing", which is shown and costs nothing (doc 06).
+export function standing(entry, pastDue) {
+  if (entry?.paid) return "paid";
+  if (entry?.settled) return "settled";
+  return pastDue ? "overdue" : "due";
+}
